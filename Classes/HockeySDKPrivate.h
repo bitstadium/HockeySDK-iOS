@@ -47,7 +47,7 @@
 #define kBITUpdateAuthorizedVersion					@"BITUpdateAuthorizedVersion"
 #define kBITUpdateAuthorizedToken						@"BITUpdateAuthorizedToken"
 
-#define BITHOCKEYSDK_BUNDLE @"HockeySDKResources.bundle"
+#define BITHOCKEYSDK_BUNDLE @"HockeySDK.framework"
 #define BITHOCKEYSDK_URL @"https://sdk.hockeyapp.net/"
 
 #define BITHockeyLog(fmt, ...) do { if([BITHockeyManager sharedHockeyManager].isDebugLogEnabled && ![BITHockeyManager sharedHockeyManager].isAppStoreEnvironment) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)

@@ -26,6 +26,8 @@
 
 #import "UIImage+BITHockeyAdditions.h"
 
+#import "HockeySDKPrivate.h"
+
 // Private helper methods
 @interface UIImage (BITHockeyAdditionsPrivate)
 - (void)bit_addRoundedRectToPath:(CGRect)rect context:(CGContextRef)context ovalWidth:(CGFloat)ovalWidth ovalHeight:(CGFloat)ovalHeight;
@@ -329,9 +331,8 @@ CGContextRef MyOpenBitmapContext(int pixelsWide, int pixelsHigh) {
 
 
 + (UIImage *)bit_imageNamed:(NSString *)imageName bundle:(NSString *)bundleName {
-  NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-  NSString *bundlePath = [resourcePath stringByAppendingPathComponent:bundleName];
-  NSString *imagePath = [bundlePath stringByAppendingPathComponent:imageName];
+  NSBundle *hockeyBundle = BITHockeyBundle();
+  NSString *imagePath = [[hockeyBundle bundlePath] stringByAppendingPathComponent:imageName];
   return [UIImage bit_imageWithContentsOfResolutionIndependentFile:imagePath];
 }
 
