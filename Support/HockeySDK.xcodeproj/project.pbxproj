@@ -118,6 +118,13 @@
 		1EB6047015EF6B3200F69880 /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6046C15EF6B3200F69880 /* BITHockeyHelper.m */; };
 		1EB6047115EF6B3200F69880 /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6046C15EF6B3200F69880 /* BITHockeyHelper.m */; };
 		1EB6047215EF6B3200F69880 /* BITHockeyHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6046C15EF6B3200F69880 /* BITHockeyHelper.m */; };
+		83FA2D3D16102697006EC3F1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E400561D148D79B500EB22B9 /* Foundation.framework */; };
+		83FA2D49161026C1006EC3F1 /* BITCrashManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E41EB464148D7BF50015DEDC /* BITCrashManager.m */; };
+		83FA2D4A161026CE006EC3F1 /* BITCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E40BCB815A3494400BD64D9 /* BITCrashReportTextFormatter.m */; };
+		83FA2D4D16102754006EC3F1 /* BITCrashManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5955D115B72E5300A03429 /* BITCrashManager.h */; };
+		83FA2D4E16102778006EC3F1 /* BITCrashManagerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E01117E15BB6228007002AC /* BITCrashManagerPrivate.h */; };
+		83FA2D4F16102781006EC3F1 /* BITCrashManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E40BCB415A3487500BD64D9 /* BITCrashManagerDelegate.h */; };
+		83FA2D5016102785006EC3F1 /* BITCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E40BCB715A3494400BD64D9 /* BITCrashReportTextFormatter.h */; };
 		E400561E148D79B500EB22B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E400561D148D79B500EB22B9 /* Foundation.framework */; };
 		E41EB471148D7BF50015DEDC /* BITAppVersionMetaInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = E41EB459148D7BF50015DEDC /* BITAppVersionMetaInfo.h */; };
 		E41EB472148D7BF50015DEDC /* BITAppVersionMetaInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E41EB45A148D7BF50015DEDC /* BITAppVersionMetaInfo.m */; };
@@ -164,6 +171,18 @@
 			remoteInfo = HockeySDKResources;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		83FA2D3A16102697006EC3F1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1E01117E15BB6228007002AC /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
@@ -212,6 +231,7 @@
 		1EB6046B15EF6B3200F69880 /* BITHockeyHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyHelper.h; sourceTree = "<group>"; };
 		1EB6046C15EF6B3200F69880 /* BITHockeyHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyHelper.m; sourceTree = "<group>"; };
 		1EDA60CF15C2C1450032D10B /* HockeySDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
+		83FA2D3C16102697006EC3F1 /* libHockeyCrashManagerLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHockeyCrashManagerLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E400561A148D79B500EB22B9 /* libHockeySDK-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libHockeySDK-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E400561D148D79B500EB22B9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E41EB459148D7BF50015DEDC /* BITAppVersionMetaInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITAppVersionMetaInfo.h; sourceTree = "<group>"; };
@@ -261,6 +281,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83FA2D3916102697006EC3F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83FA2D3D16102697006EC3F1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +349,7 @@
 				1E59547C15B6C41300A03429 /* libHockeySDK-iphonesimulator.a */,
 				1E5954F215B6F24A00A03429 /* libHockeySDK.a */,
 				1E59550A15B6F45800A03429 /* HockeySDKResources.bundle */,
+				83FA2D3C16102697006EC3F1 /* libHockeyCrashManagerLib.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -469,6 +498,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83FA2D4C1610273D006EC3F1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83FA2D4D16102754006EC3F1 /* BITCrashManager.h in Headers */,
+				83FA2D4E16102778006EC3F1 /* BITCrashManagerPrivate.h in Headers */,
+				83FA2D4F16102781006EC3F1 /* BITCrashManagerDelegate.h in Headers */,
+				83FA2D5016102785006EC3F1 /* BITCrashReportTextFormatter.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4005618148D79B500EB22B9 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -568,6 +608,25 @@
 			productReference = 1E59550A15B6F45800A03429 /* HockeySDKResources.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		83FA2D3B16102697006EC3F1 /* HockeyCrashManagerLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83FA2D4716102697006EC3F1 /* Build configuration list for PBXNativeTarget "HockeyCrashManagerLib" */;
+			buildPhases = (
+				83FA2D3816102697006EC3F1 /* Sources */,
+				83FA2D3916102697006EC3F1 /* Frameworks */,
+				83FA2D3A16102697006EC3F1 /* CopyFiles */,
+				83FA2D4C1610273D006EC3F1 /* Headers */,
+				83FA2D5116102AFE006EC3F1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HockeyCrashManagerLib;
+			productName = HockeyCrashManagerLib;
+			productReference = 83FA2D3C16102697006EC3F1 /* libHockeyCrashManagerLib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		E4005619148D79B500EB22B9 /* HockeySDK-Device */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E400563E148D79B500EB22B9 /* Build configuration list for PBXNativeTarget "HockeySDK-Device" */;
@@ -626,6 +685,7 @@
 				1E5954CB15B6F24A00A03429 /* HockeySDKLib */,
 				1E59550915B6F45800A03429 /* HockeySDKResources */,
 				1E8E66AD15BC3D7700632A2E /* HockeySDK Documentation */,
+				83FA2D3B16102697006EC3F1 /* HockeyCrashManagerLib */,
 			);
 		};
 /* End PBXProject section */
@@ -685,6 +745,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\nAPPLEDOC_DOCSET_NAME=\"HockeySDK-iOS\"\n\n/usr/local/bin/appledoc \\\n  --output \"${SOURCE_ROOT}/../documentation\" \\\n  --ignore Vendor \\\n  --ignore .m \\\n  --create-html \\\n  --create-docset \\\n  --install-docset \\\n  --keep-intermediate-file \\\n  --project-name \"$APPLEDOC_DOCSET_NAME ${VERSION_STRING}\" \\\n  -v \"${VERSION_STRING}\" \\\n  --project-company \"BitStadium GmbH\" \\\n  --company-id \"de.bitstadium\" \\\n  --docset-bundle-name \"$APPLEDOC_DOCSET_NAME ${VERSION_STRING}\" \\\n  --docset-feed-name \"$APPLEDOC_DOCSET_NAME\" \\\n  --docset-platform-family \"iphoneos\" \\\n  --index-desc \"${SOURCE_ROOT}/../docs/index.md\" \\\n  --include \"${SOURCE_ROOT}/../docs/\" \\\n  --merge-categories \\\n  --no-repeat-first-par \\\n  --warn-undocumented-object \\\n  --warn-undocumented-member \\\n  --warn-empty-description \\\n  --warn-unknown-directive \\\n  --warn-invalid-crossref \\\n  --warn-missing-arg \\\n  --logformat xcode \\\n  --exit-threshold 2 \\\n  \"${SOURCE_ROOT}/../\" \\\n";
 		};
+		83FA2D5116102AFE006EC3F1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nset -x\n\n# Combine the CrashReporter static library into a new Hockey static library file, if not already combined\nif [ -z $(otool -L \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" | grep 'libCrashReporter') ]\nthen\n  libtool -static -o \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${SRCROOT}/../Vendor/CrashReporter.framework/Versions/A/CrashReporter\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -735,6 +808,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83FA2D3816102697006EC3F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83FA2D49161026C1006EC3F1 /* BITCrashManager.m in Sources */,
+				83FA2D4A161026CE006EC3F1 /* BITCrashReportTextFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,6 +1055,56 @@
 			};
 			name = Release;
 		};
+		83FA2D4516102697006EC3F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DSTROOT = /tmp/HockeyCrashManagerLib.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		83FA2D4616102697006EC3F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/HockeyCrashManagerLib.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../Vendor\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		E400563C148D79B500EB22B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E66CA9115D4100500F35BED /* buildnumber.xcconfig */;
@@ -1111,6 +1243,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		83FA2D4716102697006EC3F1 /* Build configuration list for PBXNativeTarget "HockeyCrashManagerLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83FA2D4516102697006EC3F1 /* Debug */,
+				83FA2D4616102697006EC3F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		E4005614148D79B500EB22B9 /* Build configuration list for PBXProject "HockeySDK" */ = {
 			isa = XCConfigurationList;
