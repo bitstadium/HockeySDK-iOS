@@ -319,5 +319,9 @@ typedef enum {
  */
 - (BITUpdateViewController *)hockeyViewController:(BOOL)modal;
 
+/**
+ Whether to enable debug logging.
+ */
+@property (nonatomic, assign, getter=isDebugLogEnabled) BOOL debugLogEnabled;
 
 @end

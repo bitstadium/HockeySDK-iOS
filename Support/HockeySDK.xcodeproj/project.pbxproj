@@ -122,9 +122,13 @@
 		83FA2D49161026C1006EC3F1 /* BITCrashManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E41EB464148D7BF50015DEDC /* BITCrashManager.m */; };
 		83FA2D4A161026CE006EC3F1 /* BITCrashReportTextFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E40BCB815A3494400BD64D9 /* BITCrashReportTextFormatter.m */; };
 		83FA2D4D16102754006EC3F1 /* BITCrashManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E5955D115B72E5300A03429 /* BITCrashManager.h */; };
-		83FA2D4E16102778006EC3F1 /* BITCrashManagerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E01117E15BB6228007002AC /* BITCrashManagerPrivate.h */; };
 		83FA2D4F16102781006EC3F1 /* BITCrashManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E40BCB415A3487500BD64D9 /* BITCrashManagerDelegate.h */; };
-		83FA2D5016102785006EC3F1 /* BITCrashReportTextFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E40BCB715A3494400BD64D9 /* BITCrashReportTextFormatter.h */; };
+		83FA2D5616103AE3006EC3F1 /* HockeySDKPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59559C15B70F4D00A03429 /* HockeySDKPrivate.m */; };
+		83FA2D5816103BDB006EC3F1 /* HockeySDKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */; };
+		83FA2D5916103BDB006EC3F1 /* HockeySDKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */; };
+		83FA2D5A16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */; };
+		83FA2D5B16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */; };
+		83FA2D5C16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */; };
 		E400561E148D79B500EB22B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E400561D148D79B500EB22B9 /* Foundation.framework */; };
 		E41EB471148D7BF50015DEDC /* BITAppVersionMetaInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = E41EB459148D7BF50015DEDC /* BITAppVersionMetaInfo.h */; };
 		E41EB472148D7BF50015DEDC /* BITAppVersionMetaInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E41EB45A148D7BF50015DEDC /* BITAppVersionMetaInfo.m */; };
@@ -232,6 +236,7 @@
 		1EB6046C15EF6B3200F69880 /* BITHockeyHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyHelper.m; sourceTree = "<group>"; };
 		1EDA60CF15C2C1450032D10B /* HockeySDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HockeySDK-Info.plist"; sourceTree = "<group>"; };
 		83FA2D3C16102697006EC3F1 /* libHockeyCrashManagerLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHockeyCrashManagerLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDKTypes.h; sourceTree = "<group>"; };
 		E400561A148D79B500EB22B9 /* libHockeySDK-iphoneos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libHockeySDK-iphoneos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E400561D148D79B500EB22B9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E41EB459148D7BF50015DEDC /* BITAppVersionMetaInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITAppVersionMetaInfo.h; sourceTree = "<group>"; };
@@ -339,6 +344,7 @@
 				E4E7335A148D7A5A00763A39 /* LICENSE.txt */,
 				E4E7335B148D7A5A00763A39 /* README.md */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
 		};
 		E400561B148D79B500EB22B9 /* Products */ = {
@@ -398,6 +404,7 @@
 				E41EB465148D7BF50015DEDC /* BITHockeyManager.h */,
 				E41EB466148D7BF50015DEDC /* BITHockeyManager.m */,
 				1E5955FA15B7877A00A03429 /* BITHockeyManagerDelegate.h */,
+				83FA2D5716103BDB006EC3F1 /* HockeySDKTypes.h */,
 				1E71509A15B5C76F004E88FF /* HockeySDK.h */,
 			);
 			name = Classes;
@@ -451,6 +458,7 @@
 				1E5955F415B77F5E00A03429 /* PSWebTableViewCell.h in Headers */,
 				1E5954B815B6E19C00A03429 /* BITAppVersionMetaInfo.h in Headers */,
 				1E59548715B6C51100A03429 /* BITCrashReportTextFormatter.h in Headers */,
+				83FA2D5816103BDB006EC3F1 /* HockeySDKTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +481,7 @@
 				1E5955F015B7752300A03429 /* BITUpdateManagerDelegate.h in Headers */,
 				1E5955FC15B7877B00A03429 /* BITHockeyManagerDelegate.h in Headers */,
 				1EB6046E15EF6B3200F69880 /* BITHockeyHelper.h in Headers */,
+				83FA2D5A16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,6 +504,7 @@
 				1E5955F115B7752300A03429 /* BITUpdateManagerDelegate.h in Headers */,
 				1E5955FD15B7877B00A03429 /* BITHockeyManagerDelegate.h in Headers */,
 				1EB6046F15EF6B3200F69880 /* BITHockeyHelper.h in Headers */,
+				83FA2D5B16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,9 +513,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				83FA2D4D16102754006EC3F1 /* BITCrashManager.h in Headers */,
-				83FA2D4E16102778006EC3F1 /* BITCrashManagerPrivate.h in Headers */,
 				83FA2D4F16102781006EC3F1 /* BITCrashManagerDelegate.h in Headers */,
-				83FA2D5016102785006EC3F1 /* BITCrashReportTextFormatter.h in Headers */,
+				83FA2D5C16103BDB006EC3F1 /* HockeySDKTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +537,7 @@
 				1E5955EF15B7752300A03429 /* BITUpdateManagerDelegate.h in Headers */,
 				1E5955FB15B7877B00A03429 /* BITHockeyManagerDelegate.h in Headers */,
 				1EB6046D15EF6B3200F69880 /* BITHockeyHelper.h in Headers */,
+				83FA2D5916103BDB006EC3F1 /* HockeySDKTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -817,6 +827,7 @@
 			files = (
 				83FA2D49161026C1006EC3F1 /* BITCrashManager.m in Sources */,
 				83FA2D4A161026CE006EC3F1 /* BITCrashReportTextFormatter.m in Sources */,
+				83FA2D5616103AE3006EC3F1 /* HockeySDKPrivate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,6 +1262,7 @@
 				83FA2D4616102697006EC3F1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4005614148D79B500EB22B9 /* Build configuration list for PBXProject "HockeySDK" */ = {
 			isa = XCConfigurationList;

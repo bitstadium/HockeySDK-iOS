@@ -31,11 +31,13 @@
 #import <CrashReporter/CrashReporter.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <UIKit/UIKit.h>
-#import "HockeySDK.h"
+
+#import "HockeySDKTypes.h"
 #import "HockeySDKPrivate.h"
 
 #import "BITCrashManagerPrivate.h"
 #import "BITCrashReportTextFormatter.h"
+#import "BITCrashManagerDelegate.h"
 
 #include <sys/sysctl.h>
 
@@ -46,6 +48,9 @@
 #define kBITCrashMetaUserName @"BITCrashMetaUserName"
 #define kBITCrashMetaUserEmail @"BITCrashMetaUserEmail"
 #define kBITCrashMetaApplicationLog @"BITCrashMetaApplicationLog"
+
+
+#define BITCrashManagerLog(fmt, ...) do { if (self.isDebugLogEnabled) { NSLog((@"[BITCrashManager] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
 
 
 @interface BITCrashManager ()
@@ -61,7 +66,7 @@
 @synthesize showAlwaysButton = _showAlwaysButton;
 @synthesize didCrashInLastSession = _didCrashInLastSession;
 @synthesize timeintervalCrashInLastSessionOccured = _timeintervalCrashInLastSessionOccured;
-
+@synthesize debugLogEnabled = _debugLogEnabled;
 @synthesize fileManager = _fileManager;
 
 
@@ -184,7 +189,7 @@
   if (plist) {
     [plist writeToFile:_settingsFile atomically:YES];
   } else {
-    BITHockeyLog(@"ERROR: Writing settings. %@", errorString);
+    BITCrashManagerLog(@"ERROR: Writing settings. %@", errorString);
   }
 }
 
@@ -206,7 +211,7 @@
     if ([rootObj objectForKey:kBITCrashApprovedReports])
       [_approvedCrashReports setDictionary:[rootObj objectForKey:kBITCrashApprovedReports]];
   } else {
-    BITHockeyLog(@"ERROR: Reading settings. %@", errorString);
+    BITCrashManagerLog(@"ERROR: Reading settings. %@", errorString);
   }
 }
 
@@ -273,7 +278,7 @@
     NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
     
     if (crashData == nil) {
-      BITHockeyLog(@"ERROR: Could not load crash report: %@", error);
+      BITCrashManagerLog(@"ERROR: Could not load crash report: %@", error);
     } else {
       [crashData writeToFile:[_crashesDir stringByAppendingPathComponent: cacheFilename] atomically:YES];
       
@@ -305,7 +310,7 @@
       if (plist) {
         [plist writeToFile:[NSString stringWithFormat:@"%@.meta", [_crashesDir stringByAppendingPathComponent: cacheFilename]] atomically:YES];
       } else {
-        BITHockeyLog(@"ERROR: Writing crash meta data failed. %@", error);
+        BITCrashManagerLog(@"ERROR: Writing crash meta data failed. %@", error);
       }
 
       // get the startup timestamp from the crash report, and the file timestamp to calculate the timeinterval when the crash happened after startup
@@ -363,7 +368,7 @@
   }
   
   if ([_crashFiles count] > 0) {
-    BITHockeyLog(@"INFO: %i pending crash reports found.", [_crashFiles count]);
+    BITCrashManagerLog(@"INFO: %i pending crash reports found.", [_crashFiles count]);
     return YES;
   } else
     return NO;
@@ -374,7 +379,7 @@
 
 // slightly delayed startup processing, so we don't keep the first runloop on startup busy for too long
 - (void)invokeDelayedProcessing {
-  BITHockeyLog(@"INFO: Start delayed CrashManager processing");
+  BITCrashManagerLog(@"INFO: Start delayed CrashManager processing");
   
   // was our own exception handler successfully added?
   if (_exceptionHandler) {
@@ -384,7 +389,7 @@
     // If the top level error handler differs from our own, then at least another one was added.
     // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
     if (_exceptionHandler != currentHandler) {
-      BITHockeyLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
+      BITCrashManagerLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
     }
   }
   
@@ -486,7 +491,7 @@
       if (currentHandler && currentHandler != initialHandler) {
         _exceptionHandler = currentHandler;
         
-        BITHockeyLog(@"INFO: Exception handler successfully initialized.");
+        BITCrashManagerLog(@"INFO: Exception handler successfully initialized.");
       } else {
         // this should never happen, theoretically only if NSSetUncaugtExceptionHandler() has some internal issues
         NSLog(@"[HockeySDK] ERROR: Exception handler could not be set. Make sure there is no other exception handler set up!");
@@ -521,7 +526,7 @@
       PLCrashReport *report = [[[PLCrashReport alloc] initWithData:crashData error:&error] autorelease];
 			
       if (report == nil) {
-        BITHockeyLog(@"WARNING: Could not parse crash report");
+        BITCrashManagerLog(@"WARNING: Could not parse crash report");
         // we cannot do anything with this report, so delete it
         [_fileManager removeItemAtPath:filename error:&error];
         [_fileManager removeItemAtPath:[NSString stringWithFormat:@"%@.meta", filename] error:&error];
@@ -562,7 +567,7 @@
         useremail = [metaDict objectForKey:kBITCrashMetaUserEmail] ?: @"";
         applicationLog = [metaDict objectForKey:kBITCrashMetaApplicationLog] ?: @"";
       } else {
-        BITHockeyLog(@"ERROR: Reading crash meta data. %@", error);
+        BITCrashManagerLog(@"ERROR: Reading crash meta data. %@", error);
       }
       
       if ([applicationLog length] > 0) {
@@ -596,7 +601,7 @@
   [self saveSettings];
   
   if (crashes != nil) {
-    BITHockeyLog(@"INFO: Sending crash reports:\n%@", crashes);
+    BITCrashManagerLog(@"INFO: Sending crash reports:\n%@", crashes);
     [self postXML:[NSString stringWithFormat:@"<crashes>%@</crashes>", crashes]];
   }
 }
@@ -676,14 +681,14 @@
   _urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
   
   if (!_urlConnection) {
-    BITHockeyLog(@"INFO: Sending crash reports could not start!");
+    BITCrashManagerLog(@"INFO: Sending crash reports could not start!");
     _sendingInProgress = NO;
   } else {
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerWillSendCrashReport:)]) {
       [self.delegate crashManagerWillSendCrashReport:self];
     }
     
-    BITHockeyLog(@"INFO: Sending crash reports started.");
+    BITCrashManagerLog(@"INFO: Sending crash reports started.");
   }
 }
 
@@ -704,7 +709,7 @@
     [self.delegate crashManager:self didFailWithError:error];
   }
   
-  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+  BITCrashManagerLog(@"ERROR: %@", [error localizedDescription]);
   
   _sendingInProgress = NO;
 	
@@ -725,8 +730,8 @@
                                                                      mutabilityOption:NSPropertyListMutableContainersAndLeaves
                                                                                format:nil
                                                                      errorDescription:NULL];
-    BITHockeyLog(@"INFO: Received API response: %@", response);
-            
+    BITCrashManagerLog(@"INFO: Received API response: %@", response);
+
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerDidFinishSendingCrashReport:)]) {
       [self.delegate crashManagerDidFinishSendingCrashReport:self];
     }
@@ -741,7 +746,7 @@
       [self.delegate crashManager:self didFailWithError:error];
     }
     
-    BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+    BITCrashManagerLog(@"ERROR: %@", [error localizedDescription]);
   } else {
     if (_responseData == nil || [_responseData length] == 0) {
       error = [NSError errorWithDomain:kBITCrashErrorDomain
@@ -757,7 +762,7 @@
       [self.delegate crashManager:self didFailWithError:error];
     }
 
-    BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+    BITCrashManagerLog(@"ERROR: %@", [error localizedDescription]);
   }
   
   _sendingInProgress = NO;

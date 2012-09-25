@@ -29,7 +29,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "BITCrashManager.h"
 
 @interface BITCrashManager () {
 }

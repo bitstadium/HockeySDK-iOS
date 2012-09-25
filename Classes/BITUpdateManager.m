@@ -40,6 +40,8 @@
 #import "BITAppVersionMetaInfo.h"
 
 
+#define BITUpdateManagerLog(fmt, ...) do { if (self.isDebugLogEnabled) { NSLog((@"[BITUpdateManager] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
+
 
 // API defines - do not change
 #define BETA_DOWNLOAD_TYPE_PROFILE	@"profile"
@@ -76,11 +78,12 @@
 @synthesize trackerConfig = _trackerConfig;
 @synthesize barStyle = _barStyle;
 @synthesize modalPresentationStyle = _modalPresentationStyle;
+@synthesize debugLogEnabled = _debugLogEnabled;
 
 #pragma mark - private
 
 - (void)reportError:(NSError *)error {
-  BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
+  BITUpdateManagerLog(@"ERROR: %@", [error localizedDescription]);
   _lastCheckFailed = YES;
   
   // only show error if we enable that
@@ -337,7 +340,7 @@
     if ([UIWindow instancesRespondToSelector:@selector(rootViewController)]) {
       if ([window rootViewController]) {
         visibleWindow = window;
-        BITHockeyLog(@"INFO: UIWindow with rootViewController found: %@", visibleWindow);
+        BITUpdateManagerLog(@"INFO: UIWindow with rootViewController found: %@", visibleWindow);
         break;
       }
     }
@@ -458,7 +461,7 @@
   }
   
   if (_currentHockeyViewController) {
-    BITHockeyLog(@"INFO: Update view already visible, aborting");
+    BITUpdateManagerLog(@"INFO: Update view already visible, aborting");
     return;
   }
   
@@ -724,7 +727,7 @@
   
   // build request & send
   NSString *url = [NSString stringWithFormat:@"%@%@", _updateURL, parameter];
-  BITHockeyLog(@"INFO: Sending api request to %@", url);
+  BITUpdateManagerLog(@"INFO: Sending api request to %@", url);
   
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
   [request setHTTPMethod:@"GET"];
@@ -748,7 +751,7 @@
                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Server returned empty response.", NSLocalizedDescriptionKey, nil]]];
       return;
     } else {
-      BITHockeyLog(@"INFO: Received API response: %@", responseString);
+      BITUpdateManagerLog(@"INFO: Received API response: %@", responseString);
       NSString *token = [[feedDict objectForKey:@"authcode"] lowercaseString];
       failed = NO;
       if ([[self authenticationToken] compare:token] == NSOrderedSame) {
@@ -768,7 +771,7 @@
         }
       } else {
         // different token, block this version
-        BITHockeyLog(@"INFO: AUTH FAILURE: %@", [self authenticationToken]);
+        BITUpdateManagerLog(@"INFO: AUTH FAILURE: %@", [self authenticationToken]);
         
         // store the new data
         [[NSUserDefaults standardUserDefaults] setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:kBITUpdateAuthorizedVersion];
@@ -809,7 +812,7 @@
   
   // do we need to update?
   if (![self checkForTracker] && ![self shouldCheckForUpdates] && !_currentHockeyViewController) {
-    BITHockeyLog(@"INFO: Update not needed right now");
+    BITUpdateManagerLog(@"INFO: Update not needed right now");
     self.checkInProgress = NO;
     return;
   }
@@ -839,7 +842,7 @@
   
   // build request & send
   NSString *url = [NSString stringWithFormat:@"%@%@", _updateURL, parameter];
-  BITHockeyLog(@"INFO: Sending api request to %@", url);
+  BITUpdateManagerLog(@"INFO: Sending api request to %@", url);
   
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
   [request setHTTPMethod:@"GET"];
@@ -859,7 +862,7 @@
   if (_isAppStoreEnvironment) return NO;
   
   if (!self.isUpdateAvailable) {
-    BITHockeyLog(@"WARNING: No update available. Aborting.");
+    BITUpdateManagerLog(@"WARNING: No update available. Aborting.");
     return NO;
   }
   
@@ -877,9 +880,9 @@
   NSString *hockeyAPIURL = [NSString stringWithFormat:@"%@api/2/apps/%@?format=plist%@", _updateURL, [self encodedAppIdentifier], extraParameter];
   NSString *iOSUpdateURL = [NSString stringWithFormat:@"itms-services://?action=download-manifest&url=%@", bit_URLEncodedString(hockeyAPIURL)];
   
-  BITHockeyLog(@"INFO: API Server Call: %@, calling iOS with %@", hockeyAPIURL, iOSUpdateURL);
+  BITUpdateManagerLog(@"INFO: API Server Call: %@, calling iOS with %@", hockeyAPIURL, iOSUpdateURL);
   BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iOSUpdateURL]];
-  BITHockeyLog(@"INFO: System returned: %d", success);
+  BITUpdateManagerLog(@"INFO: System returned: %d", success);
   return success;
 }
 
@@ -921,7 +924,7 @@
   if (!_isAppStoreEnvironment) {
     if ([self isUpdateManagerDisabled]) return;
 
-    BITHockeyLog(@"INFO: Start UpdateManager");
+    BITUpdateManagerLog(@"INFO: Start UpdateManager");
 
     [self checkExpiryDateReached];
     if (![self expiryDateReached]) {
@@ -993,7 +996,7 @@
   
   if ([self.receivedData length]) {
     NSString *responseString = [[[NSString alloc] initWithBytes:[_receivedData bytes] length:[_receivedData length] encoding: NSUTF8StringEncoding] autorelease];
-    BITHockeyLog(@"INFO: Received API response: %@", responseString);
+    BITUpdateManagerLog(@"INFO: Received API response: %@", responseString);
     
     id json = [self parseJSONResultString:responseString];
     self.trackerConfig = (([self checkForTracker] && [[json valueForKey:@"tracker"] isKindOfClass:[NSDictionary class]]) ? [json valueForKey:@"tracker"] : nil);
@@ -1009,7 +1012,7 @@
       
       // server returned empty response?
       if (![feedArray count]) {
-        BITHockeyLog(@"WARNING: No versions available for download on HockeyApp.");
+        BITUpdateManagerLog(@"WARNING: No versions available for download on HockeyApp.");
         return;
       } else {
         _lastCheckFailed = NO;
