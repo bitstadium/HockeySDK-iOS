@@ -766,7 +766,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nset -x\n\n# Combine the CrashReporter static library into a new Hockey static library file, if not already combined\nif [ -z $(otool -L \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" | grep 'libCrashReporter') ]\nthen\n  libtool -static -o \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${SRCROOT}/../Vendor/CrashReporter.framework/Versions/A/CrashReporter\"\nfi\n";
+			shellScript = "set -e\nset -x\n\n# Combine the CrashReporter static library into a new Hockey static library file, if not already combined\nresult=$(otool -L \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" | grep 'libCrashReporter' | wc -l)\nif [ $result -eq 0 ]\nthen\n  libtool -static -o \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${CONFIGURATION_BUILD_DIR}/libHockeyCrashManagerLib.a\" \"${SRCROOT}/../Vendor/CrashReporter.framework/Versions/A/CrashReporter\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
