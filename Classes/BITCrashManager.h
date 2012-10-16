@@ -106,7 +106,7 @@ static NSString *kBITCrashManagerStatus = @"BITCrashManagerStatus";
 /**
  Sets the optional `BITCrashManagerDelegate` delegate.
  */
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, assign) id<BITCrashManagerDelegate> delegate;
 
 
 ///-----------------------------------------------------------------------------
@@ -189,5 +189,10 @@ static NSString *kBITCrashManagerStatus = @"BITCrashManagerStatus";
  @see BITCrashManagerDelegate
  */
 @property (nonatomic, readonly) NSTimeInterval timeintervalCrashInLastSessionOccured;
+
+/**
+ Whether to enable debug logging.
+ */
+@property (nonatomic, assign, getter=isDebugLogEnabled) BOOL debugLogEnabled;
 
 @end

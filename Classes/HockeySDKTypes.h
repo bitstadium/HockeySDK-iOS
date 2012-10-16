@@ -1,5 +1,6 @@
 /*
  * Author: Andreas Linde <mail@andreaslinde.de>
+ *         Chris Miles <miles.chris@gmail.com>
  *
  * Copyright (c) 2012 HockeyApp, Bit Stadium GmbH.
  * Copyright (c) 2011 Andreas Linde.
@@ -27,20 +28,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HockeySDK_h
-#define HockeySDK_h
+#ifndef HockeySDK_HockeySDKTypes_h
+#define HockeySDK_HockeySDKTypes_h
 
-#import "HockeySDKTypes.h"
+#import <Foundation/Foundation.h>
 
-#import "BITHockeyManager.h"
-#import "BITHockeyManagerDelegate.h"
 
-#import "BITCrashManager.h"
-#import "BITCrashManagerDelegate.h"
+// Notification message which HockeyManager is listening to, to retry requesting updated from the server
+#define BITHockeyNetworkDidBecomeReachableNotification @"BITHockeyNetworkDidBecomeReachable"
 
-#import "BITUpdateManager.h"
-#import "BITUpdateManagerDelegate.h"
-#import "BITUpdateViewController.h"
+
+// hockey api error domain
+typedef enum {
+    BITCrashErrorUnknown,
+    BITCrashAPIAppVersionRejected,
+    BITCrashAPIReceivedEmptyResponse,
+    BITCrashAPIErrorWithStatusCode
+} BITCrashErrorReason;
+static NSString *kBITCrashErrorDomain = @"BITCrashReporterErrorDomain";
+
+
+// Update App Versions
+
+// hockey api error domain
+typedef enum {
+    BITUpdateErrorUnknown,
+    BITUpdateAPIServerReturnedInvalidStatus,
+    BITUpdateAPIServerReturnedInvalidData,
+    BITUpdateAPIServerReturnedEmptyResponse,
+    BITUpdateAPIClientAuthorizationMissingSecret,
+    BITUpdateAPIClientCannotCreateConnection
+} BITUpdateErrorReason;
+static NSString *kBITUpdateErrorDomain = @"BITUpdaterErrorDomain";
 
 
 #endif

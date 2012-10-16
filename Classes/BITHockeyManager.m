@@ -33,6 +33,8 @@
 #import "BITCrashManagerPrivate.h"
 #import "BITUpdateManagerPrivate.h"
 
+#define BITHockeyLog(fmt, ...) do { if(NSClassFromString(@"BITHockeyManager") && [NSClassFromString(@"BITHockeyManager") sharedHockeyManager].isDebugLogEnabled && ![NSClassFromString(@"BITHockeyManager") sharedHockeyManager].isAppStoreEnvironment) { NSLog((@"[HockeySDK] %s/%d " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__); }} while(0)
+
 
 @interface BITHockeyManager ()
 
@@ -214,6 +216,12 @@
   }
 }
 
+- (void)setDebugLogEnabled:(BOOL)debugLogEnabled
+{
+  _debugLogEnabled = debugLogEnabled;
+  _crashManager.debugLogEnabled = debugLogEnabled;
+  _updateManager.debugLogEnabled = debugLogEnabled;
+}
 
 #pragma mark - Private Instance Methods
 
@@ -235,10 +243,12 @@
     BITHockeyLog(@"INFO: Setup CrashManager");
     _crashManager = [[BITCrashManager alloc] initWithAppIdentifier:_appIdentifier];
     _crashManager.delegate = _delegate;
+    _crashManager.debugLogEnabled = self.debugLogEnabled;
     
     BITHockeyLog(@"INFO: Setup UpdateManager");
     _updateManager = [[BITUpdateManager alloc] initWithAppIdentifier:_appIdentifier isAppStoreEnvironemt:_appStoreEnvironment];
     _updateManager.delegate = _delegate;
+    _updateManager.debugLogEnabled = self.debugLogEnabled;
     
 #if JIRA_MOBILE_CONNECT_SUPPORT_ENABLED
     // Only if JMC is part of the project
