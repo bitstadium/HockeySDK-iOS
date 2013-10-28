@@ -75,7 +75,7 @@ The SDK runs on devices with iOS 5.0 or higher.
 <a id="modify"></a> 
 ## Modify Code
 
-1. Open your `AppDelegate.m` file.
+1. Open your `AppDelegate.h` file.
 
 2. Add the following line at the top of the file below your own #import statements:
 
@@ -83,7 +83,9 @@ The SDK runs on devices with iOS 5.0 or higher.
 
 3. Let the AppDelegate implement the protocols `BITHockeyManagerDelegate`:
 
-        @interface AppDelegate(HockeyProtocols) <BITHockeyManagerDelegate> {}
+
+        @interface AppDelegate : UIResponder <UIApplicationDelegate, BITHockeyManagerDelegate>
+        @property (strong, nonatomic) UIWindow *window;
         @end
 
 4. Search for the method `application:didFinishLaunchingWithOptions:`
