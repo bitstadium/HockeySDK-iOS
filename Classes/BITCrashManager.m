@@ -704,7 +704,7 @@ NSString *const kBITCrashManagerStatus = @"BITCrashManagerStatus";
 
         dispatch_async(dispatch_get_main_queue(), ^{
           [alertView show];
-        })
+        });
 
       } else {
         [self sendCrashReports];
