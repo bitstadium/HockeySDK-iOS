@@ -653,60 +653,64 @@ NSString *const kBITCrashManagerStatus = @"BITCrashManagerStatus";
  */
 - (void)invokeDelayedProcessing {
   if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
-  
-  BITHockeyLog(@"INFO: Start delayed CrashManager processing");
-  
-  // was our own exception handler successfully added?
-  if (self.exceptionHandler) {
-    // get the current top level error handler
-    NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
-  
-    // If the top level error handler differs from our own, then at least another one was added.
-    // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
-    if (self.exceptionHandler != currentHandler) {
-      BITHockeyLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    BITHockeyLog(@"INFO: Start delayed CrashManager processing");
+    
+    // was our own exception handler successfully added?
+    if (self.exceptionHandler) {
+      // get the current top level error handler
+      NSUncaughtExceptionHandler *currentHandler = NSGetUncaughtExceptionHandler();
+    
+      // If the top level error handler differs from our own, then at least another one was added.
+      // This could cause exception crashes not to be reported to HockeyApp. See log message for details.
+      if (self.exceptionHandler != currentHandler) {
+        BITHockeyLog(@"[HockeySDK] WARNING: Another exception handler was added. If this invokes any kind exit() after processing the exception, which causes any subsequent error handler not to be invoked, these crashes will NOT be reported to HockeyApp!");
+      }
     }
-  }
-  
-  if (!_sendingInProgress && [self hasPendingCrashReport]) {
-    _sendingInProgress = YES;
-    if (!BITHockeyBundle()) {
-      [self sendCrashReports];
-    } else if (_crashManagerStatus != BITCrashManagerStatusAutoSend && [self hasNonApprovedCrashReports]) {
-      
-      if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerWillShowSubmitCrashReportAlert:)]) {
-        [self.delegate crashManagerWillShowSubmitCrashReportAlert:self];
+    
+    if (!_sendingInProgress && [self hasPendingCrashReport]) {
+      _sendingInProgress = YES;
+      if (!BITHockeyBundle()) {
+        [self sendCrashReports];
+      } else if (_crashManagerStatus != BITCrashManagerStatusAutoSend && [self hasNonApprovedCrashReports]) {
+        
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(crashManagerWillShowSubmitCrashReportAlert:)]) {
+          [self.delegate crashManagerWillShowSubmitCrashReportAlert:self];
+        }
+        
+        NSString *appName = bit_appName(BITHockeyLocalizedString(@"HockeyAppNamePlaceholder"));
+        NSString *alertDescription = [NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundAnonymousDescription"), appName];
+        
+        // the crash report is not anynomous any more if username or useremail are not nil
+        NSString *userid = [self userIDForCrashReport];
+        NSString *username = [self userNameForCrashReport];
+        NSString *useremail = [self userEmailForCrashReport];
+              
+        if ((userid && [userid length] > 0) ||
+            (username && [username length] > 0) ||
+            (useremail && [useremail length] > 0)) {
+          alertDescription = [NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundDescription"), appName];
+        }
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundTitle"), appName]
+                                                            message:alertDescription
+                                                           delegate:self
+                                                  cancelButtonTitle:BITHockeyLocalizedString(@"CrashDontSendReport")
+                                                  otherButtonTitles:BITHockeyLocalizedString(@"CrashSendReport"), nil];
+        
+        if (self.shouldShowAlwaysButton) {
+          [alertView addButtonWithTitle:BITHockeyLocalizedString(@"CrashSendReportAlways")];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [alertView show];
+        })
+
+      } else {
+        [self sendCrashReports];
       }
-      
-      NSString *appName = bit_appName(BITHockeyLocalizedString(@"HockeyAppNamePlaceholder"));
-      NSString *alertDescription = [NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundAnonymousDescription"), appName];
-      
-      // the crash report is not anynomous any more if username or useremail are not nil
-      NSString *userid = [self userIDForCrashReport];
-      NSString *username = [self userNameForCrashReport];
-      NSString *useremail = [self userEmailForCrashReport];
-            
-      if ((userid && [userid length] > 0) ||
-          (username && [username length] > 0) ||
-          (useremail && [useremail length] > 0)) {
-        alertDescription = [NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundDescription"), appName];
-      }
-      
-      UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:BITHockeyLocalizedString(@"CrashDataFoundTitle"), appName]
-                                                          message:alertDescription
-                                                         delegate:self
-                                                cancelButtonTitle:BITHockeyLocalizedString(@"CrashDontSendReport")
-                                                otherButtonTitles:BITHockeyLocalizedString(@"CrashSendReport"), nil];
-      
-      if (self.shouldShowAlwaysButton) {
-        [alertView addButtonWithTitle:BITHockeyLocalizedString(@"CrashSendReportAlways")];
-      }
-      
-      [alertView show];
-    } else {
-      [self sendCrashReports];
     }
-  }
+  });
 }
 
 /**
