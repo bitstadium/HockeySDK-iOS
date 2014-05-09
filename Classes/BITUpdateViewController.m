@@ -364,6 +364,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyUpdateViewAppearing object:nil];
   if (_isAppStoreEnvironment) {
     self.appStoreButtonState = AppStoreButtonStateOffline;
   } else if (self.mandatoryUpdate) {
@@ -375,6 +376,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyUpdateViewDisappearing object:nil];
   _updateManager.currentHockeyViewController = nil;
   //if the popover is still visible, dismiss it
   [_popOverController dismissPopoverAnimated:YES];

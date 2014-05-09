@@ -72,6 +72,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyUserDataViewAppearing object:nil];
+
   [super viewWillAppear:animated];
 
   _statusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
@@ -102,6 +104,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyUserDataViewDisappearing object:nil];
 	[super viewWillDisappear:animated];
   
   [[UIApplication sharedApplication] setStatusBarStyle:_statusBarStyle];

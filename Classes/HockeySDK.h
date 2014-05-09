@@ -50,6 +50,8 @@
 #if HOCKEYSDK_FEATURE_STORE_UPDATES
 #import "BITStoreUpdateManager.h"
 #import "BITStoreUpdateManagerDelegate.h"
+#define BITHockeyUpdateViewAppearing @"BITHockeyUpdateViewAppearing"
+#define BITHockeyUpdateViewDisappearing @"BITHockeyUpdateViewDisappearing"
 #endif /* HOCKEYSDK_FEATURE_STORE_UPDATES */
 
 #if HOCKEYSDK_FEATURE_FEEDBACK
@@ -59,10 +61,18 @@
 #import "BITFeedbackComposeViewController.h"
 #import "BITFeedbackComposeViewControllerDelegate.h"
 #import "BITFeedbackListViewController.h"
+#define BITHockeyFeedbackComposeViewAppearing @"BITHockeyFeedbackComposeViewAppearing"
+#define BITHockeyFeedbackComposeViewDisappearing @"BITHockeyFeedbackComposeViewDisappearing"
+#define BITHockeyFeedbackListViewAppearing @"BITHockeyFeedbackListViewAppearing"
+#define BITHockeyFeedbackListViewDisappearing @"BITHockeyFeedbackListViewDisappearing"
+#define BITHockeyUserDataViewAppearing @"BITHockeyUserDataViewAppearing"
+#define BITHockeyUserDataViewDisappearing @"BITHockeyUserDataViewDisappearing"
 #endif /* HOCKEYSDK_FEATURE_FEEDBACK */
 
 #if HOCKEYSDK_FEATURE_AUTHENTICATOR
 #import "BITAuthenticator.h"
+#define BITHockeyAuthenticationViewAppearing @"BITHockeyAuthenticationViewAppearing"
+#define BITHockeyAuthenticationViewDisappearing @"BITHockeyAuthenticationViewDisappearing"
 #endif
 
 // Notification message which HockeyManager is listening to, to retry requesting updated from the server

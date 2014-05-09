@@ -196,6 +196,10 @@
   [self.tableView flashScrollIndicators];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackListViewAppearing object:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
   if (self.userDataComposeFlow) {
     self.userDataComposeFlow = NO;
@@ -231,6 +235,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
   self.manager.currentFeedbackListViewController = nil;
   
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackListViewDisappearing object:nil];
   [super viewWillDisappear:animated];
 }
 
