@@ -167,6 +167,8 @@
                                            selector:@selector(keyboardWillBeHidden:)
                                                name:UIKeyboardWillHideNotification object:nil];
 
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackComposeViewAppearing object:nil];
+
   self.manager.currentFeedbackComposeViewController = self;
   
   [super viewWillAppear:animated];
@@ -207,6 +209,8 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
   
+  [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackComposeViewDisappearing object:nil];
+
   self.manager.currentFeedbackComposeViewController = nil;
   
 	[super viewWillDisappear:animated];
