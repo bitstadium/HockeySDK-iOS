@@ -17,3 +17,4 @@ FOUNDATION_EXPORT const unsigned char HockeySDK_iOSVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <HockeySDK_iOS/PublicHeader.h>
 
 
+#import <HockeySDK/HockeySDK.h>
