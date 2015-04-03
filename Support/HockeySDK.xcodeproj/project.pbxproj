@@ -242,6 +242,7 @@
 		5CB39B531AC2477C007ABD93 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9760F6C318BB4D2D00959B93 /* AssetsLibrary.framework */; };
 		5CB39B541AC24781007ABD93 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E400561D148D79B500EB22B9 /* Foundation.framework */; };
 		5CB39B551AC2478D007ABD93 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41EB48B148D7C4E0015DEDC /* CrashReporter.framework */; };
+		5CE141BC1ACF5F10002B551B /* HockeySDKResources.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1E59550A15B6F45800A03429 /* HockeySDKResources.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		973EC8B418BCA7BC00DBFFBB /* BITImageAnnotationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F0FA0018AE375E00EF50AA /* BITImageAnnotationViewController.m */; };
 		973EC8B718BCA8A200DBFFBB /* BITRectangleImageAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 973EC8B518BCA8A200DBFFBB /* BITRectangleImageAnnotation.h */; };
 		973EC8B818BCA8A200DBFFBB /* BITRectangleImageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 973EC8B618BCA8A200DBFFBB /* BITRectangleImageAnnotation.m */; };
@@ -314,7 +315,27 @@
 			remoteGlobalIDString = 1E59550915B6F45800A03429;
 			remoteInfo = HockeySDKResources;
 		};
+		5CE141BD1ACF5F15002B551B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4005611148D79B500EB22B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E59550915B6F45800A03429;
+			remoteInfo = HockeySDKResources;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5CE141BB1ACF5F09002B551B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				5CE141BC1ACF5F10002B551B /* HockeySDKResources.bundle in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1E0828FF1708F69A0073050E /* BITStoreUpdateManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITStoreUpdateManagerDelegate.h; sourceTree = "<group>"; };
@@ -1086,10 +1107,12 @@
 				5CB39AD41AC24477007ABD93 /* Frameworks */,
 				5CB39AD51AC24477007ABD93 /* Headers */,
 				5CB39AD61AC24477007ABD93 /* Resources */,
+				5CE141BB1ACF5F09002B551B /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				5CE141BE1ACF5F15002B551B /* PBXTargetDependency */,
 			);
 			name = "HockeySDK-iOS";
 			productName = "HockeySDK-iOS";
@@ -1397,6 +1420,11 @@
 			isa = PBXTargetDependency;
 			target = 1E59550915B6F45800A03429 /* HockeySDKResources */;
 			targetProxy = 1EA1170A16F54A5C001C015C /* PBXContainerItemProxy */;
+		};
+		5CE141BE1ACF5F15002B551B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E59550915B6F45800A03429 /* HockeySDKResources */;
+			targetProxy = 5CE141BD1ACF5F15002B551B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
