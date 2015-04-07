@@ -1,0 +1,275 @@
+/*
+ Localization provided by Ivan Kovalisko
+ ikovalisko@gmail.com
+ */
+
+
+/* General */
+
+/* For dialogs yes buttons */
+"HockeyYes" = "Так";
+
+/* For dialogs no buttons */
+"HockeyNo" = "Ні";
+
+/* For dialogs ok buttons */
+"HockeyOK" = "Гаразд";
+
+/* Replacement for app name, if it could not be detected */
+"HockeyAppNamePlaceholder" = "Цей додаток";
+
+/* Crash */
+
+
+/* Crash dialog */
+
+/* Title showing in the alert box when crash report data has been found */
+"CrashDataFoundTitle" = "Додаток %@ несподівано завершився";
+
+/* Description explaining that crash data has been found and ask the user if the data might be uploaded to the developers server */
+"CrashDataFoundAnonymousDescription" = "Чи хотіли б Ви надіслати аноміний звіт, щоб ми могли виправити цю помилку?";
+
+/* Description explaining that crash data has been found and ask the user if the non anonymous data might be uplaoded to the developers server */
+"CrashDataFoundDescription" = "Чи хотіли б Ви надіслати звіт, щоб ми могли виправити цю помилку?";
+
+/* Alert box button if the users wants to send crash data always automatically */
+"CrashSendReportAlways" = "Надсилати завжди";
+
+/* Alert box button to send the crash report once */
+"CrashSendReport" = "Надіслати звіт";
+
+/* Alert box button to decline sending the report */
+"CrashDontSendReport" = "Не надсилати";
+
+/* Text showing in a processing box that the crash data is being uploaded to the server */
+"CrashReportSending" = "Надсилання…";
+
+
+/* Update */
+
+
+/* Update Alert view */
+
+/* Update available */
+"UpdateAvailable" = "Доступне оновлення";
+
+"UpdateAlertTextWithAppVersion" = "Доступно: %@";
+
+"UpdateAlertMandatoryTextWithAppVersion" = "Доступне обов’язкове оновлення для %@!";
+
+"UpdateIgnore" = "Ігнорувати";
+
+"UpdateShow" = "Показати";
+
+"UpdateInstall" = "Встановити";
+
+"UpdateRemindMe" = "Нагадати пізніше";
+
+
+/* Update Details */
+
+"UpdateScreenTitle" = "Оновлення";
+
+"UpdateButtonCheck" = "ПЕРЕВІРИТИ";
+
+"UpdateButtonSearching" = "ПЕРЕВІРКА";
+
+"UpdateButtonUpdate" = "ОНОВИТИ";
+
+"UpdateButtonInstalling" = "ВСТАНОВЛЕННЯ";
+
+"UpdateButtonOffline" = "ОФЛАЙН";
+
+"UpdateInstalled" = "ВСТАНОВЛЕНО";
+
+"UpdateVersion" = "Версія";
+
+"UpdateShowPreviousVersions" = "Показати попередні версії...";
+
+"UpdateNoUpdateAvailableTitle" = "Немає оновлень";
+
+"UpdateNoUpdateAvailableMessage" = "%@: уже найсвіжіша версія.";
+
+"UpdateError" = "Помилка";
+
+"UpdateWarning" = "Увага";
+
+"UpdateNoReleaseNotesAvailable" = "Ця версія не має коментарів.";
+
+
+/* Update Authorization  */
+
+"UpdateAuthorizationProgress" = "Авторизація...";
+
+"UpdateAuthorizationOffline" = "Необхідне підключення до інтернету!";
+
+"UpdateAuthorizationDenied" = "У доступі відмовлено. Будь ласка, зверніться до розробника.";
+
+
+/* Update Expiry  */
+
+"UpdateExpired" = "Термін використання %@ вичерпався і більше не буде доступним.";
+
+
+/* Update Simulator Warning */
+
+"UpdateSimulatorMessage" = "Hockey Update не працює в Симуляторі.\nСхема itms-services:// впроваджена, але не працюватиме.";
+
+
+/* Feedback */
+
+
+/* New Message Alert */
+
+/* Alert Title */
+"HockeyFeedbackNewMessageTitle" = "Нова відповідь на відгук";
+
+/* Alert Text */
+"HockeyFeedbackNewMessageText" = "З’явилася нова відповідь на Ваш відгук. Хочете її переглянути?";
+
+/* Alert Ignore Button */
+"HockeyFeedbackIgnore" = "Ігнорувати";
+
+/* Alert Show Button */
+"HockeyFeedbackShow" = "Показати";
+
+
+/* List View */
+
+/* Title */
+"HockeyFeedbackListTitle" = "Відгук";
+
+/* Last Updated */
+"HockeyFeedbackListLastUpdated" = "Останнє оновлення: %@";
+
+/* Never Updated */
+"HockeyFeedbackListNeverUpdated" = "Ніколи";
+
+/* Provide Feedback Button Title */
+"HockeyFeedbackListButtonWriteFeedback" = "Написати відгук";
+
+/* Add a Response Button Title */
+"HockeyFeedbackListButtonWriteResponse" = "Відповісти";
+
+/* User Data Set Name Button Title */
+"HockeyFeedbackListButtonUserDataSetName" = "Вкажіть Ваше ім’я";
+
+/* User Data Set Email Button Title */
+"HockeyFeedbackListButtonUserDataSetEmail" = "Вкажіть Ваш Email";
+
+/* User Data With Name Button Title */
+"HockeyFeedbackListButtonUserDataWithName" = "Ім’я: %@";
+
+/* User Data With Email Button Title */
+"HockeyFeedbackListButtonUserDataWithEmail" = "Електронна пошта: %@";
+
+/* Button title for deleting all local messages*/
+"HockeyFeedbackListButtonDeleteAllMessages" = "Видалити всі повідомлення";
+
+/* Message pending to be send */
+"HockeyFeedbackListMessagePending" = "Очікування";
+
+
+/* Delete All Messages Action Sheet / Alert View */
+
+/* Title for the Action Sheet */
+"HockeyFeedbackListDeleteAllTitle" = "Ця дія видалить всі повідомлення з цього пристрою.";
+
+/* Button Title to perform delete action */
+"HockeyFeedbackListDeleteAllDelete" = "Видалити";
+
+/* Button Title to cancel delete action */
+"HockeyFeedbackListDeleteAllCancel" = "Скасувати";
+
+
+/* Open Link In Safari Action Sheet / Alert View */
+
+/* Button Title to cancel */
+"HockeyFeedbackListLinkActionCancel" = "Скасувати";
+
+/* Button Title to Open the Link */
+"HockeyFeedbackListLinkActionOpen" = "Відкрити";
+
+/* Button Title to Copy the Link */
+"HockeyFeedbackListLinkActionCopy" = "Копіювати";
+
+
+/* UIActivity */
+
+/* Activity Sharing Button Title, App Name will be inserted */
+"HockeyFeedbackActivityButtonTitle" = "Відгук для %@";
+
+/* if there can no app name be found, use this instead for HockeyFeedbackActivityButtonTitle */
+"HockeyFeedbackActivityAppPlaceholder" = "Додаток";
+
+
+/* Compose Message */
+
+/* Title */
+"HockeyFeedbackComposeTitle" = "Новий відгук";
+
+/* Send button */
+"HockeyFeedbackComposeSend" = "Надіслати";
+
+/* Add Image button for attachment actions */
+"HockeyFeedbackComposeAttachmentAddImage" = "Додати зображення";
+
+/* Edit button for attachment actions */
+"HockeyFeedbackComposeAttachmentEdit" = "Редагувати зображення";
+
+/* Delete button for attachment actions */
+"HockeyFeedbackComposeAttachmentDelete" = "Видалити зображення";
+
+/* Cancel button for attachment actions */
+"HockeyFeedbackComposeAttachmentCancel" = "Скасувати";
+
+
+/* Set User Data */
+
+/* Title */
+"HockeyFeedbackUserDataTitle" = "Мої дані";
+
+/* Description On What Should Be Entered */
+"HockeyFeedbackUserDataDescription" = "Щоб надіслати відгук, вкажіть інформацію про себе.";
+
+/* Name Field */
+"HockeyFeedbackUserDataName" = "Ім’я";
+
+/* Name Placeholder */
+"HockeyFeedbackUserDataNamePlaceHolder" = "John Doe";
+
+/* Email Field */
+"HockeyFeedbackUserDataEmail" = "Електронна пошта";
+
+/* Email Placeholder */
+"HockeyFeedbackUserDataEmailPlaceholder" = "email@example.com";
+
+
+/* Authenticator */
+
+/* View Controller Title*/
+"HockeyAuthenticatorViewControllerTitle" = "HockeyApp";
+
+/* BITAuthenticatorAuthTypeUDIDProvider */
+"HockeyAuthenticationViewControllerWebUDIDLoginDescription" = "Розробник подав запит на UDID Вашого пристрою. Натисніть на посилання внизу, щоб перейти на веб-сайт HockeyApp і надати доступ.";
+"HockeyAuthenticationViewControllerWebLoginButtonTitle" = "Відкрити HockeyApp";
+
+/* BITAuthenticatorIdentificationTypeWebAuth */
+"HockeyAuthenticationViewControllerWebAuthLoginDescription" = "Розробник подав запит на отримання Вашої електронної адреси. Натисніть на посилання внизу, щоб перейти на веб-сайт HockeyApp і надати доступ.";
+
+/* BITAuthenticatorAuthTypeEmail and BITAuthenticatorAuthTypeEmailAndPassword */
+"HockeyAuthenticationViewControllerDataEmailAndPasswordDescription" = "Щоб отримати доступ до цього додатку, введіть Вашу електронну адрерсу та пароль.";
+"HockeyAuthenticationViewControllerDataEmailDescription" = "Щоб отримати доступ до цього додатку, введіть Вашу електронну адрерсу.";
+"HockeyAuthenticationViewControllerEmailPlaceholder" = "email@example.com";
+"HockeyAuthenticationViewControllerPasswordPlaceholder" = "Обов’язково";
+"HockeyAuthenticationViewControllerEmailDescription" = "Електронна пошта";
+"HockeyAuthenticationViewControllerPasswordDescription" = "Пароль";
+
+/* Error presented to the user if authentication failed because of networking issues */
+"HockeyAuthenticationViewControllerNetworkError" = "Не вдоалося авторизуватись, тому що Ваш пристрій не підключений до Інтернету. Спробуйте ще раз.";
+
+"HockeyAuthenticationFailedAuthenticate" = "Не вдоалося авторизуватись. Спробуйте ще раз або зв’яжіться з розробником цього додатку.";
+"HockeyAuthenticationNotMember" = "Вам не довзволено користуватися цим додатком. Будь ласка, зв’яжіться з розробником.";
+"HockeyAuthenticationContactDeveloper" = "Помилка авторизації. Будь ласка, зв’яжіться з розробником цього додатку.";
+"HockeyAuthenticationWrongEmailPassword" = "Неправильна електронна адреса або пароль. Будь ласка, перевірте введені дані і спробуйте ще раз.";
+"HockeyAuthenticationAuthSecretMissing" = "HockeySDK authorization secret не налаштований або не вказаний. Будь ласка, зв’яжіться з розробником цього додатку.";
