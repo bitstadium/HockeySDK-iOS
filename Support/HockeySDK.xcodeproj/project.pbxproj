@@ -148,7 +148,6 @@
 		1EF95CAA162CB314000AE3AD /* BITFeedbackComposeViewControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF95CA9162CB313000AE3AD /* BITFeedbackComposeViewControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EFF03E517F2485500A5F13C /* BITCrashManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */; };
 		5C89D8A81AC2522500B945F7 /* BITCrashDetailsPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1ECA8F4B192B5BD8006B9416 /* BITCrashDetailsPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5CB39ADD1AC24477007ABD93 /* HockeySDK-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CB39ADC1AC24477007ABD93 /* HockeySDK-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5CB39AF51AC24569007ABD93 /* BITHTTPOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = E4933E7E17B66CDA00B11ACC /* BITHTTPOperation.h */; };
 		5CB39AF61AC24569007ABD93 /* BITHTTPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E4933E7F17B66CDA00B11ACC /* BITHTTPOperation.m */; };
 		5CB39AF71AC24569007ABD93 /* BITHockeyAppClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E40E0B0A17DA1AFF005E38C1 /* BITHockeyAppClient.h */; };
@@ -469,7 +468,6 @@
 		1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashManagerTests.m; sourceTree = "<group>"; };
 		5CB39AD81AC24477007ABD93 /* HockeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HockeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CB39ADB1AC24477007ABD93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5CB39ADC1AC24477007ABD93 /* HockeySDK-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HockeySDK-iOS.h"; sourceTree = "<group>"; };
 		973EC8B518BCA8A200DBFFBB /* BITRectangleImageAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITRectangleImageAnnotation.h; sourceTree = "<group>"; };
 		973EC8B618BCA8A200DBFFBB /* BITRectangleImageAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITRectangleImageAnnotation.m; sourceTree = "<group>"; };
 		973EC8B918BDE29800DBFFBB /* BITArrowImageAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITArrowImageAnnotation.h; sourceTree = "<group>"; };
@@ -794,7 +792,6 @@
 		5CB39AD91AC24477007ABD93 /* HockeySDK-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				5CB39ADC1AC24477007ABD93 /* HockeySDK-iOS.h */,
 				5CB39ADA1AC24477007ABD93 /* Supporting Files */,
 			);
 			path = "HockeySDK-iOS";
@@ -1028,7 +1025,6 @@
 				5CB39AFE1AC24569007ABD93 /* BITHockeyBaseViewController.h in Headers */,
 				5CB39AF71AC24569007ABD93 /* BITHockeyAppClient.h in Headers */,
 				5CB39AFD1AC24569007ABD93 /* BITHockeyBaseManagerPrivate.h in Headers */,
-				5CB39ADD1AC24477007ABD93 /* HockeySDK-iOS.h in Headers */,
 				5CB39B131AC24569007ABD93 /* BITCrashManager.h in Headers */,
 				5CB39B0F1AC24569007ABD93 /* BITAuthenticationViewController.h in Headers */,
 				5CB39B371AC24569007ABD93 /* BITFeedbackActivity.h in Headers */,
