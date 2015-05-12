@@ -33,50 +33,50 @@
 /**
  * If true, include support for handling crash reports
  *
- * _Default_: Enabled
+ * _Default_: Disabled
  */
 #ifndef HOCKEYSDK_FEATURE_CRASH_REPORTER
-#    define HOCKEYSDK_FEATURE_CRASH_REPORTER 1
+#    define HOCKEYSDK_FEATURE_CRASH_REPORTER 0
 #endif /* HOCKEYSDK_FEATURE_CRASH_REPORTER */
 
 
 /**
  * If true, include support for managing user feedback
  *
- * _Default_: Enabled
+ * _Default_: Disabled
  */
 #ifndef HOCKEYSDK_FEATURE_FEEDBACK
-#    define HOCKEYSDK_FEATURE_FEEDBACK 1
+#    define HOCKEYSDK_FEATURE_FEEDBACK 0
 #endif /* HOCKEYSDK_FEATURE_FEEDBACK */
 
 
 /**
  * If true, include support for informing the user about new updates pending in the App Store
  *
- * _Default_: Enabled
+ * _Default_: Disabled
  */
 #ifndef HOCKEYSDK_FEATURE_STORE_UPDATES
-#    define HOCKEYSDK_FEATURE_STORE_UPDATES 1
+#    define HOCKEYSDK_FEATURE_STORE_UPDATES 0
 #endif /* HOCKEYSDK_FEATURE_STORE_UPDATES */
 
 
 /**
  * If true, include support for authentication installations for Ad-Hoc and Enterprise builds
  *
- * _Default_: Enabled
+ * _Default_: Disabled
  */
 #ifndef HOCKEYSDK_FEATURE_AUTHENTICATOR
-#    define HOCKEYSDK_FEATURE_AUTHENTICATOR 1
+#    define HOCKEYSDK_FEATURE_AUTHENTICATOR 0
 #endif /* HOCKEYSDK_FEATURE_AUTHENTICATOR */
 
 
 /**
  * If true, include support for handling in-app updates for Ad-Hoc and Enterprise builds
  *
- * _Default_: Enabled
+ * _Default_: Disabled
  */
 #ifndef HOCKEYSDK_FEATURE_UPDATES
-#    define HOCKEYSDK_FEATURE_UPDATES 1
+#    define HOCKEYSDK_FEATURE_UPDATES 0
 #endif /* HOCKEYSDK_FEATURE_UPDATES */
 
 
