@@ -204,7 +204,14 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
         if (completion) { completion(NO, error); }
         return;
       }
-      [self handleAuthenticationWithEmail:[self providedEmail] password:@"" completion:completion];
+      if (nil == self.providedEmail) {
+        NSError *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
+                                             code:BITAuthenticatorEmailMissing
+                                         userInfo:@{NSLocalizedDescriptionKey : @"For transparent email validation, the provided email must be set"}];
+        if (completion) { completion(NO, error); }
+        return;
+      }
+      [self handleAuthenticationWithEmail:[self providedEmail] password:nil completion:completion];
       return;
   }
   
@@ -493,7 +500,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                           completion:(void (^)(BOOL, NSError *))completion {
   
   NSParameterAssert(email && email.length);
-  NSParameterAssert(self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail || (password && password.length));
+  NSParameterAssert((self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail) ||
+                    (self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent) ||
+                    (password && password.length));
   
   NSURLRequest *request = [self requestForAuthenticationEmail:email password:password];
 
