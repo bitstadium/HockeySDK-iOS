@@ -143,6 +143,10 @@ typedef NS_ENUM(NSInteger, BITAuthenticatorReason) {
    *  Not yet identified
    */
   BITAuthenticatorNotIdentified,
+  /**
+   *  Email for transparent email authentication missing
+   */
+  BITAuthenticatorEmailMissing
 };
 
 /**
