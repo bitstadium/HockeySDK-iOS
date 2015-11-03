@@ -272,7 +272,7 @@ BOOL bit_isPreiOS8Environment(void) {
 }
 
 BOOL bit_isAppStoreReceiptSandbox(void) {
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_SIMULATOR
   return NO;
 #else
   NSURL *appStoreReceiptURL = NSBundle.mainBundle.appStoreReceiptURL;
@@ -289,7 +289,7 @@ BOOL bit_hasEmbeddedMobileProvision(void) {
 }
 
 BOOL bit_isRunningInTestFlightEnvironment(void) {
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_SIMULATOR
   return NO;
 #else
   if (bit_isAppStoreReceiptSandbox() && !bit_hasEmbeddedMobileProvision()) {
@@ -300,7 +300,7 @@ BOOL bit_isRunningInTestFlightEnvironment(void) {
 }
 
 BOOL bit_isRunningInAppStoreEnvironment(void) {
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_SIMULATOR
   return NO;
 #else
   if (bit_isAppStoreReceiptSandbox() || bit_hasEmbeddedMobileProvision()) {

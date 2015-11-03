@@ -164,7 +164,7 @@ bitstadium_info_t bitstadium_library_info __attribute__((section("__TEXT,__bit_h
     _installString = bit_appAnonID(NO);
     _disableInstallTracking = NO;
     
-#if !TARGET_IPHONE_SIMULATOR
+#if !TARGET_OS_SIMULATOR
     // check if we are really in an app store environment
     if (bit_isRunningInAppStoreEnvironment()) {
       _appEnvironment = BITEnvironmentAppStore;
