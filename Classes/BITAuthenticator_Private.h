@@ -93,7 +93,6 @@
 
 #pragma mark - Testing
 - (void) storeInstallationIdentifier:(NSString*) identifier withType:(BITAuthenticatorIdentificationType) type;
-- (void)validateWithCompletion:(void (^)(BOOL validated, NSError *))completion;
 - (void)authenticationViewController:(UIViewController *)viewController
        handleAuthenticationWithEmail:(NSString *)email
                              request:(NSURLRequest *)request

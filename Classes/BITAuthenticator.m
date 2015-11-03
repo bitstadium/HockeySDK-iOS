@@ -334,7 +334,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   }
   
   NSString *validationPath = [NSString stringWithFormat:@"api/3/apps/%@/identity/validate", self.encodedAppIdentifier];
-  
   __weak typeof(self) weakSelf = self;
   if ([BITHockeyHelper isURLSessionSupported]) {
     NSURLRequest *request = [self.hockeyAppClient requestWithMethod:@"GET" path:validationPath parameters:[self validationParameters]];
@@ -453,39 +452,16 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 - (void)handleAuthenticationWithEmail:(NSString *)email
                             password:(NSString *)password
                           completion:(void (^)(BOOL, NSError *))completion {
-  NSParameterAssert(email && email.length);
-  NSParameterAssert(self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail ||self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent|| (password && password.length));
-  NSURLRequest* request = [self requestForAuthenticationEmail:email password:password];
-  
-  id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
-  BOOL isURLSessionSupported = (nsurlsessionClass && !bit_isRunningInAppExtension());
-  [self handleAuthenticationWithEmail:email request:request urlSessionSupported:isURLSessionSupported completion:completion];
+  [self authenticationViewController:nil handleAuthenticationWithEmail:email password:password completion:completion];
 }
 
 - (void)handleAuthenticationWithEmail:(NSString *)email
                              request:(NSURLRequest *)request
-                 urlSessionSupported:(BOOL)isURLSessionSupported
                           completion:(void (^)(BOOL, NSError *))completion {
-  __weak typeof (self) weakSelf = self;
-  if(isURLSessionSupported) {
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              typeof (self) strongSelf = weakSelf;
-                                              NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
-                                              [strongSelf handleAuthenticationWithResponse:httpResponse email:email data:data completion:completion];
-                                            }];
-    [task resume];
-  }else{
-    BITHTTPOperation *operation = [self.hockeyAppClient operationWithURLRequest:request
-                                                                     completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
-                                                                       typeof (self) strongSelf = weakSelf;
-                                                                       [strongSelf handleAuthenticationWithResponse:operation.response email:email data:responseData completion:completion];
-                                                                     }];
-    [self.hockeyAppClient enqeueHTTPOperation:operation];
-  }
+  [self authenticationViewController:nil
+       handleAuthenticationWithEmail:email
+                             request:request
+                          completion:completion];
 }
 
 #pragma mark - AuthenticationViewController Helper
@@ -520,7 +496,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   NSParameterAssert(self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail || (password && password.length));
   
   NSURLRequest *request = [self requestForAuthenticationEmail:email password:password];
-  
+
   [self authenticationViewController:viewController handleAuthenticationWithEmail:email request:request completion:completion];
 }
 
