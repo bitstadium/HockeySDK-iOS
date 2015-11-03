@@ -54,6 +54,15 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    */
   BITAuthenticatorIdentificationTypeHockeyAppEmail,
   /**
+   * Provide the HockeyApp account email.
+   * <br/><br/>
+   * Provide an email for transparent email authentication.
+   * If restrictApplicationUsage is enabled, the provided user account has to match a
+   * registered HockeyApp user who is a member or tester of the app.
+   * For identification purpose any HockeyApp user is allowed.
+   */
+  BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent,
+  /**
    * Ask for the HockeyApp account by email and password
    * <br/><br/>
    * This will present a user interface requesting the user to provide their
@@ -87,15 +96,6 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * For identification purpose any HockeyApp user is allowed.
    */
   BITAuthenticatorIdentificationTypeWebAuth,
-  /**
-   * Provide the HockeyApp account email.
-   * <br/><br/>
-   * Provide an email for transparent email authentication.
-   * If restrictApplicationUsage is enabled, the provided user account has to match a
-   * registered HockeyApp user who is a member or tester of the app.
-   * For identification purpose any HockeyApp user is allowed.
-   */
-  BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent,
 };
 
 /**
