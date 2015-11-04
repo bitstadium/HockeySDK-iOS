@@ -86,9 +86,9 @@
  *                     the UI. if succeeded is NO, it shows an alertView presenting the error
  *                     given by the completion block
  */
-- (void) authenticationViewController:(UIViewController*) viewController
-        handleAuthenticationWithEmail:(NSString*) email
-                             password:(NSString*) password
-                           completion:(void(^)(BOOL succeeded, NSError *error)) completion;
+- (void)authenticationViewController:(UIViewController*) viewController
+       handleAuthenticationWithEmail:(NSString*) email
+                            password:(NSString*) password
+                          completion:(void(^)(BOOL succeeded, NSError *error)) completion;
 
 @end

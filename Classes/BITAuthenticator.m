@@ -306,7 +306,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       break;
     }
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
-      if(nil == self.authenticationSecret) {
+      if (nil == self.authenticationSecret) {
         error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                     code:BITAuthenticatorAuthorizationSecretMissing
                                 userInfo:@{NSLocalizedDescriptionKey : @"For email validation, the authentication secret must be set"}];
