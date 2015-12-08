@@ -1576,7 +1576,11 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 - (NSMutableURLRequest *)requestWithBoundary:(NSString *)boundary {
   NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
-  
+  if ([self.delegate respondsToSelector:@selector(crashManagerCustomCrashPath)] &&
+    [[self.delegate crashManagerCustomCrashPath] isKindOfClass:[NSString class]]) {
+    postCrashPath = [self.delegate crashManagerCustomCrashPath];
+  }
+
   NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
                                                                     path:postCrashPath
                                                               parameters:nil];

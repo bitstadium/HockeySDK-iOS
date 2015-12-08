@@ -191,4 +191,11 @@
  */
 -(NSDictionary*)crashManagerRequestCustomHeaderDictionary;
 
+/** Define the path of the crash report endpoint
+
+ @return A string that will be appended after the server URL when posting the crash report
+ @see `[BITHockeyManager serverURL]`
+ */
+-(NSString*)crashManagerCustomCrashPath;
+
 @end
