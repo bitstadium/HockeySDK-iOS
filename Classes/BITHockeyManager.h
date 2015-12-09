@@ -90,6 +90,9 @@
 /// @name Initialization
 ///-----------------------------------------------------------------------------
 
++ (instancetype)new __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager] instead")));
+- (instancetype)init __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager] instead")));
+
 /**
  Returns a shared BITHockeyManager object
  

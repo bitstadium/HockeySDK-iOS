@@ -127,8 +127,7 @@ bitstadium_info_t bitstadium_library_info __attribute__((section("__TEXT,__bit_h
   static dispatch_once_t pred;
   
   dispatch_once(&pred, ^{
-    sharedInstance = [BITHockeyManager alloc];
-    sharedInstance = [sharedInstance init];
+    sharedInstance = [[self alloc] init];
   });
   
   return sharedInstance;
