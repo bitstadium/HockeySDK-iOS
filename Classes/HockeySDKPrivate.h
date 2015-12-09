@@ -72,6 +72,7 @@
 #define BIT_RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 
 NSBundle *BITHockeyBundle(void);
+NSString *BITCurrentAppVersion(void);
 NSString *BITHockeyLocalizedString(NSString *stringToken);
 NSString *BITHockeyMD5(NSString *str);
 

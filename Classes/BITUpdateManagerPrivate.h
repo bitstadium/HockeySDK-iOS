@@ -95,9 +95,6 @@
 // get/set current active hockey view controller
 @property (nonatomic, strong) BITUpdateViewController *currentHockeyViewController;
 
-// convenience method to get current running version string
-- (NSString *)currentAppVersion;
-
 // get newest app version
 - (BITAppVersionMetaInfo *)newestAppVersion;
 

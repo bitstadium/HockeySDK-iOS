@@ -227,7 +227,7 @@
   }
   
   NSString *installed = @"";
-  if ([appVersion.version isEqualToString:[_updateManager currentAppVersion]]) {
+  if ([appVersion.version isEqualToString:BITCurrentAppVersion()]) {
     installed = [NSString stringWithFormat:@"<span style=\"float:right;\"><b>%@</b></span>", BITHockeyLocalizedString(@"UpdateInstalled")];
   }
   
@@ -385,7 +385,7 @@
     
     // only show the newer version of the app by default, if we don't show all versions
     if (!_showAllVersions) {
-      if ([appVersion.version isEqualToString:[_updateManager currentAppVersion]]) {
+      if ([appVersion.version isEqualToString:BITCurrentAppVersion()]) {
         if (i == 1) {
           breakAfterThisAppVersion = YES;
         } else {
@@ -416,7 +416,7 @@
   
   for (BITAppVersionMetaInfo *appVersion in _updateManager.appVersions) {
     if (!showAllPending) {
-      if ([appVersion.version isEqualToString:[_updateManager currentAppVersion]]) {            
+      if ([appVersion.version isEqualToString:BITCurrentAppVersion()]) {
         showAllPending = YES;
         if (appVersion == _updateManager.newestAppVersion) {
           continue; // skip this version already if it the latest version is the installed one
