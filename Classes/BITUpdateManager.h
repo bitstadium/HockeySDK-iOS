@@ -74,6 +74,9 @@ typedef NS_ENUM (NSUInteger, BITUpdateSetting) {
 
 @interface BITUpdateManager : BITHockeyBaseManager <UIAlertViewDelegate>
 
++ (instancetype)new __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].updateManager instead")));
+- (instancetype)init __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].updateManager instead")));
+
 ///-----------------------------------------------------------------------------
 /// @name Update Checking
 ///-----------------------------------------------------------------------------

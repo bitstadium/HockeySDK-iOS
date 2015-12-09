@@ -133,8 +133,10 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  */
 @interface BITAuthenticator : BITHockeyBaseManager
 
-#pragma mark - Configuration
++ (instancetype)new __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].authenticator instead")));
+- (instancetype)init __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].authenticator instead")));
 
+#pragma mark - Configuration
 
 ///-----------------------------------------------------------------------------
 /// @name Configuration

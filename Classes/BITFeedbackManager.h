@@ -138,6 +138,9 @@ typedef NS_ENUM(NSInteger, BITFeedbackObservationMode) {
 
 @interface BITFeedbackManager : BITHockeyBaseManager
 
++ (instancetype)new __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].feedbackManager instead")));
+- (instancetype)init __attribute__((unavailable("Use +[BITHockeyManager sharedHockeyManager].feedbackManager instead")));
+
 ///-----------------------------------------------------------------------------
 /// @name General settings
 ///-----------------------------------------------------------------------------

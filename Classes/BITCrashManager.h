@@ -157,6 +157,8 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
 
 @interface BITCrashManager : BITHockeyBaseManager
 
++ (instancetype)new __attribute__((unavailable("Use [BITHockeyManager sharedHockeyManager].crashManager instead")));
+- (instancetype)init __attribute__((unavailable("Use [BITHockeyManager sharedHockeyManager].crashManager instead")));
 
 ///-----------------------------------------------------------------------------
 /// @name Configuration
