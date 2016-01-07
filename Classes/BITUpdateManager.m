@@ -956,16 +956,39 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
   if (nsurlsessionClass && !bit_isRunningInAppExtension()) {
     NSURLSession *session = self.urlSession;
-    NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request];
+    NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+      [session finishTasksAndInvalidate];
+      
+      if (error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          [self handleError:error];
+        });
+        return;
+      }
+      
+      if ([response respondsToSelector:@selector(statusCode)]) {
+        NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
+        if (statusCode == 404) {
+          NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
+          [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
+                                                code:BITUpdateAPIServerReturnedInvalidStatus
+                                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorStr, NSLocalizedDescriptionKey, nil]]];
+          return;
+        }
+      }
+      self.receivedData = data.mutableCopy ?: [NSMutableData data];
+      [self finishLoading];
+    }];
+    
     if (!sessionTask) {
       self.checkInProgress = NO;
       [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
                                             code:BITUpdateAPIClientCannotCreateConnection
                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Url Connection could not be created.", NSLocalizedDescriptionKey, nil]]];
-    }else{
+    } else {
       [sessionTask resume];
     }
-  }else{
+  } else {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
@@ -1086,7 +1109,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 - (void)finishLoading {
-  {
+{
     self.checkInProgress = NO;
     
     if ([self.receivedData length]) {
@@ -1220,53 +1243,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 // api call returned, parsing
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
   [self finishLoading];
-}
-
-#pragma mark - NSURLSession
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-  
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [session finishTasksAndInvalidate];
-    
-    if(error){
-      [self handleError:error];
-    }else{
-      [self finishLoading];
-    }
-  });
-}
-
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-  [_receivedData appendData:data];
-}
-
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-  
-  if ([response respondsToSelector:@selector(statusCode)]) {
-    NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
-    if (statusCode == 404) {
-      [dataTask cancel];
-      NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
-      [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
-                                            code:BITUpdateAPIServerReturnedInvalidStatus
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorStr, NSLocalizedDescriptionKey, nil]]];
-      if (completionHandler) { completionHandler(NSURLSessionResponseCancel); }
-      return;
-    }
-    if (completionHandler) { completionHandler(NSURLSessionResponseAllow);}
-  }
-  
-  self.receivedData = [NSMutableData data];
-  [_receivedData setLength:0];
-}
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest *))completionHandler {
-  NSURLRequest *newRequest = request;
-  if (response) {
-    newRequest = nil;
-  }
-  if (completionHandler) { completionHandler(newRequest); }
 }
 
 #pragma mark - Properties
