@@ -52,6 +52,12 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   BITUpdateAlertViewTagMandatoryUpdate = 2,
 };
 
+@interface BITUpdateManager ()
+
+@property (nonatomic, strong) NSURLSession *urlSession;
+
+@end
+
 @implementation BITUpdateManager {
   NSString *_currentAppVersion;
   
@@ -905,9 +911,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   
   id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
   if (nsurlsessionClass && !bit_isRunningInAppExtension()) {
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:(id<NSURLSessionDelegate>)self delegateQueue:nil];
-    
+    NSURLSession *session = self.urlSession;
     NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request];
     if (!sessionTask) {
       self.checkInProgress = NO;
@@ -1263,6 +1267,14 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 #pragma mark - Properties
+
+- (NSURLSession *)urlSession {
+  if (!_urlSession) {
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    _urlSession = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:(id<NSURLSessionDelegate>)self delegateQueue:nil];
+  }
+  return _urlSession;
+}
 
 - (NSString *)currentAppVersion {
   return _currentAppVersion;
