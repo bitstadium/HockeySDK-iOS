@@ -556,6 +556,50 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   });
 }
 
+- (void)showVersionIsCurrentAlert {
+  // use currentVersionString, as version still may differ (e.g. server: 1.2, client: 1.3)
+  NSString *versionString = [self currentAppVersion];
+  NSString *shortVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+  shortVersionString = shortVersionString ? [NSString stringWithFormat:@"%@ ", shortVersionString] : @"";
+  versionString = [shortVersionString length] ? [NSString stringWithFormat:@"(%@)", versionString] : versionString;
+  NSString *currentVersionString = [NSString stringWithFormat:@"%@ %@ %@%@", self.newestAppVersion.name, BITHockeyLocalizedString(@"UpdateVersion"), shortVersionString, versionString];
+  NSString *alertMsg = [NSString stringWithFormat:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableMessage"), currentVersionString];
+  /* We won't use this for now until we have a more robust solution for displaying UIAlertController
+   // requires iOS 8
+   id uialertcontrollerClass = NSClassFromString(@"UIAlertController");
+   if (uialertcontrollerClass) {
+   __weak typeof(self) weakSelf = self;
+   UIAlertController *alertController = [UIAlertController alertControllerWithTitle:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableTitle")
+   message:alertMsg
+   preferredStyle:UIAlertControllerStyleAlert];
+   
+   
+   UIAlertAction *okAction = [UIAlertAction actionWithTitle:BITHockeyLocalizedString(@"HockeyOK")
+   style:UIAlertActionStyleDefault
+   handler:^(UIAlertAction * action) {
+   typeof(self) strongSelf = weakSelf;
+   _updateAlertShowing = NO;
+   if ([strongSelf expiryDateReached] && !strongSelf.blockingView) {
+   [strongSelf alertFallback:_blockingScreenMessage];
+   }
+   }];
+   
+   [alertController addAction:okAction];
+   
+   [self showAlertController:alertController];
+   } else {
+   */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableTitle")
+                                                  message:alertMsg
+                                                 delegate:nil
+                                        cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK")
+                                        otherButtonTitles:nil];
+  [alert show];
+#pragma clang diagnostic pop
+  /*}*/
+}
 
 - (void)showCheckForUpdateAlert {
   if (self.appEnvironment != BITEnvironmentOther) return;
@@ -1112,48 +1156,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
         
         // show alert if we are on the latest & greatest
         if (_showFeedback && !self.isUpdateAvailable) {
-          // use currentVersionString, as version still may differ (e.g. server: 1.2, client: 1.3)
-          NSString *versionString = [self currentAppVersion];
-          NSString *shortVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-          shortVersionString = shortVersionString ? [NSString stringWithFormat:@"%@ ", shortVersionString] : @"";
-          versionString = [shortVersionString length] ? [NSString stringWithFormat:@"(%@)", versionString] : versionString;
-          NSString *currentVersionString = [NSString stringWithFormat:@"%@ %@ %@%@", self.newestAppVersion.name, BITHockeyLocalizedString(@"UpdateVersion"), shortVersionString, versionString];
-          NSString *alertMsg = [NSString stringWithFormat:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableMessage"), currentVersionString];
-          /* We won't use this for now until we have a more robust solution for displaying UIAlertController
-          // requires iOS 8
-          id uialertcontrollerClass = NSClassFromString(@"UIAlertController");
-          if (uialertcontrollerClass) {
-            __weak typeof(self) weakSelf = self;
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableTitle")
-                                                                                     message:alertMsg
-                                                                              preferredStyle:UIAlertControllerStyleAlert];
-            
-            
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:BITHockeyLocalizedString(@"HockeyOK")
-                                                               style:UIAlertActionStyleDefault
-                                                             handler:^(UIAlertAction * action) {
-                                                               typeof(self) strongSelf = weakSelf;
-                                                               _updateAlertShowing = NO;
-                                                               if ([strongSelf expiryDateReached] && !strongSelf.blockingView) {
-                                                                 [strongSelf alertFallback:_blockingScreenMessage];
-                                                               }
-                                                             }];
-            
-            [alertController addAction:okAction];
-            
-            [self showAlertController:alertController];
-          } else {
-           */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BITHockeyLocalizedString(@"UpdateNoUpdateAvailableTitle")
-                                                            message:alertMsg
-                                                           delegate:nil
-                                                  cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK")
-                                                  otherButtonTitles:nil];
-            [alert show];
-#pragma clang diagnostic pop
-          /*}*/
+          [self showVersionIsCurrentAlert];
         }
         
         if (self.isUpdateAvailable && (self.alwaysShowUpdateReminder || newVersionDiffersFromCachedVersion || [self hasNewerMandatoryVersion])) {
