@@ -746,6 +746,21 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   }
 }
 
+- (BOOL)hasNewerMandatoryVersion {
+  BOOL result = NO;
+  
+  for (BITAppVersionMetaInfo *appVersion in self.appVersions) {
+    if ([appVersion.version isEqualToString:self.currentAppVersion] || bit_versionCompare(appVersion.version, self.currentAppVersion) == NSOrderedAscending) {
+      break;
+    }
+    
+    if ([appVersion.mandatory boolValue]) {
+      result = YES;
+    }
+  }
+  return result;
+}
+
 // nag the user with neverending alerts if we cannot find out the window for presenting the covering sheet
 - (void)alertFallback:(NSString *)message {
   /* We won't use this for now until we have a more robust solution for displaying UIAlertController
@@ -1247,33 +1262,22 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   if (completionHandler) { completionHandler(newRequest); }
 }
 
-- (BOOL)hasNewerMandatoryVersion {
-  BOOL result = NO;
-  
-  for (BITAppVersionMetaInfo *appVersion in self.appVersions) {
-    if ([appVersion.version isEqualToString:self.currentAppVersion] || bit_versionCompare(appVersion.version, self.currentAppVersion) == NSOrderedAscending) {
-      break;
-    }
-    
-    if ([appVersion.mandatory boolValue]) {
-      result = YES;
-    }
-  }
-  
-  return result;
+#pragma mark - Properties
+
+- (NSString *)currentAppVersion {
+  return _currentAppVersion;
 }
 
-#pragma mark - Properties
+- (BITAppVersionMetaInfo *)newestAppVersion {
+  BITAppVersionMetaInfo *appVersion = [_appVersions objectAtIndex:0];
+  return appVersion;
+}
 
 - (void)setCurrentHockeyViewController:(BITUpdateViewController *)aCurrentHockeyViewController {
   if (_currentHockeyViewController != aCurrentHockeyViewController) {
     _currentHockeyViewController = aCurrentHockeyViewController;
     //HockeySDKLog(@"active hockey view controller: %@", aCurrentHockeyViewController);
   }
-}
-
-- (NSString *)currentAppVersion {
-  return _currentAppVersion;
 }
 
 - (void)setLastCheck:(NSDate *)aLastCheck {
@@ -1301,11 +1305,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     }      
     [self didChangeValueForKey:@"appVersions"];
   }
-}
-
-- (BITAppVersionMetaInfo *)newestAppVersion {
-  BITAppVersionMetaInfo *appVersion = [_appVersions objectAtIndex:0];
-  return appVersion;
 }
 
 - (void)setBlockingView:(UIView *)anBlockingView {
