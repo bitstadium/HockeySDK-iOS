@@ -267,7 +267,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 - (void)loadAppVersionUsageData {
   self.currentAppVersionUsageTime = @0;
   
-  if ([self expiryDateReached]) return;
+  if ([self expiryDateReached]) { return; }
   
   BOOL newVersion = NO;
   
