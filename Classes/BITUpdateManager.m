@@ -973,16 +973,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
         });
         return;
       }
-      if ([response respondsToSelector:@selector(statusCode)]) {
-        NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
-        if (statusCode == 404) {
-          NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
-          [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
-                                                code:BITUpdateAPIServerReturnedInvalidStatus
-                                            userInfo:@{NSLocalizedDescriptionKey : errorStr}]];
-          return;
-        }
-      }
+      if ([self handleErrorInResponse:response]) { return; };
+
       self.receivedData = data.mutableCopy ?: [NSMutableData data];
       [self finishLoading];
     }];
@@ -1110,6 +1102,20 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 #pragma mark - Handle responses
 
+- (BOOL)handleErrorInResponse:(NSURLResponse *)response {
+  if ([response respondsToSelector:@selector(statusCode)]) {
+    NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
+    if (statusCode == 404) {
+      NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
+      [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
+                                            code:BITUpdateAPIServerReturnedInvalidStatus
+                                        userInfo:@{NSLocalizedDescriptionKey : errorStr}]];
+      return YES;
+    }
+  }
+  return NO;
+}
+
 - (void)handleError:(NSError *)error {
   self.receivedData = nil;
   self.urlConnection = nil;
@@ -1227,16 +1233,10 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-  if ([response respondsToSelector:@selector(statusCode)]) {
-    NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
-    if (statusCode == 404) {
-      [connection cancel];  // stop connecting; no more delegate messages
-      NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
-      [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
-                                            code:BITUpdateAPIServerReturnedInvalidStatus
-                                        userInfo:@{NSLocalizedDescriptionKey : errorStr}]];
-      return;
-    }
+  if ([self handleErrorInResponse:response]) {
+    // stop connecting; no more delegate messages
+    [connection cancel];
+    return;
   }
 
   self.receivedData = [NSMutableData data];
