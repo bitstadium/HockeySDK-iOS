@@ -32,8 +32,6 @@
 
 #if HOCKEYSDK_FEATURE_UPDATES
 
-#import <sys/sysctl.h>
-
 #import "HockeySDKPrivate.h"
 #import "BITHockeyHelper.h"
 
@@ -62,15 +60,12 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   NSString *_currentAppVersion;
   
   BITUpdateViewController *_currentHockeyViewController;
-  
-  BOOL _dataFound;
+
   BOOL _showFeedback;
   BOOL _updateAlertShowing;
-  BOOL _lastCheckFailed;
   BOOL _sendUsageData;
   
   NSFileManager  *_fileManager;
-  NSString       *_updateDir;
   NSString       *_usageDataFile;
 
   id _appDidBecomeActiveObserver;
@@ -95,8 +90,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 - (void)reportError:(NSError *)error {
   BITHockeyLog(@"ERROR: %@", [error localizedDescription]);
-  _lastCheckFailed = YES;
-  
+
   // only show error if we enable that
   if (_showFeedback) {
     /* We won't use this for now until we have a more robust solution for displaying UIAlertController
@@ -457,9 +451,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _delegate = nil;
     _expiryDate = nil;
     _checkInProgress = NO;
-    _dataFound = NO;
     _updateAvailable = NO;
-    _lastCheckFailed = NO;
     _currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     _blockingView = nil;
     _lastCheck = nil;
@@ -1161,8 +1153,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
           self.receivedData = nil;
           self.urlConnection = nil;
           return;
-        } else {
-          _lastCheckFailed = NO;
         }
         
         
