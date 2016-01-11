@@ -286,9 +286,9 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   }
   
   if (newVersion) {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]] forKey:kBITUpdateDateOfVersionInstallation];
+    [[NSUserDefaults standardUserDefaults] setObject:@([NSDate date].timeIntervalSinceReferenceDate) forKey:kBITUpdateDateOfVersionInstallation];
     [[NSUserDefaults standardUserDefaults] setObject:_uuid forKey:kBITUpdateUsageTimeForUUID];
-    [self storeUsageTimeForCurrentVersion:[NSNumber numberWithDouble:0]];
+    [self storeUsageTimeForCurrentVersion:@0.0];
   } else {
     if (![_fileManager fileExistsAtPath:_usageDataFile])
       return;
@@ -325,8 +325,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   
   double timeDifference = [[NSDate date] timeIntervalSinceReferenceDate] - [_usageStartTimestamp timeIntervalSinceReferenceDate];
   double previousTimeDifference = [self.currentAppVersionUsageTime doubleValue];
-  
-  [self storeUsageTimeForCurrentVersion:[NSNumber numberWithDouble:previousTimeDifference + timeDifference]];
+
+  [self storeUsageTimeForCurrentVersion:@(previousTimeDifference + timeDifference)];
 }
 
 - (void) storeUsageTimeForCurrentVersion:(NSNumber *)usageTime {
@@ -934,21 +934,20 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     NSURLSession *session = self.urlSession;
     NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
       [session finishTasksAndInvalidate];
-      
+
       if (error) {
         dispatch_async(dispatch_get_main_queue(), ^{
           [self handleError:error];
         });
         return;
       }
-      
       if ([response respondsToSelector:@selector(statusCode)]) {
         NSInteger statusCode = [((NSHTTPURLResponse *)response) statusCode];
         if (statusCode == 404) {
           NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
           [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
                                                 code:BITUpdateAPIServerReturnedInvalidStatus
-                                            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorStr, NSLocalizedDescriptionKey, nil]]];
+                                            userInfo:@{NSLocalizedDescriptionKey : errorStr}]];
           return;
         }
       }
@@ -1175,7 +1174,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
           } else {
             [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
                                                   code:BITUpdateAPIServerReturnedInvalidData
-                                              userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Invalid data received from server.", NSLocalizedDescriptionKey, nil]]];
+                                              userInfo:@{NSLocalizedDescriptionKey : @"Invalid data received from server."}]];
           }
         }
         // only set if different!
@@ -1202,7 +1201,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     } else if (![self expiryDateReached]) {
       [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
                                             code:BITUpdateAPIServerReturnedEmptyResponse
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Server returned an empty response.", NSLocalizedDescriptionKey, nil]]];
+                                        userInfo:@{NSLocalizedDescriptionKey : @"Server returned an empty response."}]];
     }
     
     if (!_updateAlertShowing && [self expiryDateReached] && !self.blockingView) {
@@ -1232,11 +1231,11 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       NSString *errorStr = [NSString stringWithFormat:@"Hockey API received HTTP Status Code %ld", (long)statusCode];
       [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
                                             code:BITUpdateAPIServerReturnedInvalidStatus
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorStr, NSLocalizedDescriptionKey, nil]]];
+                                        userInfo:@{NSLocalizedDescriptionKey : errorStr}]];
       return;
     }
   }
-  
+
   self.receivedData = [NSMutableData data];
   [_receivedData setLength:0];
 }
@@ -1269,7 +1268,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 - (BITAppVersionMetaInfo *)newestAppVersion {
-  BITAppVersionMetaInfo *appVersion = [_appVersions objectAtIndex:0];
+  BITAppVersionMetaInfo *appVersion = _appVersions[0];
   return appVersion;
 }
 
@@ -1299,7 +1298,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       defaultApp.name = bit_appName(BITHockeyLocalizedString(@"HockeyAppNamePlaceholder"));
       defaultApp.version = _currentAppVersion;
       defaultApp.shortVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-      _appVersions = [NSArray arrayWithObject:defaultApp];
+      _appVersions = @[defaultApp];
     } else {
       _appVersions = [anAppVersions copy];
     }      
@@ -1336,7 +1335,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _installationIdentification = installationIdentification;
     
     // we need to reset the usage time, because the user/device may have changed
-    [self storeUsageTimeForCurrentVersion:[NSNumber numberWithDouble:0]];
+    [self storeUsageTimeForCurrentVersion:@0.0];
     self.usageStartTimestamp = [NSDate date];
   }
 }
