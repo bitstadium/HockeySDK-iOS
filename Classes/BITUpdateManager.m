@@ -918,21 +918,61 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     return;
   }
   
-  NSString *parameter = [self parameterStringForUpdateRequest];
+  NSString *parameters = [self parameterStringForUpdateRequest];
+  NSURLRequest *request = [self updateRequestWithParameters:parameters];
 
-  // build request & send
-  NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
-  BITHockeyLog(@"INFO: Sending api request to %@", url);
+  id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
+  if (nsurlsessionClass && !bit_isRunningInAppExtension()) {
+    [self loadDataUsingNSURLSessionWithRequest:request];
+  } else {
+    [self loadDataUsingNSURLConnectionWithRequest:request];
+  }
+}
+
+- (NSString *)parameterStringForUpdateRequest {
+  NSMutableString *parameter = [NSMutableString stringWithFormat:@"api/2/apps/%@?format=json&extended=true&sdk=%@&sdk_version=%@&uuid=%@",
+                                bit_URLEncodedString([self encodedAppIdentifier]),
+                                BITHOCKEY_NAME,
+                                BITHOCKEY_VERSION,
+                                _uuid];
   
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:1 timeoutInterval:10.0];
+  // add installationIdentificationType and installationIdentifier if available
+  if (self.installationIdentification && self.installationIdentificationType) {
+    [parameter appendFormat:@"&%@=%@",
+                            bit_URLEncodedString(self.installationIdentificationType),
+                            bit_URLEncodedString(self.installationIdentification)
+    ];
+  }
+
+  // add additional statistics if user didn't disable flag
+  if (_sendUsageData) {
+    [parameter appendFormat:@"&app_version=%@&os=iOS&os_version=%@&device=%@&lang=%@&first_start_at=%@&usage_time=%@",
+                            bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]),
+                            bit_URLEncodedString([[UIDevice currentDevice] systemVersion]),
+                            bit_URLEncodedString([self getDevicePlatform]),
+                            bit_URLEncodedString([NSBundle mainBundle].preferredLocalizations[0]),
+                            bit_URLEncodedString([self installationDateString]),
+                            bit_URLEncodedString([self currentUsageString])
+    ];
+  }
+  return parameter;
+}
+
+- (NSURLRequest *)updateRequestWithParameters:(NSString *)parameters {
+  NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameters];
+  BITHockeyLog(@"INFO: Sending api request to %@", url);
+
+  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
   [request setHTTPMethod:@"GET"];
   [request setValue:@"Hockey/iOS" forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
   
-  id nsurlsessionClass = NSClassFromString(@"NSURLSessionDataTask");
-  if (nsurlsessionClass && !bit_isRunningInAppExtension()) {
-    NSURLSession *session = self.urlSession;
-    NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+  return request;
+}
+
+- (void)loadDataUsingNSURLSessionWithRequest:(NSURLRequest *)request {
+  NSURLSession *session = self.urlSession;
+  NSURLSessionDataTask *sessionTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
       [session finishTasksAndInvalidate];
 
       if (error) {
@@ -954,56 +994,29 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       self.receivedData = data.mutableCopy ?: [NSMutableData data];
       [self finishLoading];
     }];
-    
-    if (!sessionTask) {
-      self.checkInProgress = NO;
-      [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
-                                            code:BITUpdateAPIClientCannotCreateConnection
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Url Connection could not be created.", NSLocalizedDescriptionKey, nil]]];
-    } else {
+
+  if (!sessionTask) {
+    [self handleConnectionCreationError];
+  } else {
       [sessionTask resume];
     }
-  } else {
+}
+
+- (void)loadDataUsingNSURLConnectionWithRequest:(NSURLRequest *)request {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+  self.urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 #pragma clang diagnostic pop
-    if (!self.urlConnection) {
-      self.checkInProgress = NO;
-      [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
-                                            code:BITUpdateAPIClientCannotCreateConnection
-                                        userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Url Connection could not be created.", NSLocalizedDescriptionKey, nil]]];
-    }
+  if (!self.urlConnection) {
+    [self handleConnectionCreationError];
   }
 }
 
-- (NSString *)parameterStringForUpdateRequest {
-  NSMutableString *parameter = [NSMutableString stringWithFormat:@"api/2/apps/%@?format=json&extended=true&sdk=%@&sdk_version=%@&uuid=%@",
-                                bit_URLEncodedString([self encodedAppIdentifier]),
-                                BITHOCKEY_NAME,
-                                BITHOCKEY_VERSION,
-                                _uuid];
-
-// add installationIdentificationType and installationIdentifier if available
-  if (self.installationIdentification && self.installationIdentificationType) {
-    [parameter appendFormat:@"&%@=%@",
-     bit_URLEncodedString(self.installationIdentificationType),
-     bit_URLEncodedString(self.installationIdentification)
-     ];
-  }
-
-  // add additional statistics if user didn't disable flag
-  if (_sendUsageData) {
-    [parameter appendFormat:@"&app_version=%@&os=iOS&os_version=%@&device=%@&lang=%@&first_start_at=%@&usage_time=%@",
-     bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]),
-     bit_URLEncodedString([[UIDevice currentDevice] systemVersion]),
-     bit_URLEncodedString([self getDevicePlatform]),
-     bit_URLEncodedString([[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0]),
-     bit_URLEncodedString([self installationDateString]),
-     bit_URLEncodedString([self currentUsageString])
-     ];
-  }
-  return parameter;
+- (void)handleConnectionCreationError {
+  self.checkInProgress = NO;
+  [self reportError:[NSError errorWithDomain:kBITUpdateErrorDomain
+                                        code:BITUpdateAPIClientCannotCreateConnection
+                                    userInfo:@{NSLocalizedDescriptionKey : @"Url Connection could not be created."}]];
 }
 
 - (BOOL)initiateAppDownload {
@@ -1212,7 +1225,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     self.urlConnection = nil;
 }
 
-#pragma mark - NSURLRequest
+#pragma mark - NSURLConnectionDataDelegate
 
 - (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
   NSURLRequest *newRequest = request;
@@ -1244,13 +1257,15 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   [_receivedData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-  [self handleError:error];
-}
-
 // api call returned, parsing
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
   [self finishLoading];
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+  [self handleError:error];
 }
 
 #pragma mark - Properties
