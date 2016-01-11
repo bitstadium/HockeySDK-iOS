@@ -1011,35 +1011,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   }
   
 #if TARGET_OS_SIMULATOR
-  /* We won't use this for now until we have a more robust solution for displaying UIAlertController
-  // requires iOS 8
-  id uialertcontrollerClass = NSClassFromString(@"UIAlertController");
-  if (uialertcontrollerClass) {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:BITHockeyLocalizedString(@"UpdateWarning")
-                                                                             message:BITHockeyLocalizedString(@"UpdateSimulatorMessage")
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:BITHockeyLocalizedString(@"HockeyOK")
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * action) {}];
-    
-    [alertController addAction:okAction];
-    
-    [self showAlertController:alertController];
-  } else {
-   */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BITHockeyLocalizedString(@"UpdateWarning")
-                                                    message:BITHockeyLocalizedString(@"UpdateSimulatorMessage")
-                                                   delegate:nil
-                                          cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK")
-                                          otherButtonTitles:nil];
-    [alert show];
-#pragma clang diagnostic pop
-  /*}*/
+  [self showUpdateSimulatorAlert];
   return NO;
-
 #else
   
   NSString *extraParameter = [NSString string];
@@ -1067,6 +1040,39 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   return success;
 
 #endif /* TARGET_OS_SIMULATOR */
+}
+
+/*
+ * Updating an app in the iOS Simulator does not work, therefore we show an alert to notify the developer
+ */
+- (void)showUpdateSimulatorAlert {
+/* We won't use this for now until we have a more robust solution for displaying UIAlertController
+  // requires iOS 8
+  id uialertcontrollerClass = NSClassFromString(@"UIAlertController");
+  if (uialertcontrollerClass) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:BITHockeyLocalizedString(@"UpdateWarning")
+                                                                             message:BITHockeyLocalizedString(@"UpdateSimulatorMessage")
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:BITHockeyLocalizedString(@"HockeyOK")
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * action) {}];
+
+    [alertController addAction:okAction];
+
+    [self showAlertController:alertController];
+  } else {
+   */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:BITHockeyLocalizedString(@"UpdateWarning")
+                                                    message:BITHockeyLocalizedString(@"UpdateSimulatorMessage")
+                                                   delegate:nil
+                                          cancelButtonTitle:BITHockeyLocalizedString(@"HockeyOK")
+                                          otherButtonTitles:nil];
+    [alert show];
+#pragma clang diagnostic pop
+  /*}*/
 }
 
 
