@@ -1109,7 +1109,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 - (void)finishLoading {
-{
     self.checkInProgress = NO;
     
     if ([self.receivedData length]) {
@@ -1201,7 +1200,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     
     self.receivedData = nil;
     self.urlConnection = nil;
-  }
 }
 
 #pragma mark - NSURLRequest
