@@ -918,32 +918,8 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     return;
   }
   
-  NSMutableString *parameter = [NSMutableString stringWithFormat:@"api/2/apps/%@?format=json&extended=true&sdk=%@&sdk_version=%@&uuid=%@",
-                                bit_URLEncodedString([self encodedAppIdentifier]),
-                                BITHOCKEY_NAME,
-                                BITHOCKEY_VERSION,
-                                _uuid];
-  
-  // add installationIdentificationType and installationIdentifier if available
-  if (self.installationIdentification && self.installationIdentificationType) {
-    [parameter appendFormat:@"&%@=%@",
-     bit_URLEncodedString(self.installationIdentificationType),
-     bit_URLEncodedString(self.installationIdentification)
-     ];
-  }
-  
-  // add additional statistics if user didn't disable flag
-  if (_sendUsageData) {
-    [parameter appendFormat:@"&app_version=%@&os=iOS&os_version=%@&device=%@&lang=%@&first_start_at=%@&usage_time=%@",
-     bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]),
-     bit_URLEncodedString([[UIDevice currentDevice] systemVersion]),
-     bit_URLEncodedString([self getDevicePlatform]),
-     bit_URLEncodedString([[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0]),
-     bit_URLEncodedString([self installationDateString]),
-     bit_URLEncodedString([self currentUsageString])
-     ];
-  }
-  
+  NSString *parameter = [self parameterStringForUpdateRequest];
+
   // build request & send
   NSString *url = [NSString stringWithFormat:@"%@%@", self.serverURL, parameter];
   BITHockeyLog(@"INFO: Sending api request to %@", url);
@@ -1000,6 +976,35 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Url Connection could not be created.", NSLocalizedDescriptionKey, nil]]];
     }
   }
+}
+
+- (NSString *)parameterStringForUpdateRequest {
+  NSMutableString *parameter = [NSMutableString stringWithFormat:@"api/2/apps/%@?format=json&extended=true&sdk=%@&sdk_version=%@&uuid=%@",
+                                bit_URLEncodedString([self encodedAppIdentifier]),
+                                BITHOCKEY_NAME,
+                                BITHOCKEY_VERSION,
+                                _uuid];
+
+// add installationIdentificationType and installationIdentifier if available
+  if (self.installationIdentification && self.installationIdentificationType) {
+    [parameter appendFormat:@"&%@=%@",
+     bit_URLEncodedString(self.installationIdentificationType),
+     bit_URLEncodedString(self.installationIdentification)
+     ];
+  }
+
+  // add additional statistics if user didn't disable flag
+  if (_sendUsageData) {
+    [parameter appendFormat:@"&app_version=%@&os=iOS&os_version=%@&device=%@&lang=%@&first_start_at=%@&usage_time=%@",
+     bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]),
+     bit_URLEncodedString([[UIDevice currentDevice] systemVersion]),
+     bit_URLEncodedString([self getDevicePlatform]),
+     bit_URLEncodedString([[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0]),
+     bit_URLEncodedString([self installationDateString]),
+     bit_URLEncodedString([self currentUsageString])
+     ];
+  }
+  return parameter;
 }
 
 - (BOOL)initiateAppDownload {
