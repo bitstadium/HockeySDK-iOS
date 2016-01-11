@@ -1250,7 +1250,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 - (NSURLSession *)urlSession {
   if (!_urlSession) {
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    _urlSession = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:(id<NSURLSessionDelegate>)self delegateQueue:nil];
+    _urlSession = [NSURLSession sessionWithConfiguration:sessionConfiguration];
   }
   return _urlSession;
 }
