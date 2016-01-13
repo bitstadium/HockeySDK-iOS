@@ -274,6 +274,8 @@
 		1EFF03E517F2485500A5F13C /* BITCrashManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */; };
 		802C45B31BD9629B000D043C /* HockeySDKNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E3A260E1B2B207900D59683 /* HockeySDKNullability.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		802C45B41BD9629C000D043C /* HockeySDKNullability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E3A260E1B2B207900D59683 /* HockeySDKNullability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		80455DFE1C47015500B84425 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80455DFD1C47015500B84425 /* OHHTTPStubs.framework */; };
+		80455DFF1C47015500B84425 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80455DFD1C47015500B84425 /* OHHTTPStubs.framework */; };
 		807756401BC6A44E0037C3DA /* HockeySDKEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 8077563F1BC6A44D0037C3DA /* HockeySDKEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		807756411BC6B6050037C3DA /* HockeySDKEnums.h in Headers */ = {isa = PBXBuildFile; fileRef = 8077563F1BC6A44D0037C3DA /* HockeySDKEnums.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		808441641C20617200644A40 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808441611C20617200644A40 /* libOCMock.a */; };
@@ -519,6 +521,7 @@
 		1EF95CA9162CB313000AE3AD /* BITFeedbackComposeViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackComposeViewControllerDelegate.h; sourceTree = "<group>"; };
 		1EFF03D717F20F8300A5F13C /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
 		1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashManagerTests.m; sourceTree = "<group>"; };
+		80455DFD1C47015500B84425 /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = HockeySDKTests/Vendor/OHHTTPStubs.framework; sourceTree = SOURCE_ROOT; };
 		8077563F1BC6A44D0037C3DA /* HockeySDKEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HockeySDKEnums.h; sourceTree = "<group>"; };
 		808441611C20617200644A40 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = HockeySDKTests/Vendor/libOCMock.a; sourceTree = SOURCE_ROOT; };
 		808441621C20617200644A40 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = HockeySDKTests/Vendor/OCHamcrestIOS.framework; sourceTree = SOURCE_ROOT; };
@@ -609,6 +612,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80455DFE1C47015500B84425 /* OHHTTPStubs.framework in Frameworks */,
 				97CC11FA1917C0390028768F /* MobileCoreServices.framework in Frameworks */,
 				97CC11F71917AB7C0028768F /* QuickLook.framework in Frameworks */,
 				808441661C20617300644A40 /* OCHamcrestIOS.framework in Frameworks */,
@@ -645,6 +649,7 @@
 				1EB617D51B0A36AE0035A986 /* Foundation.framework in Frameworks */,
 				808441651C20617300644A40 /* libOCMock.a in Frameworks */,
 				808441671C20617300644A40 /* OCHamcrestIOS.framework in Frameworks */,
+				80455DFF1C47015500B84425 /* OHHTTPStubs.framework in Frameworks */,
 				1EB6174A1B0A30480035A986 /* HockeySDK.framework in Frameworks */,
 				1EB617CC1B0A34040035A986 /* CrashReporter.framework in Frameworks */,
 				808441691C20617300644A40 /* OCMockitoIOS.framework in Frameworks */,
@@ -922,6 +927,7 @@
 			children = (
 				8084416A1C20617C00644A40 /* OCMock */,
 				808441611C20617200644A40 /* libOCMock.a */,
+				80455DFD1C47015500B84425 /* OHHTTPStubs.framework */,
 				808441621C20617200644A40 /* OCHamcrestIOS.framework */,
 				808441631C20617200644A40 /* OCMockitoIOS.framework */,
 			);
