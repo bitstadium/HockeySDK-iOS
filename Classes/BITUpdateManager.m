@@ -61,7 +61,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   
   BITUpdateViewController *_currentHockeyViewController;
 
-  BOOL _showFeedback;
   BOOL _updateAlertShowing;
   BOOL _sendUsageData;
   

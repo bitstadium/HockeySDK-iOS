@@ -10,34 +10,67 @@
 
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCMock/OCMock.h>
+@import OHHTTPStubs;
 
-#import "BITUpdateManager.h"
+#import "HockeySDK.h"
+#import "BITUpdateManagerPrivate.h"
+#import "BITHockeyBaseManagerPrivate.h"
 
 @interface BITUpdateManagerTests : XCTestCase
+
+@property BITUpdateManager *sut;
 
 @end
 
 @implementation BITUpdateManagerTests
 
 - (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+  [super setUp];
+  
+  self.sut = [[BITUpdateManager alloc] init];
+  [self.sut startManager];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+  // Put teardown code here. This method is called after the invocation of each test method in the class.
+  [super tearDown];
 }
 
-- (void)testReportError {
+- (void)testStartManager {
   
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)testReportErrorWithShowFeedbackDisabled {
+  id mockAlertView = OCMPartialMock([UIAlertView alloc]);
+  OCMStub([mockAlertView alloc]).andReturn(mockAlertView);
+  [[mockAlertView reject] show];
+  
+  NSError *testError = [NSError errorWithDomain:@"net.hockeyapp.test" code:666 userInfo:nil];
+  
+  XCTAssertFalse(self.sut.showFeedback);
+  
+  [self.sut reportError:testError];
+  
+  XCTAssertFalse(self.sut.showFeedback);
+  
+  [mockAlertView stopMocking];
+}
+
+- (void)testReportErrorWithShowFeedbackEnabled {
+  id mockAlertView = OCMPartialMock([UIAlertView alloc]);
+  OCMStub([mockAlertView alloc]).andReturn(mockAlertView);
+  
+  NSError *testError = [NSError errorWithDomain:@"net.hockeyapp.test" code:666 userInfo:nil];
+  
+  self.sut.showFeedback = YES;
+  
+  [self.sut reportError:testError];
+  
+  OCMVerify([mockAlertView show]);
+  XCTAssertFalse(self.sut.showFeedback);
+  
+  [mockAlertView stopMocking];
 }
 
 @end

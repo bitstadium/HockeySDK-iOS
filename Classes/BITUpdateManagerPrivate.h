@@ -83,6 +83,8 @@
 
 @property (nonatomic) BOOL installationIdentified;
 
+@property (nonatomic, assign) BOOL showFeedback;
+
 // used by BITHockeyManager if disable status is changed
 @property (nonatomic, getter = isUpdateManagerDisabled) BOOL disableUpdateManager;
 
