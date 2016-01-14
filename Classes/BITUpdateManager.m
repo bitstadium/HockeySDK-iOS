@@ -86,6 +86,99 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 }
 
 
+#pragma mark - Init
+
+- (instancetype)init {
+  if ((self = [super init])) {
+    _delegate = nil;
+    
+    _expiryDate = nil;
+    _checkInProgress = NO;
+    _updateAvailable = NO;
+    _showFeedback = NO;
+    
+    _currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    _blockingView = nil;
+    _lastCheck = nil;
+    _uuid = [[self executableUUID] copy];
+    _versionUUID = nil;
+    _versionID = nil;
+    _sendUsageData = YES;
+    _disableUpdateManager = NO;
+    _firstStartAfterInstall = NO;
+    _companyName = nil;
+    _currentAppVersionUsageTime = @0;
+    
+    // set defaults
+    _showDirectInstallOption = NO;
+    _alwaysShowUpdateReminder = YES;
+    _checkForUpdateOnLaunch = YES;
+    _updateSetting = BITUpdateCheckStartup;
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck]) {
+      // we did write something else in the past, so for compatibility reasons do this
+      id tempLastCheck = [[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck];
+      if ([tempLastCheck isKindOfClass:[NSDate class]]) {
+        _lastCheck = tempLastCheck;
+      }
+    }
+    
+    if (!_lastCheck) {
+      _lastCheck = [NSDate distantPast];
+    }
+    
+    if (!BITHockeyBundle()) {
+      NSLog(@"[HockeySDK] WARNING: %@ is missing, make sure it is added!", BITHOCKEYSDK_BUNDLE);
+    }
+    
+    _fileManager = [[NSFileManager alloc] init];
+    
+    _usageDataFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
+    
+    [self loadAppCache];
+    
+    _installationIdentification = [self stringValueFromKeychainForKey:kBITUpdateInstallationIdentification];
+    
+    [self loadAppVersionUsageData];
+    [self startUsage];
+    
+    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+    [dnc addObserver:self selector:@selector(stopUsage) name:UIApplicationWillTerminateNotification object:nil];
+    [dnc addObserver:self selector:@selector(stopUsage) name:UIApplicationWillResignActiveNotification object:nil];
+  }
+  return self;
+}
+
+- (void)dealloc {
+  [self unregisterObservers];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+  
+  [_urlConnection cancel];
+}
+
+- (void)startManager {
+  if (self.appEnvironment == BITEnvironmentOther) {
+    if ([self isUpdateManagerDisabled]) return;
+    
+    BITHockeyLog(@"INFO: Starting UpdateManager");
+    
+    if ([self.delegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
+      _sendUsageData = [self.delegate updateManagerShouldSendUsageData:self];
+    }
+    
+    [self checkExpiryDateReached];
+    if (![self expiryDateReached]) {
+      if ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates]) {
+        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
+        
+        [self performSelector:@selector(checkForUpdate) withObject:nil afterDelay:1.0f];
+      }
+    }
+  }
+  [self registerObservers];
+}
+
 #pragma mark - private
 
 - (void)reportError:(NSError *)error {
@@ -441,75 +534,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.appVersions];
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:kBITUpdateArrayOfLastCheck];
   [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-
-#pragma mark - Init
-
-- (instancetype)init {
-  if ((self = [super init])) {
-    _delegate = nil;
-    _expiryDate = nil;
-    _checkInProgress = NO;
-    _updateAvailable = NO;
-    _currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-    _blockingView = nil;
-    _lastCheck = nil;
-    _uuid = [[self executableUUID] copy];
-    _versionUUID = nil;
-    _versionID = nil;
-    _sendUsageData = YES;
-    _disableUpdateManager = NO;
-    _firstStartAfterInstall = NO;
-    _companyName = nil;
-    _currentAppVersionUsageTime = @0;
-    
-    // set defaults
-    self.showDirectInstallOption = NO;
-    self.alwaysShowUpdateReminder = YES;
-    self.checkForUpdateOnLaunch = YES;
-    self.updateSetting = BITUpdateCheckStartup;
-    
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck]) {
-      // we did write something else in the past, so for compatibility reasons do this
-      id tempLastCheck = [[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck];
-      if ([tempLastCheck isKindOfClass:[NSDate class]]) {
-        self.lastCheck = tempLastCheck;
-      }
-    }
-    
-    if (!_lastCheck) {
-      self.lastCheck = [NSDate distantPast];
-    }
-    
-    if (!BITHockeyBundle()) {
-      NSLog(@"[HockeySDK] WARNING: %@ is missing, make sure it is added!", BITHOCKEYSDK_BUNDLE);
-    }
-    
-    _fileManager = [[NSFileManager alloc] init];
-    
-    _usageDataFile = [bit_settingsDir() stringByAppendingPathComponent:BITHOCKEY_USAGE_DATA];
-    
-    [self loadAppCache];
-    
-    _installationIdentification = [self stringValueFromKeychainForKey:kBITUpdateInstallationIdentification];
-    
-    [self loadAppVersionUsageData];
-    [self startUsage];
-
-    NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-    [dnc addObserver:self selector:@selector(stopUsage) name:UIApplicationWillTerminateNotification object:nil];
-    [dnc addObserver:self selector:@selector(stopUsage) name:UIApplicationWillResignActiveNotification object:nil];
-  }
-  return self;
-}
-
-- (void)dealloc {
-  [self unregisterObservers];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-  
-  [_urlConnection cancel];
 }
 
 
@@ -1076,29 +1100,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   /*}*/
 }
 
-
-// begin the startup process
-- (void)startManager {
-  if (self.appEnvironment == BITEnvironmentOther) {
-    if ([self isUpdateManagerDisabled]) return;
-    
-    BITHockeyLog(@"INFO: Starting UpdateManager");
-    
-    if ([self.delegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
-      _sendUsageData = [self.delegate updateManagerShouldSendUsageData:self];
-    }
-    
-    [self checkExpiryDateReached];
-    if (![self expiryDateReached]) {
-      if ([self isCheckForUpdateOnLaunch] && [self shouldCheckForUpdates]) {
-        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) return;
-        
-        [self performSelector:@selector(checkForUpdate) withObject:nil afterDelay:1.0f];
-      }
-    }
-  }
-  [self registerObservers];
-}
 
 #pragma mark - Handle responses
 
