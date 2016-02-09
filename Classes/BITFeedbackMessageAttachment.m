@@ -116,19 +116,20 @@
 }
 
 - (BOOL)needsLoadingFromURL {
-  return (self.sourceURL && ![_fm fileExistsAtPath:[self.localURL path]]);
+  NSString *path = self.localURL ? self.localURL.path : nil;
+  return (self.sourceURL && path && ![_fm fileExistsAtPath:path]);
 }
 
 - (BOOL)isImage {
   return ([self.contentType rangeOfString:@"image"].location != NSNotFound);
 }
 
-- (NSURL *)localURL {
+- (nullable NSURL *)localURL {
   if (self.filename && [_fm fileExistsAtPath:self.filename]) {
     return [NSURL fileURLWithPath:self.filename];
   }
   
-  return [NSURL URLWithString:@""];
+  return nil;
 }
 
 
