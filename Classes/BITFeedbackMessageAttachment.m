@@ -98,7 +98,7 @@
   [self->_internalData writeToFile:self.filename atomically:NO];
 }
 
-- (NSData *)data {
+- (nullable NSData *)data {
   if (!self->_internalData && self.filename) {
     self.internalData = [NSData dataWithContentsOfFile:self.filename];
   }
@@ -107,7 +107,7 @@
     return self.internalData;
   }
   
-  return [NSData data];
+  return nil;
 }
 
 - (void)replaceData:(NSData *)data {
@@ -157,7 +157,7 @@
 #pragma mark - Thumbnails / Image Representation
 
 - (UIImage *)imageRepresentation {
-  if ([self.contentType rangeOfString:@"image"].location != NSNotFound && self.filename ) {
+  if (([self.contentType rangeOfString:@"image"].location != NSNotFound) && self.data) {
     return [UIImage imageWithData:self.data];
   } else {
     // Create a Icon ..
