@@ -972,46 +972,42 @@
 }
 
 - (id <QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index {
-  if (index >= 0) {
-    __weak QLPreviewController* blockController = controller;
-    BITFeedbackMessageAttachment *attachment = self.cachedPreviewItems[index];
+  __weak QLPreviewController* blockController = controller;
+  BITFeedbackMessageAttachment *attachment = self.cachedPreviewItems[index];
+  
+  if (attachment.needsLoadingFromURL && !attachment.isLoading) {
+    attachment.isLoading = YES;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:attachment.sourceURL]];
     
-    if (attachment.needsLoadingFromURL && !attachment.isLoading) {
-      attachment.isLoading = YES;
-      NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:attachment.sourceURL]];
+    __weak typeof (self) weakSelf = self;
+    if ([BITHockeyHelper isURLSessionSupported]) {
+      NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+      __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
       
-      __weak typeof (self) weakSelf = self;
-      if ([BITHockeyHelper isURLSessionSupported]) {
-        NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-        
-        NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                                completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                    typeof (self) strongSelf = weakSelf;
-                                                    
-                                                    [session finishTasksAndInvalidate];
-                                                    
-                                                    [strongSelf previewController:blockController updateAttachment:attachment data:data];
-                                                  });
-                                                }];
-        [task resume];
-      }else{
+      NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                              completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                  typeof (self) strongSelf = weakSelf;
+                                                  
+                                                  [session finishTasksAndInvalidate];
+                                                  
+                                                  [strongSelf previewController:blockController updateAttachment:attachment data:data];
+                                                });
+                                              }];
+      [task resume];
+    }else{
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
+      [NSURLConnection sendAsynchronousRequest:request queue:self.thumbnailQueue completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *err) {
 #pragma clang diagnostic pop
-          typeof (self) strongSelf = weakSelf;
-          [strongSelf previewController:blockController updateAttachment:attachment data:responseData];
-        }];
-      }
-      return attachment;
-    } else {
-      return self.cachedPreviewItems[index];
+        typeof (self) strongSelf = weakSelf;
+        [strongSelf previewController:blockController updateAttachment:attachment data:responseData];
+      }];
     }
+    return attachment;
+  } else {
+    return self.cachedPreviewItems[index];
   }
-  
-  return nil;
 }
 
 - (void)previewController:(QLPreviewController *)controller updateAttachment:(BITFeedbackMessageAttachment *)attachment data:( NSData *)data {
