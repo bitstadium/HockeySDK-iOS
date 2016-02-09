@@ -31,7 +31,9 @@
   BITTelemetryContext *mockContext = mock(BITTelemetryContext.class);
   
   _sut = [[BITChannel alloc]initWithTelemetryContext:mockContext persistence:_mockPersistence];
+#ifndef __clang_analyzer__
   BITSafeJsonEventsString = NULL;
+#endif
 }
 
 #pragma mark - Setup Tests

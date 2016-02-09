@@ -255,7 +255,8 @@
       return [NSURL fileURLWithPath:filename];
     }
   }
-  
+  // FIXME: This is a bug in either the documentation or the QLPrevieItem Protocol declaration.
+  // The documentation explicitly states the possiblity to return `nil` where the header forbids it.
   return nil;
 }
 
