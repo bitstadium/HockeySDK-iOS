@@ -246,12 +246,9 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    if (!self) {
-        return nil;
+    if (self) {
+        [self commonInit];;
     }
-    
-    [self commonInit];
-    
     return self;
 }
 
