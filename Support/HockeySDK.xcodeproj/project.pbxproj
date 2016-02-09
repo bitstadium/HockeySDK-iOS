@@ -2001,6 +2001,7 @@
 			baseConfigurationReference = 1E27E60A1B74F01400192AE2 /* crashonlyextensions.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				COMPRESS_PNG_FILES = NO;
@@ -2476,6 +2477,7 @@
 			baseConfigurationReference = 1E7DE39619D44DC6009AB8E5 /* crashonly.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				COMPRESS_PNG_FILES = NO;
@@ -2996,6 +2998,7 @@
 			baseConfigurationReference = 1E66CA9115D4100500F35BED /* buildnumber.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				COMPRESS_PNG_FILES = NO;
@@ -3034,6 +3037,7 @@
 			baseConfigurationReference = 1E45A90E1B78DB0C002CA772 /* release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				COMPRESS_PNG_FILES = NO;
