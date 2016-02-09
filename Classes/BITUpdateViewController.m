@@ -496,7 +496,7 @@
   } else {
     BITHockeyLog(@"Warning: cells_ and indexPath do not match? forgot calling redrawTableView?");
   }
-  return nil;
+  return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"defaultCell"];
 }
 
 
