@@ -1252,12 +1252,9 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       }
     }
   }
-  
-#if !defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
-  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-    [self appEnteredForeground];
-  }
-#else
+
+#if defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
+  // In extensions, UIApplicationDidFinishLaunchingNotification will never be fired, therfore we need this fallback
   [self appEnteredForeground];
 #endif
   
