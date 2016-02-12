@@ -434,7 +434,9 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
                                                                                         queue:NSOperationQueue.mainQueue
                                                                                    usingBlock:^(NSNotification * _Nonnull note) {
                                                                                      typeof(self) strongSelf = weakSelf;
-                                                                                     [strongSelf appEnteredForeground];
+                                                                                     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+                                                                                       [strongSelf appEnteredForeground];
+                                                                                     }
                                                                                    }];
   }
   
