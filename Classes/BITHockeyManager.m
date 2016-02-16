@@ -157,7 +157,6 @@ bitstadium_info_t bitstadium_library_info __attribute__((section("__TEXT,__bit_h
 #endif
     _startManagerIsInvoked = NO;
     _startUpdateManagerIsInvoked = NO;
-    
     _liveIdentifier = nil;
     _installString = bit_appAnonID(NO);
     _disableInstallTracking = NO;
@@ -539,7 +538,7 @@ bitstadium_info_t bitstadium_library_info __attribute__((section("__TEXT,__bit_h
   NSDictionary *params = @{@"timestamp": timeString,
                            @"sdk": BITHOCKEY_NAME,
                            @"sdk_version": BITHOCKEY_VERSION,
-                           @"bundle_version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]
+                           @"bundle_version": BITCurrentAppVersion()
                            };
   
   if ([BITHockeyHelper isURLSessionSupported]) {

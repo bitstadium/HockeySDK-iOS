@@ -49,6 +49,19 @@ NSBundle *BITHockeyBundle(void) {
   return bundle;
 }
 
+//Load the CFBundleVersion checking for the override if there is one in HockeyAppVersion
+NSString *BITCurrentAppVersion(void) {
+	static NSString *currentVersion = nil;
+	static dispatch_once_t predicate;
+	dispatch_once(&predicate, ^{
+		currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"HockeyAppVersion"];
+		if (!currentVersion)
+			currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	});
+	return currentVersion;
+}
+
+
 NSString *BITHockeyLocalizedString(NSString *stringToken) {
   if (!stringToken) return @"";
   

@@ -53,7 +53,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 };
 
 @implementation BITUpdateManager {
-  NSString *_currentAppVersion;
   
   BITUpdateViewController *_currentHockeyViewController;
   
@@ -364,7 +363,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 
 - (void)checkUpdateAvailable {
   // check if there is an update available
-  NSComparisonResult comparisonResult = bit_versionCompare(self.newestAppVersion.version, self.currentAppVersion);
+  NSComparisonResult comparisonResult = bit_versionCompare(self.newestAppVersion.version, BITCurrentAppVersion());
   
   if (comparisonResult == NSOrderedDescending) {
     self.updateAvailable = YES;
@@ -379,7 +378,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       } else {
         [self.appVersions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
           if (idx > 0 && [obj isKindOfClass:[BITAppVersionMetaInfo class]]) {
-            NSComparisonResult compareVersions = bit_versionCompare([(BITAppVersionMetaInfo *)obj version], self.currentAppVersion);
+            NSComparisonResult compareVersions = bit_versionCompare([(BITAppVersionMetaInfo *)obj version], BITCurrentAppVersion());
             BOOL uuidFound = [(BITAppVersionMetaInfo *)obj hasUUID:_uuid];
 
             if (uuidFound) {
@@ -453,7 +452,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     _dataFound = NO;
     _updateAvailable = NO;
     _lastCheckFailed = NO;
-    _currentAppVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     _blockingView = nil;
     _lastCheck = nil;
     _uuid = [[self executableUUID] copy];
@@ -869,7 +867,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   // add additional statistics if user didn't disable flag
   if (_sendUsageData) {
     [parameter appendFormat:@"&app_version=%@&os=iOS&os_version=%@&device=%@&lang=%@&first_start_at=%@&usage_time=%@",
-     bit_URLEncodedString([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]),
+     bit_URLEncodedString(BITCurrentAppVersion()),
      bit_URLEncodedString([[UIDevice currentDevice] systemVersion]),
      bit_URLEncodedString([self getDevicePlatform]),
      bit_URLEncodedString([[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0]),
@@ -1092,7 +1090,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
         // show alert if we are on the latest & greatest
         if (_showFeedback && !self.isUpdateAvailable) {
           // use currentVersionString, as version still may differ (e.g. server: 1.2, client: 1.3)
-          NSString *versionString = [self currentAppVersion];
+          NSString *versionString = BITCurrentAppVersion();
           NSString *shortVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
           shortVersionString = shortVersionString ? [NSString stringWithFormat:@"%@ ", shortVersionString] : @"";
           versionString = [shortVersionString length] ? [NSString stringWithFormat:@"(%@)", versionString] : versionString;
@@ -1249,7 +1247,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   BOOL result = NO;
   
   for (BITAppVersionMetaInfo *appVersion in self.appVersions) {
-    if ([appVersion.version isEqualToString:self.currentAppVersion] || bit_versionCompare(appVersion.version, self.currentAppVersion) == NSOrderedAscending) {
+    if ([appVersion.version isEqualToString:BITCurrentAppVersion()] || bit_versionCompare(appVersion.version, BITCurrentAppVersion()) == NSOrderedAscending) {
       break;
     }
     
@@ -1270,10 +1268,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   }
 }
 
-- (NSString *)currentAppVersion {
-  return _currentAppVersion;
-}
-
 - (void)setLastCheck:(NSDate *)aLastCheck {
   if (_lastCheck != aLastCheck) {
     _lastCheck = [aLastCheck copy];
@@ -1290,7 +1284,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     if (![anAppVersions count]) {
       BITAppVersionMetaInfo *defaultApp = [[BITAppVersionMetaInfo alloc] init];
       defaultApp.name = bit_appName(BITHockeyLocalizedString(@"HockeyAppNamePlaceholder"));
-      defaultApp.version = _currentAppVersion;
+      defaultApp.version = BITCurrentAppVersion();
       defaultApp.shortVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
       _appVersions = [NSArray arrayWithObject:defaultApp];
     } else {
