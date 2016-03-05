@@ -237,6 +237,67 @@ static void *kInstallationIdentification = &kInstallationIdentification;
   [verify(httpClientMock) enqeueHTTPOperation:anything()];
 }
 
+#pragma mark - Email Transparent identification type
+- (void) testEmailTransparentIdentificationFailsWithMissingSecret {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  _sut.providedEmail = @"johndoe@example.com";
+  [_sut identifyWithCompletion:^(BOOL identified, NSError *error) {
+    assertThatBool(identified, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testEmailTransparentIdentificationFailsWithMissingProvidedEmail {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  _sut.authenticationSecret = @"mySecret";
+  [_sut identifyWithCompletion:^(BOOL identified, NSError *error) {
+    assertThatBool(identified, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testEmailTransparentIdentificationDoesntShowViewController {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  _sut.authenticationSecret = @"mySecret";
+  id delegateMock = mockProtocol(@protocol(BITAuthenticatorDelegate));
+  _sut.delegate = delegateMock;
+  
+  [_sut identifyWithCompletion:nil];
+  
+  [verifyCount(delegateMock, times(0)) authenticator:_sut willShowAuthenticationController:(id)anything()];
+}
+
+- (void) testEmailTransparentValidationFailsWithMissingSecret {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  _sut.providedEmail = @"johndoe@example.com";
+  [_sut validateWithCompletion:^(BOOL validated, NSError *error) {
+    assertThatBool(validated, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testEmailTransparentValidationFailsWithMissingProvidedEmail {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  _sut.authenticationSecret = @"mySecret";
+  [_sut validateWithCompletion:^(BOOL validated, NSError *error) {
+    assertThatBool(validated, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testThatEmailTransparentIdentificationQueuesAnOperation {
+  id helperMock = OCMClassMock([BITHockeyHelper class]);
+  OCMStub([helperMock isURLSessionSupported]).andReturn(NO);
+  
+  id httpClientMock = mock(BITHockeyAppClient.class);
+  _sut.hockeyAppClient = httpClientMock;
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent;
+  
+  [_sut authenticationViewController:nil handleAuthenticationWithEmail:@"johndoe@example.com" password:nil completion:nil];
+  
+  [verify(httpClientMock) enqeueHTTPOperation:anything()];
+}
+
 #pragma mark - User identification type
 - (void) testUserIdentificationShowsViewController {
   _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppUser;
