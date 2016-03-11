@@ -23,8 +23,7 @@ env:
 
 before_install:
   - xcrun simctl list
-  - brew update
-  - brew install infer
+  - brew link infer || (brew update && brew install infer)
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 
 script:
@@ -32,8 +31,8 @@ script:
   - COMMAND+="xcodebuild -project '$PROJECT' -scheme '$SCHEME' -sdk '$SDK' -configuration '$CONFIGURATION'"
   - if [ $RUN_TESTS == "YES" ]; then
     COMMAND="infer --fail-on-bug -- $COMMAND"
-    COMMAND+=" -destination '$DESTINATION' XCODEBUILD_GCC_PREPROCESSOR_DEFINITIONS="CI=1" clean build | xcpretty && $COMMAND test | xcpretty";
+    COMMAND+=" -destination '$DESTINATION' XCODEBUILD_GCC_PREPROCESSOR_DEFINITIONS="CI=1" clean build | xcpretty && $COMMAND test";
     fi
-  - COMMAND+=""
+  - COMMAND+=" | xcpretty"
   - echo $COMMAND
   - eval $COMMAND
