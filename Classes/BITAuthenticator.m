@@ -225,15 +225,22 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       break;
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
       if(nil == self.authenticationSecret) {
-        NSError *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
-                                             code:BITAuthenticatorAuthorizationSecretMissing
-                                         userInfo:@{NSLocalizedDescriptionKey : @"For email identification, the authentication secret must be set"}];
+        NSError *error = [BITAuthenticator appSecretError];
         if(completion) completion(NO, error);
         return;
       }
       viewController = [[BITAuthenticationViewController alloc] initWithDelegate:self];
       viewController.requirePassword = NO;
       viewController.tableViewTitle = BITHockeyLocalizedString(@"HockeyAuthenticationViewControllerDataEmailDescription");
+      break;
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
+      if(nil == self.authenticationSecret) {
+        NSError *error = [BITAuthenticator appSecretError];
+        if(completion) completion(NO, error);
+        return;
+      }
+      [self handleAuthenticationWithEmail:[self providedEmail] password:@"" completion:completion];
+      return;
       break;
   }
   
@@ -310,6 +317,14 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       requirementsFulfilled = NO;
       break;
     }
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
+      if(nil == self.authenticationSecret) {
+        error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
+                                    code:BITAuthenticatorEmailMissing
+                                userInfo:@{NSLocalizedDescriptionKey : @"For transparent email validation, the provided email must be set"}];
+        requirementsFulfilled = NO;
+        break;
+      }
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
       if(nil == self.authenticationSecret) {
         error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
@@ -452,6 +467,44 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   }
 }
 
+#pragma mark - App Provided Authentication Parameters
+- (void)handleAuthenticationWithEmail:(NSString *)email
+                            password:(NSString *)password
+                          completion:(void (^)(BOOL, NSError *))completion {
+  NSParameterAssert(email && email.length);
+  NSParameterAssert(self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail ||self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent|| (password && password.length));
+  NSURLRequest* request = [self requestForAuthenticationEmail:email password:password];
+  
+  id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
+  BOOL isURLSessionSupported = (nsurlsessionClass && !bit_isRunningInAppExtension());
+  [self handleAuthenticationWithEmail:email request:request urlSessionSupported:isURLSessionSupported completion:completion];
+}
+
+- (void)handleAuthenticationWithEmail:(NSString *)email
+                             request:(NSURLRequest *)request
+                 urlSessionSupported:(BOOL)isURLSessionSupported
+                          completion:(void (^)(BOOL, NSError *))completion {
+  __weak typeof (self) weakSelf = self;
+  if(isURLSessionSupported) {
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                              typeof (self) strongSelf = weakSelf;
+                                              NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
+                                              [strongSelf handleAuthenticationWithResponse:httpResponse email:email data:data completion:completion];
+                                            }];
+    [task resume];
+  }else{
+    BITHTTPOperation *operation = [self.hockeyAppClient operationWithURLRequest:request
+                                                                     completion:^(BITHTTPOperation *operation, NSData* responseData, NSError *error) {
+                                                                       typeof (self) strongSelf = weakSelf;
+                                                                       [strongSelf handleAuthenticationWithResponse:operation.response email:email data:responseData completion:completion];
+                                                                     }];
+    [self.hockeyAppClient enqeueHTTPOperation:operation];
+  }
+}
 #pragma mark - AuthenticationViewControllerDelegate
 - (void)authenticationViewController:(UIViewController *)viewController
        handleAuthenticationWithEmail:(NSString *)email
@@ -528,7 +581,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     params[@"install_string"] = installString;
   }
   
-  if(BITAuthenticatorIdentificationTypeHockeyAppEmail == self.identificationType) {
+  if(BITAuthenticatorIdentificationTypeHockeyAppEmail == self.identificationType || BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent == self.identificationType) {
     NSString *authCode = BITHockeyMD5([NSString stringWithFormat:@"%@%@",
                                        self.authenticationSecret ? : @"",
                                        email ? : @""]);
@@ -649,6 +702,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     case BITAuthenticatorIdentificationTypeDevice:
       whatParameter = @"udid";
       break;
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeAnonymous:
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
     case BITAuthenticatorIdentificationTypeHockeyAppUser:
@@ -702,6 +756,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       localizedErrorDescription = @"Failed to retrieve UDID from URL.";
       break;
     }
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
     case BITAuthenticatorIdentificationTypeAnonymous:
     case BITAuthenticatorIdentificationTypeHockeyAppUser:
@@ -766,6 +821,11 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 }
 
 #pragma mark - Private helpers
++ (NSError*) appSecretError {
+   return [NSError errorWithDomain:kBITAuthenticatorErrorDomain
+                                         code:BITAuthenticatorAuthorizationSecretMissing
+                                     userInfo:@{NSLocalizedDescriptionKey : @"For email identification, the authentication secret must be set"}];
+}
 
 - (void) cleanupInternalStorage {
   [self removeKeyFromKeychain:kBITAuthenticatorIdentifierTypeKey];
@@ -940,6 +1000,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 - (NSString *)installationIdentifierParameterString {
   switch(self.identificationType) {
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
     case BITAuthenticatorIdentificationTypeWebAuth:
       return @"iuid";
@@ -951,6 +1012,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 + (NSString *)stringForIdentificationType:(BITAuthenticatorIdentificationType) identificationType {
   switch(identificationType) {
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent: return @"iuid";
     case BITAuthenticatorIdentificationTypeHockeyAppEmail: return @"iuid";
     case BITAuthenticatorIdentificationTypeWebAuth: return @"webAuth";
     case BITAuthenticatorIdentificationTypeHockeyAppUser: return @"auid";
@@ -969,6 +1031,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 - (NSString *)publicInstallationIdentifier {
   switch (self.identificationType) {
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
     case BITAuthenticatorIdentificationTypeHockeyAppUser:
     case BITAuthenticatorIdentificationTypeWebAuth:

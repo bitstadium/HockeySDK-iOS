@@ -87,6 +87,15 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * For identification purpose any HockeyApp user is allowed.
    */
   BITAuthenticatorIdentificationTypeWebAuth,
+  /**
+   * Provide the HockeyApp account email.
+   * <br/><br/>
+   * Provide an email for transparent email authentication.
+   * If restrictApplicationUsage is enabled, the provided user account has to match a
+   * registered HockeyApp user who is a member or tester of the app.
+   * For identification purpose any HockeyApp user is allowed.
+   */
+  BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent,
 };
 
 /**
@@ -193,11 +202,22 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  * "Secret:".
  *
  * This is only needed if `identificationType` is set to `BITAuthenticatorIdentificationTypeHockeyAppEmail`
+ * or `BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent`.
  *
  * @see identificationType
  */
 @property (nonatomic, copy) NSString *authenticationSecret;
 
+/**
+ * The approved email to use for transparent email verification. To find the right secret,
+ * click on your app on the HockeyApp dashboard, then on Show next to
+ * "Secret:".
+ *
+ * This is only needed if `identificationType` is set to `BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent`
+ *
+ * @see identificationType
+ */
+@property (nonatomic, assign) NSString *providedEmail;
 
 #pragma mark - Device based identification
 
