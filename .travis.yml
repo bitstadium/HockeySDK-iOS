@@ -1,6 +1,10 @@
 language: objective-c
 osx_image: xcode7.2
 
+cache:
+  directories:
+    - /usr/local/Cellar
+
 env:
   global:
     - PROJECT="Support/HockeySDK.xcodeproj"
@@ -19,14 +23,16 @@ env:
 
 before_install:
   - xcrun simctl list
+  - brew link infer || (brew update && brew install infer)
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 
 script:
   - set -o pipefail
-  - COMMAND="xcodebuild -project '$PROJECT' -scheme '$SCHEME' -sdk '$SDK' -configuration '$CONFIGURATION'"
+  - COMMAND+="xcodebuild -project '$PROJECT' -scheme '$SCHEME' -sdk '$SDK' -configuration '$CONFIGURATION'"
   - if [ $RUN_TESTS == "YES" ]; then
-      COMMAND+=" -destination '$DESTINATION' XCODEBUILD_GCC_PREPROCESSOR_DEFINITIONS="CI=1" clean test";
+    COMMAND="infer --fail-on-bug -- $COMMAND"
+    COMMAND+=" -destination '$DESTINATION' XCODEBUILD_GCC_PREPROCESSOR_DEFINITIONS="CI=1" clean build | xcpretty && $COMMAND test";
     fi
-  - COMMAND+=" | xcpretty -c"
+  - COMMAND+=" | xcpretty"
   - echo $COMMAND
   - eval $COMMAND
