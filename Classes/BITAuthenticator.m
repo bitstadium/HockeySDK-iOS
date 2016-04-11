@@ -536,7 +536,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   if (completion) { completion(identified, authParseError); }
   if (self.identificationCompletion) {
     self.identificationCompletion(identified, authParseError);
-    self.identificationCompletion = nil;
   }
 }
 
@@ -731,7 +730,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     self.identified = YES;
     if (self.identificationCompletion) {
       self.identificationCompletion(YES, nil);
-      self.identificationCompletion = nil;
     }
   } else {
     //reset token
@@ -743,7 +741,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                            code:BITAuthenticatorErrorUnknown
                                        userInfo:@{NSLocalizedDescriptionKey:localizedErrorDescription}];
       self.identificationCompletion(NO, error);
-      self.identificationCompletion = nil;
     }
   }
   return YES;
