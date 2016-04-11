@@ -1029,7 +1029,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   if (alertView.tag == 0) {
-    [self validate];
+    [self cleanupInternalStorage];
+    self.identified = NO;
+    [self authenticate];
   }
 }
 #pragma clang diagnostic pop
