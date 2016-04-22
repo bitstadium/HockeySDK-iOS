@@ -43,10 +43,6 @@
 #import <mach-o/dyld.h>
 #import <mach-o/loader.h>
 
-#ifndef __IPHONE_6_1
-#define __IPHONE_6_1     60100
-#endif
-
 @implementation BITHockeyBaseManager {
   UINavigationController *_navController;
   

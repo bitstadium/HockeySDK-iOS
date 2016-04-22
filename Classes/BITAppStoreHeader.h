@@ -31,10 +31,6 @@
 
 #import <UIKit/UIKit.h>
 
-#ifndef __IPHONE_6_1
-#define __IPHONE_6_1     60100
-#endif
-
 
 /**
  * Header style depending on the iOS version
