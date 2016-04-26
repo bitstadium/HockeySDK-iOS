@@ -73,7 +73,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   self = [super initWithAppIdentifier:appIdentifier appEnvironment:environment];
   if (self) {
     _webpageURL = [NSURL URLWithString:@"https://rink.hockeyapp.net/"];
-    
+
     _identificationType = BITAuthenticatorIdentificationTypeAnonymous;
     _isSetup = NO;
     _restrictApplicationUsage = NO;
@@ -100,7 +100,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 - (void)authenticateInstallation {
   //disabled in TestFlight and the AppStore
   if (self.appEnvironment != BITEnvironmentOther) { return; }
-  
+
   // make sure this is called after startManager so all modules are fully setup
   if (!_isSetup) {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(authenticateInstallation) object:nil];
@@ -148,21 +148,21 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     BITHockeyLogDebug(@"Identification type mismatch for stored auth-token. Resetting.");
     [self storeInstallationIdentifier:nil withType:BITAuthenticatorIdentificationTypeAnonymous];
   }
-  
+
   NSString *identification = [self installationIdentifier];
-  
+
   if (identification) {
     self.identified = YES;
     if (completion) { completion(YES, nil); }
     return;
   }
-  
+
   [self processFullSizeImage];
   if (self.identified) {
     if (completion) { completion(YES, nil); }
     return;
   }
-  
+
   //it's not identified yet, do it now
   BITAuthenticationViewController *viewController = nil;
   switch (self.identificationType) {
@@ -214,13 +214,13 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       [self handleAuthenticationWithEmail:[self providedEmail] password:nil completion:completion];
       return;
   }
-  
+
   if ([self.delegate respondsToSelector:@selector(authenticator:willShowAuthenticationController:)]) {
     [self.delegate authenticator:self willShowAuthenticationController:viewController];
   }
-  
+
   NSAssert(viewController, @"ViewController should've been created");
-  
+
   viewController.email = [self stringValueFromKeychainForKey:kBITAuthenticatorUserEmailKey];
   self.authenticationController = viewController;
   self.identificationCompletion = completion;
@@ -339,20 +339,20 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     }
     return;
   }
-  
+
   NSString *validationPath = [NSString stringWithFormat:@"api/3/apps/%@/identity/validate", self.encodedAppIdentifier];
   __weak typeof(self) weakSelf = self;
   if ([BITHockeyHelper isURLSessionSupported]) {
     NSURLRequest *request = [self.hockeyAppClient requestWithMethod:@"GET" path:validationPath parameters:[self validationParameters]];
-    
+
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *dataTaskError) {
-                                              typeof (self) strongSelf = weakSelf;
-                                              
+                                              typeof(self) strongSelf = weakSelf;
+
                                               [session finishTasksAndInvalidate];
-                                              
+
                                               [strongSelf handleValidationResponseWithData:data error:dataTaskError completion:completion];
                                             }];
     [task resume];
@@ -375,8 +375,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       userInfo = dict;
     }
     NSError *authenticationError = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
-                                         code:BITAuthenticatorNetworkError
-                                     userInfo:userInfo];
+                                                       code:BITAuthenticatorNetworkError
+                                                   userInfo:userInfo];
     self.validated = NO;
     if (completion) { completion(NO, authenticationError); }
   } else {
@@ -393,18 +393,18 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 - (NSDictionary *)validationParameters {
   NSParameterAssert(self.installationIdentifier);
   NSParameterAssert(self.installationIdentifierParameterString);
-  
+
   NSString *installString = bit_appAnonID(NO);
   if (installString) {
-    return @{self.installationIdentifierParameterString:self.installationIdentifier, @"install_string":installString};
+    return @{self.installationIdentifierParameterString : self.installationIdentifier, @"install_string" : installString};
   }
-  
-  return @{self.installationIdentifierParameterString:self.installationIdentifier};
+
+  return @{self.installationIdentifierParameterString : self.installationIdentifier};
 }
 
 + (BOOL)isValidationResponseValid:(id)response error:(NSError **)error {
   NSParameterAssert(response);
-  
+
   NSError *jsonParseError = nil;
   id jsonObject = [NSJSONSerialization JSONObjectWithData:response
                                                   options:0
@@ -425,7 +425,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     }
     return NO;
   }
-  
+
   NSString *status = jsonObject[@"status"];
   if ([status isEqualToString:@"not authorized"]) {
     if (error) {
@@ -456,14 +456,14 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 #pragma mark - App Provided Authentication Parameters
 
 - (void)handleAuthenticationWithEmail:(NSString *)email
-                            password:(NSString *)password
-                          completion:(void (^)(BOOL, NSError *))completion {
+                             password:(NSString *)password
+                           completion:(void (^)(BOOL, NSError *))completion {
   [self authenticationViewController:nil handleAuthenticationWithEmail:email password:password completion:completion];
 }
 
 - (void)handleAuthenticationWithEmail:(NSString *)email
-                             request:(NSURLRequest *)request
-                          completion:(void (^)(BOOL, NSError *))completion {
+                              request:(NSURLRequest *)request
+                           completion:(void (^)(BOOL, NSError *))completion {
   [self authenticationViewController:nil
        handleAuthenticationWithEmail:email
                              request:request
@@ -500,9 +500,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   
   NSParameterAssert(email && email.length);
   NSParameterAssert((self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmail) ||
-                    (self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent) ||
-                    (password && password.length));
-  
+      (self.identificationType == BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent) ||
+      (password && password.length));
   NSURLRequest *request = [self requestForAuthenticationEmail:email password:password];
 
   [self authenticationViewController:viewController handleAuthenticationWithEmail:email request:request completion:completion];
@@ -518,14 +517,14 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   if ([BITHockeyHelper isURLSessionSupported]) {
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    
+
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                               typeof(self) strongSelf = weakSelf;
                                               NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-                                              
+
                                               [session finishTasksAndInvalidate];
-                                              
+
                                               [strongSelf handleAuthenticationWithResponse:httpResponse email:email data:data completion:completion];
                                             }];
     [task resume];
@@ -537,7 +536,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                                                                                               email:email
                                                                                                                data:responseData
                                                                                                          completion:completion];
-                                                                     }];
+                                                                        }];
     [self.hockeyAppClient enqeueHTTPOperation:newOperation];
   }
 }
@@ -581,21 +580,21 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 - (NSURLRequest *)requestForAuthenticationEmail:(NSString *)email password:(NSString *)password {
   NSString *authenticationPath = [self authenticationPath];
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
-  
+
   NSString *installString = bit_appAnonID(NO);
   if (installString) {
     params[@"install_string"] = installString;
   }
-  
+
   if (BITAuthenticatorIdentificationTypeHockeyAppEmail == self.identificationType || BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent == self.identificationType) {
     NSString *authCode = BITHockeyMD5([NSString stringWithFormat:@"%@%@",
-                                       self.authenticationSecret ?: @"",
-                                       email ?: @""]);
-    
+                                                                 self.authenticationSecret ?: @"",
+                                                                 email ?: @""]);
+
     params[@"email"] = email ?: @"";
     params[@"authcode"] = authCode.lowercaseString;
   }
-  
+
   NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
                                                                     path:authenticationPath
                                                               parameters:params];
@@ -605,7 +604,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     NSString *authValue = [NSString stringWithFormat:@"Basic %@", bit_base64String(authData, authData.length)];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
   }
-  
+
   return request;
 }
 
@@ -622,19 +621,19 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     if (error) {
       *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                    code:BITAuthenticatorAPIServerReturnedInvalidResponse
-                               userInfo:@{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
+                               userInfo:@{NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
     }
     return nil;
   }
-  
-  switch (urlResponse.statusCode) {
+
+  switch(urlResponse.statusCode) {
     case 401:
       if (error) {
         *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                      code:BITAuthenticatorNotAuthorized
                                  userInfo:@{
-                                            NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationWrongEmailPassword")
-                                            }];
+                                     NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationWrongEmailPassword")
+                                 }];
       }
       break;
     case 200:
@@ -645,8 +644,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       if (error) {
         *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                      code:BITAuthenticatorAPIServerReturnedInvalidResponse
-                                 userInfo:@{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
-        
+                                 userInfo:@{NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
+
       }
       break;
   }
@@ -655,7 +654,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     NSParameterAssert(nil == error || *error);
     return nil;
   }
-  
+
   NSError *jsonParseError = nil;
   id jsonObject = [NSJSONSerialization JSONObjectWithData:data
                                                   options:0
@@ -663,7 +662,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   //no json or unexpected json
   if (nil == jsonObject || ![jsonObject isKindOfClass:[NSDictionary class]]) {
     if (error) {
-      NSDictionary *userInfo = @{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")};
+      NSDictionary *userInfo = @{NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")};
       if (jsonParseError) {
         NSMutableDictionary *userInfoMutable = [userInfo mutableCopy];
         userInfoMutable[NSUnderlyingErrorKey] = jsonParseError;
@@ -675,7 +674,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     }
     return nil;
   }
-  
+
   NSString *status = jsonObject[@"status"];
   NSString *authToken = nil;
   if ([status isEqualToString:@"identified"]) {
@@ -686,15 +685,15 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     if (error) {
       *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                    code:BITAuthenticatorNotAuthorized
-                               userInfo:@{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationNotMember")}];
-      
+                               userInfo:@{NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationNotMember")}];
+
     }
   }
   //if no error is set yet, but error parameter is given, return a generic error
   if (nil == authToken && error && nil == *error) {
     *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                  code:BITAuthenticatorAPIServerReturnedInvalidResponse
-                             userInfo:@{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
+                             userInfo:@{NSLocalizedDescriptionKey : BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")}];
   }
   return authToken;
 }
@@ -731,7 +730,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     BITHockeyLogWarning(@"WARNING: URL scheme for authentication doesn't match!");
     return NO;
   }
-  
+
   NSString *installationIdentifier = nil;
   NSString *localizedErrorDescription = nil;
   switch (self.identificationType) {
@@ -760,7 +759,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     case BITAuthenticatorIdentificationTypeHockeyAppUser:
       return NO;
   }
-  
+
   if (installationIdentifier) {
     BITHockeyLogDebug(@"Authentication succeeded.");
     if (NO == self.restrictApplicationUsage) {
@@ -839,7 +838,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   [self removeKeyFromKeychain:kBITAuthenticatorUUIDKey];
   [self removeKeyFromKeychain:kBITAuthenticatorUserEmailKey];
   [self setLastAuthenticatedVersion:nil];
-  
+
   //cleanup values stored from 3.5 Beta1..Beta3
   [self removeKeyFromKeychain:kBITAuthenticatorAuthTokenKey];
   [self removeKeyFromKeychain:kBITAuthenticatorAuthTokenTypeKey];
@@ -851,7 +850,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 #else
   NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingString:@"/../iTunesArtwork"];
 #endif
-  
+
   struct stat fs;
   int fd = open([path UTF8String], O_RDONLY, 0);
   if (fstat(fd, &fs) < 0) {
@@ -859,9 +858,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     close(fd);
     return;
   }
-  
+
   BITHockeyLogDebug(@"Processing full size image for possible authentication");
-  
+
   unsigned char *buffer, *source;
   source = (unsigned char *)malloc((unsigned long)fs.st_size);
   if (read(fd, source, (unsigned long)fs.st_size) != fs.st_size) {
@@ -870,15 +869,15 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     free(source);
     return;
   }
-  
+
   if ((fs.st_size < 20) || (memcmp(source, kBITPNGHeader, 8))) {
     // Not a PNG
     free(source);
     return;
   }
-  
+
   buffer = source + 8;
-  
+
   NSString *result = nil;
   bit_uint32 length;
   unsigned char *name;
@@ -888,42 +887,42 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   do {
     memcpy(&length, buffer, 4);
     length = ntohl(length);
-    
+
     buffer += 4;
     name = (unsigned char *)malloc(5);
     name[4] = 0;
     memcpy(name, buffer, 4);
-    
+
     buffer += 4;
     data = (unsigned char *)malloc(length + 1);
-    
+
     if (bytes_left >= length) {
       memcpy(data, buffer, length);
-      
+
       buffer += length;
       buffer += 4;
       if (!strcmp((const char *)name, "tEXt")) {
         data[length] = 0;
         NSString *key = [NSString stringWithCString:(char *)data encoding:NSUTF8StringEncoding];
-        
+
         if ([key isEqualToString:@"Data"]) {
           result = [NSString stringWithCString:(char *)(data + key.length + 1) encoding:NSUTF8StringEncoding];
         }
       }
-      
+
       if (!memcmp(name, kBITPNGEndChunk, 4)) {
         chunk_index = 128;
       }
     }
-    
+
     free(data);
     free(name);
-    
+
     bytes_left -= (length + 3 * 4);
   } while ((chunk_index++ < 128) && (bytes_left > 8));
-  
+
   free(source);
-  
+
   if (result) {
     BITHockeyLogDebug(@"Authenticating using full size image information: %@", result);
     [self handleOpenURL:[NSURL URLWithString:result] sourceApplication:nil annotation:nil];
@@ -1023,8 +1022,8 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 + (NSString *)stringForIdentificationType:(BITAuthenticatorIdentificationType)identificationType {
   switch (identificationType) {
-    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeHockeyAppEmail:
+    case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
       return @"iuid";
     case BITAuthenticatorIdentificationTypeWebAuth:
       return @"webAuth";
