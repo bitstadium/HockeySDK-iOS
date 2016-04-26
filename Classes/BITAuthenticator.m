@@ -347,22 +347,21 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     __block NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
-    
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              typeof(self) strongSelf = weakSelf;
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *dataTaskError) {
+                                              typeof (self) strongSelf = weakSelf;
                                               
                                               [session finishTasksAndInvalidate];
                                               
-                                              [strongSelf handleValidationResponseWithData:data error:error completion:completion];
+                                              [strongSelf handleValidationResponseWithData:data error:dataTaskError completion:completion];
                                             }];
     [task resume];
   } else {
     [self.hockeyAppClient getPath:validationPath
                        parameters:[self validationParameters]
-                       completion:^(BITHTTPOperation *operation, NSData *responseData, NSError *error) {
+                       completion:^(BITHTTPOperation *operation, NSData *responseData, NSError *dataTaskError) {
                          typeof(self) strongSelf = weakSelf;
-                         [strongSelf handleValidationResponseWithData:responseData error:error completion:completion];
+                         [strongSelf handleValidationResponseWithData:responseData error:dataTaskError completion:completion];
                        }];
   }
 }
@@ -375,11 +374,11 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
       dict[NSUnderlyingErrorKey] = error;
       userInfo = dict;
     }
-    NSError *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
+    NSError *authenticationError = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                          code:BITAuthenticatorNetworkError
                                      userInfo:userInfo];
     self.validated = NO;
-    if (completion) { completion(NO, error); }
+    if (completion) { completion(NO, authenticationError); }
   } else {
     NSError *validationParseError = nil;
     BOOL valid = [self.class isValidationResponseValid:responseData error:&validationParseError];
@@ -531,7 +530,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                             }];
     [task resume];
   } else {
-    BITHTTPOperation *operation = [self.hockeyAppClient operationWithURLRequest:request
+    BITHTTPOperation *newOperation = [self.hockeyAppClient operationWithURLRequest:request
                                                                      completion:^(BITHTTPOperation *operation, NSData *responseData, NSError *error) {
                                                                        typeof(self) strongSelf = weakSelf;
                                                                        [strongSelf handleAuthenticationWithResponse:operation.response
@@ -539,7 +538,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                                                                                                data:responseData
                                                                                                          completion:completion];
                                                                      }];
-    [self.hockeyAppClient enqeueHTTPOperation:operation];
+    [self.hockeyAppClient enqeueHTTPOperation:newOperation];
   }
 }
 
@@ -714,7 +713,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
     case BITAuthenticatorIdentificationTypeHockeyAppEmailTransparent:
     case BITAuthenticatorIdentificationTypeHockeyAppUser:
       return nil;
-      break;
   }
   NSURL *url = [self.webpageURL URLByAppendingPathComponent:[NSString stringWithFormat:@"apps/%@/authorize", self.encodedAppIdentifier]];
   NSParameterAssert(whatParameter && url.absoluteString);
@@ -723,7 +721,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 }
 
 - (BOOL)handleOpenURL:(NSURL *)url
-    sourceApplication:(NSString *)sourceApplication
+    sourceApplication:(NSString *)sourceApplication__unused 
            annotation:(id)annotation {
   //check if this URL was meant for us, if not return NO so the user can
   //handle it
@@ -790,7 +788,7 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   return YES;
 }
 
-+ (NSString *)UDIDFromOpenURL:(NSURL *)url annotation:(id)annotation {
++ (NSString *)UDIDFromOpenURL:(NSURL *)url annotation:(id)__unused annotation {
   NSString *query = [url query];
   NSString *udid = nil;
   //there should actually only one
@@ -1062,11 +1060,11 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 
 #pragma mark - Application Lifecycle
 
-- (void)applicationDidBecomeActive:(NSNotification *)note {
+- (void)applicationDidBecomeActive:(NSNotification *)__unused note {
   [self authenticate];
 }
 
-- (void)applicationDidEnterBackground:(NSNotification *)note {
+- (void)applicationDidEnterBackground:(NSNotification *)__unused note {
   if (BITAuthenticatorAppRestrictionEnforcementOnAppActive == self.restrictionEnforcementFrequency) {
     self.validated = NO;
   }
