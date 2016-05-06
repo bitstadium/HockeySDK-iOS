@@ -141,7 +141,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param appIdentifier The app identifier that should be used.
  @param delegate `nil` or the class implementing the option protocols
  */
-- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(id<BITHockeyManagerDelegate>)delegate;
+- (void)configureWithIdentifier:(NSString *)appIdentifier delegate:(_Nullable id<BITHockeyManagerDelegate>)delegate;
 
 
 /**
@@ -178,7 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param liveIdentifier The app identifier for the app store configurations.
  @param delegate `nil` or the class implementing the optional protocols
  */
-- (void)configureWithBetaIdentifier:(NSString *)betaIdentifier liveIdentifier:(NSString *)liveIdentifier delegate:(id<BITHockeyManagerDelegate>)delegate;
+- (void)configureWithBetaIdentifier:(NSString *)betaIdentifier liveIdentifier:(NSString *)liveIdentifier delegate:(_Nullable id<BITHockeyManagerDelegate>)delegate;
 
 
 /**
@@ -214,7 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
  @see BITUpdateManagerDelegate
  @see BITFeedbackManagerDelegate
  */
-@property (nonatomic, weak) id<BITHockeyManagerDelegate> delegate;
+@property (nonatomic, weak, nullable) id<BITHockeyManagerDelegate> delegate;
 
 
 /**
