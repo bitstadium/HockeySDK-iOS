@@ -208,6 +208,14 @@ typedef NS_ENUM(NSInteger, BITFeedbackObservationMode) {
 
 
 /**
+ Define if each new feedback should start a new discussion thread in the backend.
+ 
+ Default is `NO`
+ */
+@property (nonatomic, readwrite) BOOL startNewThreadForEachFeedback;
+
+
+/**
  Define the trigger that opens the feedback composer and attaches a screenshot
  
  The following modes are available:

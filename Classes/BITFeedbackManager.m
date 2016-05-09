@@ -878,7 +878,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
   [[NSNotificationCenter defaultCenter] postNotificationName:BITHockeyFeedbackMessagesLoadingStarted object:nil];
   
   NSString *tokenParameter = @"";
-  if ([self token]) {
+  if ([self token] && !self.startNewThreadForEachFeedback) {
     tokenParameter = [NSString stringWithFormat:@"/%@", [self token]];
   }
   NSMutableString *parameter = [NSMutableString stringWithFormat:@"api/2/apps/%@/feedback%@", [self encodedAppIdentifier], tokenParameter];
