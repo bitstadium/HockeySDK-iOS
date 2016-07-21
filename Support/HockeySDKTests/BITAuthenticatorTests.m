@@ -183,6 +183,7 @@ static void *kInstallationIdentification = &kInstallationIdentification;
   
   [verifyCount(delegateMock, times(1)) authenticator:_sut willShowAuthenticationController:(id)anything()];
 }
+
 #pragma mark - Web auth identification type
 - (void) testWebAuthIdentificationShowsViewController {
   _sut.identificationType = BITAuthenticatorIdentificationTypeWebAuth;
@@ -233,6 +234,67 @@ static void *kInstallationIdentification = &kInstallationIdentification;
   _sut.authenticationSecret = @"double";
   
   [_sut authenticationViewController:nil handleAuthenticationWithEmail:@"stephan@dd.de" request:[NSURLRequest new] completion:nil];
+  
+  [verify(httpClientMock) enqeueHTTPOperation:anything()];
+}
+
+#pragma mark - ProvidedUserEmail identification type
+- (void) testProvidedUserEmailIdentificationFailsWithMissingSecret {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  [BITHockeyManager sharedHockeyManager].userEmail = @"johndoe@example.com";
+  [_sut identifyWithCompletion:^(BOOL identified, NSError *error) {
+    assertThatBool(identified, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testProvidedUserEmailIdentificationFailsWithMissingProvidedEmail {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  _sut.authenticationSecret = @"mySecret";
+  [_sut identifyWithCompletion:^(BOOL identified, NSError *error) {
+    assertThatBool(identified, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testProvidedUserEmailIdentificationDoesntShowViewController {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  _sut.authenticationSecret = @"mySecret";
+  id delegateMock = mockProtocol(@protocol(BITAuthenticatorDelegate));
+  _sut.delegate = delegateMock;
+  
+  [_sut identifyWithCompletion:nil];
+  
+  [verifyCount(delegateMock, times(0)) authenticator:_sut willShowAuthenticationController:(id)anything()];
+}
+
+- (void) testProvidedUserEmailValidationFailsWithMissingSecret {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  [BITHockeyManager sharedHockeyManager].userEmail = @"johndoe@example.com";
+  [_sut validateWithCompletion:^(BOOL validated, NSError *error) {
+    assertThatBool(validated, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testProvidedUserEmailValidationFailsWithMissingProvidedEmail {
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  _sut.authenticationSecret = @"mySecret";
+  [_sut validateWithCompletion:^(BOOL validated, NSError *error) {
+    assertThatBool(validated, isFalse());
+    assertThat(error, notNilValue());
+  }];
+}
+
+- (void) testThatProvidedUserEmailIdentificationQueuesAnOperation {
+  id helperMock = OCMClassMock([BITHockeyHelper class]);
+  OCMStub([helperMock isURLSessionSupported]).andReturn(NO);
+  
+  id httpClientMock = mock(BITHockeyAppClient.class);
+  _sut.hockeyAppClient = httpClientMock;
+  _sut.identificationType = BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail;
+  
+  [_sut authenticationViewController:nil handleAuthenticationWithEmail:@"johndoe@example.com" password:nil completion:nil];
   
   [verify(httpClientMock) enqeueHTTPOperation:anything()];
 }

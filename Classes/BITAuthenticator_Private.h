@@ -92,14 +92,13 @@
 @property (nonatomic, assign, readwrite, getter = isValidated) BOOL validated;
 
 #pragma mark - Testing
-- (void) storeInstallationIdentifier:(NSString*) identifier withType:(BITAuthenticatorIdentificationType) type;
-- (void)validateWithCompletion:(void (^)(BOOL validated, NSError *))completion;
+- (void)storeInstallationIdentifier:(NSString*) identifier withType:(BITAuthenticatorIdentificationType) type;
 - (void)authenticationViewController:(UIViewController *)viewController
        handleAuthenticationWithEmail:(NSString *)email
                              request:(NSURLRequest *)request
                           completion:(void (^)(BOOL, NSError *))completion;
-- (BOOL) needsValidation;
-- (void) authenticate;
+- (BOOL)needsValidation;
+- (void)authenticate;
 @end
 
 #endif /* HOCKEYSDK_FEATURE_AUTHENTICATOR */

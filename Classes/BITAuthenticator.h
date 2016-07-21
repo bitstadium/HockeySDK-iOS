@@ -27,7 +27,6 @@
  */
 
 #import <Foundation/Foundation.h>
-
 #import "BITHockeyBaseManager.h"
 
 /**
@@ -42,7 +41,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * to identify who actually is running this installation and on which device
    * the app is installed.
    */
-  BITAuthenticatorIdentificationTypeAnonymous,
+    BITAuthenticatorIdentificationTypeAnonymous,
   /**
    * Ask for the HockeyApp account email
    * <br/><br/>
@@ -52,7 +51,16 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * The provided email address has to match an email address of a registered
    * HockeyApp user who is a member or tester of the app
    */
-  BITAuthenticatorIdentificationTypeHockeyAppEmail,
+    BITAuthenticatorIdentificationTypeHockeyAppEmail,
+  /**
+   * Provide the HockeyApp account email.
+   * <br/><br/>
+   * Provide an email for email authentication via `BITHockeyManagerDelegate` or `userEmail` property.
+   * If restrictApplicationUsage is enabled, the provided user account has to match a
+   * registered HockeyApp user who is a member or tester of the app.
+   * For identification purpose any HockeyApp user is allowed.
+   */
+    BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail,
   /**
    * Ask for the HockeyApp account by email and password
    * <br/><br/>
@@ -62,7 +70,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * The provided user account has to match a registered HockeyApp user who is
    * a member or tester of the app
    */
-  BITAuthenticatorIdentificationTypeHockeyAppUser,
+    BITAuthenticatorIdentificationTypeHockeyAppUser,
   /**
    * Identifies the current device
    * <br/><br/>
@@ -74,7 +82,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * This requires the app to register an URL scheme. See the linked property and methods
    * for further documentation on this.
    */
-  BITAuthenticatorIdentificationTypeDevice,
+    BITAuthenticatorIdentificationTypeDevice,
   /**
    * Ask for the HockeyApp account email.
    * <br/><br/>
@@ -86,7 +94,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorIdentificationType) {
    * registered HockeyApp user who is a member or tester of the app.
    * For identification purpose any HockeyApp user is allowed.
    */
-  BITAuthenticatorIdentificationTypeWebAuth,
+    BITAuthenticatorIdentificationTypeWebAuth,
 };
 
 /**
@@ -99,11 +107,11 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
   /**
    * Checks if the user is allowed to use the app at the first time a version is started
    */
-  BITAuthenticatorAppRestrictionEnforcementOnFirstLaunch,
+    BITAuthenticatorAppRestrictionEnforcementOnFirstLaunch,
   /**
    * Checks if the user is allowed to use the app every time the app becomes active
    */
-  BITAuthenticatorAppRestrictionEnforcementOnAppActive,
+    BITAuthenticatorAppRestrictionEnforcementOnAppActive,
 };
 
 @protocol BITAuthenticatorDelegate;
@@ -131,10 +139,10 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  * either once your modal view is fully presented (e.g. its `viewDidLoad:` method is processed)
  * or once your modal view is dismissed.
  */
-@interface BITAuthenticator : BITHockeyBaseManager
+@interface BITAuthenticator: BITHockeyBaseManager
+
 
 #pragma mark - Configuration
-
 
 ///-----------------------------------------------------------------------------
 /// @name Configuration
@@ -193,6 +201,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  * "Secret:".
  *
  * This is only needed if `identificationType` is set to `BITAuthenticatorIdentificationTypeHockeyAppEmail`
+ * or `BITAuthenticatorIdentificationTypeHockeyAppProvidedUserEmail`.
  *
  * @see identificationType
  */
@@ -218,7 +227,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  * URL to query the device's id via external webpage
  * Built with the baseURL set in `webpageURL`.
  */
-- (NSURL*) deviceAuthenticationURL;
+- (NSURL *)deviceAuthenticationURL;
 
 /**
  * The url-scheme used to identify via `BITAuthenticatorIdentificationTypeDevice`
@@ -269,9 +278,10 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  @see identificationType
  @see urlScheme
  */
-- (BOOL) handleOpenURL:(NSURL *) url
-     sourceApplication:(NSString *) sourceApplication
-            annotation:(id) annotation;
+- (BOOL)handleOpenURL:(NSURL *)url
+    sourceApplication:(NSString *)sourceApplication
+           annotation:(id)annotation;
+
 
 #pragma mark - Authentication
 
@@ -297,7 +307,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  *
  * @see identificationType
  */
-- (void) authenticateInstallation;
+- (void)authenticateInstallation;
 
 /**
  * Identifies the user according to the type specified in `identificationType`.
@@ -315,7 +325,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  *
  * @param completion Block being executed once identification completed. Be sure to properly dispatch code to the main queue if necessary.
  */
-- (void) identifyWithCompletion:(void(^)(BOOL identified, NSError *error)) completion;
+- (void)identifyWithCompletion:(void (^)(BOOL identified, NSError *error))completion;
 
 /**
  * Returns YES if this app is identified according to the setting in `identificationType`.
@@ -344,7 +354,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  *
  * @param completion Block being executed once validation completed. Be sure to properly dispatch code to the main queue if necessary.
  */
-- (void) validateWithCompletion:(void(^)(BOOL validated, NSError *error)) completion;
+- (void)validateWithCompletion:(void (^)(BOOL validated, NSError *error))completion;
 
 /**
  * Indicates if this installation is validated.
@@ -354,7 +364,7 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
 /**
  * Removes all previously stored authentication tokens, UDIDs, etc.
  */
-- (void) cleanupInternalStorage;
+- (void)cleanupInternalStorage;
 
 /**
  * Returns different values depending on `identificationType`. This can be used 
@@ -362,17 +372,20 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  *
  * @see identificationType
  */
-- (NSString*) publicInstallationIdentifier;
+- (NSString *)publicInstallationIdentifier;
+
 @end
+
 
 #pragma mark - Protocol
 
 /**
  * `BITAuthenticator` protocol
  */
-@protocol BITAuthenticatorDelegate <NSObject>
+@protocol BITAuthenticatorDelegate<NSObject>
 
 @optional
+
 /**
  * If the authentication (or validation) needs to identify the user,
  * this delegate method is called with the viewController that we'll present.
@@ -381,5 +394,6 @@ typedef NS_ENUM(NSUInteger, BITAuthenticatorAppRestrictionEnforcementFrequency) 
  * @param viewController `UIViewController` used to identify the user
  *
  */
-- (void) authenticator:(BITAuthenticator *)authenticator willShowAuthenticationController:(UIViewController*) viewController;
+- (void)authenticator:(BITAuthenticator *)authenticator willShowAuthenticationController:(UIViewController *)viewController;
+
 @end

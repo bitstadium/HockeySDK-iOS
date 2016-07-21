@@ -220,7 +220,7 @@
  are not anonymous any more and the crash alerts will not show the word "anonymous"!
 
  @param hockeyManager The `BITHockeyManager` HockeyManager instance invoking this delegate
- @param componentManager The `BITHockeyBaseManager` component instance invoking this delegate, can be `BITCrashManager` or `BITFeedbackManager`
+ @param componentManager The `BITHockeyBaseManager` component instance invoking this delegate, can be `BITAuthenticator`, `BITCrashManager` or `BITFeedbackManager`
  @see userIDForHockeyManager:componentManager:
  @see userNameForHockeyManager:componentManager:
  @see [BITHockeyManager userEmail]
