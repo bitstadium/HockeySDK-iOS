@@ -2343,13 +2343,13 @@
 			};
 			name = Debug;
 		};
-		1E4F61EC1621AD970033EFC5 /* ReleaseDefault */ = {
+		1E4F61EC1621AD970033EFC5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
 				PRODUCT_NAME = HockeySDK.framework;
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1E5954F015B6F24A00A03429 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2378,7 +2378,7 @@
 			};
 			name = Debug;
 		};
-		1E5954F115B6F24A00A03429 /* ReleaseDefault */ = {
+		1E5954F115B6F24A00A03429 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
@@ -2404,7 +2404,7 @@
 				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1E59551515B6F45800A03429 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2419,7 +2419,7 @@
 			};
 			name = Debug;
 		};
-		1E59551615B6F45800A03429 /* ReleaseDefault */ = {
+		1E59551615B6F45800A03429 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_THUMB_SUPPORT = NO;
@@ -2430,7 +2430,7 @@
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1E5A45A016F0DFC200B55C04 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2495,7 +2495,7 @@
 			};
 			name = Debug;
 		};
-		1E5A45A116F0DFC200B55C04 /* ReleaseDefault */ = {
+		1E5A45A116F0DFC200B55C04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2553,7 +2553,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1E7DE39019D44D88009AB8E5 /* ReleaseCrashOnly */ = {
 			isa = XCBuildConfiguration;
@@ -2726,14 +2726,14 @@
 			};
 			name = Debug;
 		};
-		1E8E66AF15BC3D7700632A2E /* ReleaseDefault */ = {
+		1E8E66AF15BC3D7700632A2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_THUMB_SUPPORT = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1EB617531B0A30480035A986 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2783,7 +2783,7 @@
 			};
 			name = Debug;
 		};
-		1EB617551B0A30480035A986 /* ReleaseDefault */ = {
+		1EB617551B0A30480035A986 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
@@ -2831,7 +2831,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1EB617561B0A30480035A986 /* ReleaseCrashOnly */ = {
 			isa = XCBuildConfiguration;
@@ -2953,7 +2953,7 @@
 			};
 			name = Debug;
 		};
-		1EB6175A1B0A30480035A986 /* ReleaseDefault */ = {
+		1EB6175A1B0A30480035A986 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3018,7 +3018,7 @@
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 		1EB6175B1B0A30480035A986 /* ReleaseCrashOnly */ = {
 			isa = XCBuildConfiguration;
@@ -3417,7 +3417,7 @@
 			};
 			name = Debug;
 		};
-		E400563D148D79B500EB22B9 /* ReleaseDefault */ = {
+		E400563D148D79B500EB22B9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E45A90E1B78DB0C002CA772 /* default.xcconfig */;
 			buildSettings = {
@@ -3459,7 +3459,7 @@
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 			};
-			name = ReleaseDefault;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -3468,7 +3468,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E4F61EB1621AD970033EFC5 /* Debug */,
-				1E4F61EC1621AD970033EFC5 /* ReleaseDefault */,
+				1E4F61EC1621AD970033EFC5 /* Release */,
 				B298554B1D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39419D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E6131B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3480,7 +3480,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E5954F015B6F24A00A03429 /* Debug */,
-				1E5954F115B6F24A00A03429 /* ReleaseDefault */,
+				1E5954F115B6F24A00A03429 /* Release */,
 				B29855451D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39119D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E60D1B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3492,7 +3492,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E59551515B6F45800A03429 /* Debug */,
-				1E59551615B6F45800A03429 /* ReleaseDefault */,
+				1E59551615B6F45800A03429 /* Release */,
 				B29855471D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39219D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E60F1B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3504,7 +3504,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E5A45A016F0DFC200B55C04 /* Debug */,
-				1E5A45A116F0DFC200B55C04 /* ReleaseDefault */,
+				1E5A45A116F0DFC200B55C04 /* Release */,
 				B29855461D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39519D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E60E1B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3516,7 +3516,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E8E66AE15BC3D7700632A2E /* Debug */,
-				1E8E66AF15BC3D7700632A2E /* ReleaseDefault */,
+				1E8E66AF15BC3D7700632A2E /* Release */,
 				B298554A1D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39319D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E6121B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3528,7 +3528,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1EB617531B0A30480035A986 /* Debug */,
-				1EB617551B0A30480035A986 /* ReleaseDefault */,
+				1EB617551B0A30480035A986 /* Release */,
 				B29855481D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1EB617561B0A30480035A986 /* ReleaseCrashOnly */,
 				1E27E6101B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3540,7 +3540,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1EB617581B0A30480035A986 /* Debug */,
-				1EB6175A1B0A30480035A986 /* ReleaseDefault */,
+				1EB6175A1B0A30480035A986 /* Release */,
 				B29855491D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1EB6175B1B0A30480035A986 /* ReleaseCrashOnly */,
 				1E27E6111B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
@@ -3552,7 +3552,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E400563C148D79B500EB22B9 /* Debug */,
-				E400563D148D79B500EB22B9 /* ReleaseDefault */,
+				E400563D148D79B500EB22B9 /* Release */,
 				B29855441D85EBC9007FF452 /* ReleaseAllFeatures */,
 				1E7DE39019D44D88009AB8E5 /* ReleaseCrashOnly */,
 				1E27E60C1B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
