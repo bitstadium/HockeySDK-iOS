@@ -650,6 +650,11 @@ NSString *bit_validAppIconStringFromIcons(NSBundle *resourceBundle, NSArray *ico
         iconPath = [resourceBundle pathForResource:iconFilename ofType:icon.pathExtension];
       }
       
+      if (!iconPath) {
+        BITHockeyLogError(@"Error: No icon found for the given name.");
+        abort();
+      }
+      
       NSData *imgData = [[NSData alloc] initWithContentsOfFile:iconPath];
       
       UIImage *iconImage = [[UIImage alloc] initWithData:imgData];

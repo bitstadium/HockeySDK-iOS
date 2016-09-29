@@ -1011,7 +1011,8 @@
     }
   }
   
-  return nil;
+  BITHockeyLogError(@"Error: No QLPreviewItem found at index.");
+  abort();
 }
 
 - (void)previewController:(QLPreviewController *)controller updateAttachment:(BITFeedbackMessageAttachment *)attachment data:( NSData *)data {
