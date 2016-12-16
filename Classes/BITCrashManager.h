@@ -438,4 +438,10 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
  */
 - (void)generateTestCrash;
 
+/**
+ * Generates a crash report as if the app had crashed at the current execution point
+ * with the provided exception.
+ */
+- (void)logException:(NSException *)exception;
+
 @end
