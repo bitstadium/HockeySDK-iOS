@@ -38,6 +38,7 @@
 #import <sys/sysctl.h>
 
 static NSString *const kBITUtcDateFormatter = @"utcDateFormatter";
+NSString *const kBITExcludeApplicationSupportFromBackup = @"kBITExcludeApplicationSupportFromBackup";
 
 @implementation BITHockeyHelper
 
@@ -45,6 +46,18 @@ static NSString *const kBITUtcDateFormatter = @"utcDateFormatter";
   id nsurlsessionClass = NSClassFromString(@"NSURLSessionUploadTask");
   BOOL isUrlSessionSupported = (nsurlsessionClass && !bit_isRunningInAppExtension());
   return isUrlSessionSupported;
+}
+
++ (BOOL)isPhotoAccessPossible {
+  if(bit_isPreiOS10Environment()) {
+    return YES;
+  }
+  else {
+    NSString *privacyDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSPhotoLibraryUsageDescription"];
+    BOOL privacyStringSet = (privacyDescription != nil) && (privacyDescription.length > 0);
+    
+    return privacyStringSet;
+  }
 }
 
 @end
@@ -123,23 +136,45 @@ NSComparisonResult bit_versionCompare(NSString *stringA, NSString *stringB) {
   NSRange letterRange = [plainSelf rangeOfCharacterFromSet: [NSCharacterSet letterCharacterSet]];
   if (letterRange.length)
     plainSelf = [plainSelf substringToIndex: letterRange.location];
-	
+  
   // Extract plain version number from other
   NSString *plainOther = stringB;
   letterRange = [plainOther rangeOfCharacterFromSet: [NSCharacterSet letterCharacterSet]];
   if (letterRange.length)
     plainOther = [plainOther substringToIndex: letterRange.location];
-	
+  
   // Compare plain versions
   NSComparisonResult result = [plainSelf compare:plainOther options:NSNumericSearch];
-	
+  
   // If plain versions are equal, compare full versions
   if (result == NSOrderedSame)
     result = [stringA compare:stringB options:NSNumericSearch];
-	
+  
   // Done
   return result;
 }
+
+#pragma mark Exclude from backup fix
+
+void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
+  
+  BOOL shouldExcludeAppSupportDirFromBackup = [[NSUserDefaults standardUserDefaults] boolForKey:kBITExcludeApplicationSupportFromBackup];
+  if (shouldExcludeAppSupportDirFromBackup) {
+    return;
+  }
+  
+  if (directoryURL) {
+    NSError *getResourceError = nil;
+    NSNumber *appSupportDirExcludedValue;
+    
+    if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
+      NSError *setResourceError = nil;
+      [directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError];
+    }
+  }
+}
+
+#pragma mark Identifiers
 
 NSString *bit_mainBundleIdentifier(void) {
   return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
@@ -246,6 +281,8 @@ NSString *bit_appAnonID(BOOL forceNewAnonID) {
   return appAnonID;
 }
 
+#pragma mark Environment detection
+
 BOOL bit_isPreiOS7Environment(void) {
   static BOOL isPreiOS7Environment = YES;
   static dispatch_once_t checkOS;
@@ -273,7 +310,7 @@ BOOL bit_isPreiOS8Environment(void) {
   dispatch_once(&checkOS8, ^{
     // NSFoundationVersionNumber_iOS_7_1 = 1047.25
     // We hardcode this, so compiling with iOS 7 is possible while still being able to detect the correct environment
-
+    
     // runtime check according to
     // https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/TransitionGuide/SupportingEarlieriOS.html
     if (floor(NSFoundationVersionNumber) <= 1047.25) {
@@ -285,6 +322,27 @@ BOOL bit_isPreiOS8Environment(void) {
   
   return isPreiOS8Environment;
 }
+
+BOOL bit_isPreiOS10Environment(void) {
+  static BOOL isPreOS10Environment = YES;
+  static dispatch_once_t checkOS10;
+  
+  dispatch_once(&checkOS10, ^{
+    // NSFoundationVersionNumber_iOS_9_MAX = 1299
+    // We hardcode this, so compiling with iOS 7 is possible while still being able to detect the correct environment
+    
+    // runtime check according to
+    // https://developer.apple.com/library/prerelease/ios/documentation/UserExperience/Conceptual/TransitionGuide/SupportingEarlieriOS.html
+    if (floor(NSFoundationVersionNumber) <= 1299.00) {
+      isPreOS10Environment = YES;
+    } else {
+      isPreOS10Environment = NO;
+    }
+  });
+  
+  return isPreOS10Environment;
+}
+
 
 BOOL bit_isAppStoreReceiptSandbox(void) {
 #if TARGET_OS_SIMULATOR
@@ -340,6 +398,32 @@ BOOL bit_isRunningInAppExtension(void) {
   return isRunningInAppExtension;
 }
 
+BOOL bit_isDebuggerAttached(void) {
+  static BOOL debuggerIsAttached = NO;
+  
+  static dispatch_once_t debuggerPredicate;
+  dispatch_once(&debuggerPredicate, ^{
+    struct kinfo_proc info;
+    size_t info_size = sizeof(info);
+    int name[4];
+    
+    name[0] = CTL_KERN;
+    name[1] = KERN_PROC;
+    name[2] = KERN_PROC_PID;
+    name[3] = getpid();
+    
+    if (sysctl(name, 4, &info, &info_size, NULL, 0) == -1) {
+      BITHockeyLogError(@"[HockeySDK] ERROR: Checking for a running debugger via sysctl() failed.");
+      debuggerIsAttached = false;
+    }
+    
+    if (!debuggerIsAttached && (info.kp_proc.p_flag & P_TRACED) != 0)
+      debuggerIsAttached = true;
+  });
+  
+  return debuggerIsAttached;
+}
+
 #pragma mark NSString helpers
 
 NSString *bit_URLEncodedString(NSString *inputString) {
@@ -373,6 +457,148 @@ NSString *bit_base64String(NSData * data, unsigned long length) {
   }
 }
 
+#pragma mark Context helpers
+
+// Return ISO 8601 string representation of the date
+NSString *bit_utcDateString(NSDate *date){
+  static NSDateFormatter *dateFormatter;
+  
+  // NSDateFormatter is not thread-safe prior to iOS 7
+  if (bit_isPreiOS7Environment()) {
+    NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
+    dateFormatter = threadDictionary[kBITUtcDateFormatter];
+    
+    if (!dateFormatter) {
+      dateFormatter = [NSDateFormatter new];
+      NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+      dateFormatter.locale = enUSPOSIXLocale;
+      dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+      dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+      threadDictionary[kBITUtcDateFormatter] = dateFormatter;
+    }
+    
+    NSString *dateString = [dateFormatter stringFromDate:date];
+    
+    return dateString;
+  }
+  
+  static dispatch_once_t dateFormatterToken;
+  dispatch_once(&dateFormatterToken, ^{
+    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    dateFormatter = [NSDateFormatter new];
+    dateFormatter.locale = enUSPOSIXLocale;
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+  });
+  
+  NSString *dateString = [dateFormatter stringFromDate:date];
+  
+  return dateString;
+}
+
+NSString *bit_devicePlatform(void) {
+  
+  size_t size;
+  sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+  char *answer = (char*)malloc(size);
+  if (answer == NULL)
+    return @"";
+  sysctlbyname("hw.machine", answer, &size, NULL, 0);
+  NSString *platform = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
+  free(answer);
+  return platform;
+}
+
+NSString *bit_deviceType(void){
+  
+  UIUserInterfaceIdiom idiom = [UIDevice currentDevice].userInterfaceIdiom;
+  
+  switch (idiom) {
+    case UIUserInterfaceIdiomPad:
+      return @"Tablet";
+    case UIUserInterfaceIdiomPhone:
+      return @"Phone";
+    default:
+      return @"Unknown";
+  }
+}
+
+NSString *bit_osVersionBuild(void) {
+  void *result = NULL;
+  size_t result_len = 0;
+  int ret;
+  
+  /* If our buffer is too small after allocation, loop until it succeeds -- the requested destination size
+   * may change after each iteration. */
+  do {
+    /* Fetch the expected length */
+    if ((ret = sysctlbyname("kern.osversion", NULL, &result_len, NULL, 0)) == -1) {
+      break;
+    }
+    
+    /* Allocate the destination buffer */
+    if (result != NULL) {
+      free(result);
+    }
+    result = malloc(result_len);
+    
+    /* Fetch the value */
+    ret = sysctlbyname("kern.osversion", result, &result_len, NULL, 0);
+  } while (ret == -1 && errno == ENOMEM);
+  
+  /* Handle failure */
+  if (ret == -1) {
+    int saved_errno = errno;
+    
+    if (result != NULL) {
+      free(result);
+    }
+    
+    errno = saved_errno;
+    return NULL;
+  }
+  
+  NSString *osBuild = [NSString stringWithCString:result encoding:NSUTF8StringEncoding];
+  free(result);
+  
+  NSString *osVersion = [[UIDevice currentDevice] systemVersion];
+  
+  return [NSString stringWithFormat:@"%@ (%@)", osVersion, osBuild];
+}
+
+NSString *bit_osName(void){
+  return [[UIDevice currentDevice] systemName];
+}
+
+NSString *bit_deviceLocale(void) {
+  NSLocale *locale = [NSLocale currentLocale];
+  return [locale objectForKey:NSLocaleIdentifier];
+}
+
+NSString *bit_deviceLanguage(void) {
+  return [[NSBundle mainBundle] preferredLocalizations][0];
+}
+
+NSString *bit_screenSize(void){
+  CGFloat scale = [UIScreen mainScreen].scale;
+  CGSize screenSize = [UIScreen mainScreen].bounds.size;
+  return [NSString stringWithFormat:@"%dx%d",(int)(screenSize.height * scale), (int)(screenSize.width * scale)];
+}
+
+NSString *bit_sdkVersion(void){
+  return [NSString stringWithFormat:@"ios:%@", [NSString stringWithUTF8String:hockeyapp_library_info.bit_version]];
+}
+
+NSString *bit_appVersion(void){
+  NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+  NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+  
+  if(version){
+    return [NSString stringWithFormat:@"%@ (%@)", version, build];
+  }else{
+    return build;
+  }
+}
 
 #if !defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnly) && !defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
 
@@ -391,13 +617,13 @@ NSString *bit_validAppIconStringFromIcons(NSBundle *resourceBundle, NSArray *ico
   
   BOOL useHighResIcon = NO;
   BOOL useiPadIcon = NO;
-  if ([UIScreen mainScreen].scale == 2.0f) useHighResIcon = YES;
+  if ([UIScreen mainScreen].scale >= 2.0f) useHighResIcon = YES;
   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) useiPadIcon = YES;
   
   NSString *currentBestMatch = nil;
   float currentBestMatchHeight = 0;
   float bestMatchHeight = 0;
-
+  
   if (bit_isPreiOS7Environment()) {
     bestMatchHeight = useiPadIcon ? (useHighResIcon ? 144 : 72) : (useHighResIcon ? 114 : 57);
   } else {
@@ -407,19 +633,29 @@ NSString *bit_validAppIconStringFromIcons(NSBundle *resourceBundle, NSArray *ico
   for(NSString *icon in icons) {
     // Don't use imageNamed, otherwise unit tests won't find the fixture icon
     // and using imageWithContentsOfFile doesn't load @2x files with absolut paths (required in tests)
+    
 
-    NSString *iconPathExtension = ([[icon pathExtension] length] > 0) ? [icon pathExtension] : @"png";
     NSMutableArray *iconFilenameVariants = [NSMutableArray new];
     
+    [iconFilenameVariants addObject:icon];
+    [iconFilenameVariants addObject:[NSString stringWithFormat:@"%@@2x", icon]];
     [iconFilenameVariants addObject:[icon stringByDeletingPathExtension]];
     [iconFilenameVariants addObject:[NSString stringWithFormat:@"%@@2x", [icon stringByDeletingPathExtension]]];
     
     for (NSString *iconFilename in iconFilenameVariants) {
       // this call already covers "~ipad" files
-      NSString *iconPath = [resourceBundle pathForResource:iconFilename ofType:iconPathExtension];
+      NSString *iconPath = [resourceBundle pathForResource:iconFilename ofType:@"png"];
+      
+      if (!iconPath && (icon.pathExtension.length > 0)) {
+        iconPath = [resourceBundle pathForResource:iconFilename ofType:icon.pathExtension];
+      }
+      // We still haven't managed to get a path to the app icon, just using a placeholder now.
+      if(!iconPath) {
+        iconPath = [resourceBundle pathForResource:@"AppIconPlaceHolder" ofType:@"png"];
+      }
       
       NSData *imgData = [[NSData alloc] initWithContentsOfFile:iconPath];
-    
+      
       UIImage *iconImage = [[UIImage alloc] initWithData:imgData];
       
       if (iconImage) {
@@ -453,17 +689,15 @@ NSString *bit_validAppIconFilename(NSBundle *bundle, NSBundle *resourceBundle) {
   }
   
   // we test iPad structure anyway and use it if we find a result and don't have another one yet
-  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+  if (!iconFilename && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) {
     icons = [bundle objectForInfoDictionaryKey:@"CFBundleIcons~ipad"];
     if (icons && [icons isKindOfClass:[NSDictionary class]]) {
       icons = [icons valueForKeyPath:@"CFBundlePrimaryIcon.CFBundleIconFiles"];
     }
     NSString *iPadIconFilename = bit_validAppIconStringFromIcons(resourceBundle, icons);
-    if (iPadIconFilename && !iconFilename) {
-      iconFilename = iPadIconFilename;
-    }
+    iconFilename = iPadIconFilename;
   }
-
+  
   if (!iconFilename) {
     NSString *tempFilename = [bundle objectForInfoDictionaryKey:@"CFBundleIconFile"];
     if (tempFilename) {
@@ -813,7 +1047,7 @@ UIImage *bit_appIcon() {
   
   if (icons) {
     BOOL useHighResIcon = NO;
-    if ([UIScreen mainScreen].scale == 2.0f) useHighResIcon = YES;
+    if ([UIScreen mainScreen].scale >= 2.0f) useHighResIcon = YES;
     
     for(NSString *icon in icons) {
       iconString = icon;
@@ -910,149 +1144,6 @@ UIImage *bit_screenshot(void) {
   UIGraphicsEndImageContext();
   
   return image;
-}
-
-#pragma mark Context helpers
-
-// Return ISO 8601 string representation of the date
-NSString *bit_utcDateString(NSDate *date){
-  static NSDateFormatter *dateFormatter;
-  
-  // NSDateFormatter is not thread-safe prior to iOS 7
-  if (bit_isPreiOS7Environment()) {
-    NSMutableDictionary *threadDictionary = [NSThread currentThread].threadDictionary;
-    dateFormatter = threadDictionary[kBITUtcDateFormatter];
-    
-    if (!dateFormatter) {
-      dateFormatter = [NSDateFormatter new];
-      NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-      dateFormatter.locale = enUSPOSIXLocale;
-      dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-      dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-      threadDictionary[kBITUtcDateFormatter] = dateFormatter;
-    }
-    
-    NSString *dateString = [dateFormatter stringFromDate:date];
-    
-    return dateString;
-  }
-  
-  static dispatch_once_t dateFormatterToken;
-  dispatch_once(&dateFormatterToken, ^{
-    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    dateFormatter = [NSDateFormatter new];
-    dateFormatter.locale = enUSPOSIXLocale;
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-  });
-  
-  NSString *dateString = [dateFormatter stringFromDate:date];
-  
-  return dateString;
-}
-
-NSString *bit_devicePlatform(void) {
-  
-  size_t size;
-  sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-  char *answer = (char*)malloc(size);
-  if (answer == NULL)
-    return @"";
-  sysctlbyname("hw.machine", answer, &size, NULL, 0);
-  NSString *platform = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
-  free(answer);
-  return platform;
-}
-
-NSString *bit_deviceType(void){
-  
-  UIUserInterfaceIdiom idiom = [UIDevice currentDevice].userInterfaceIdiom;
-  
-  switch (idiom) {
-    case UIUserInterfaceIdiomPad:
-      return @"Tablet";
-    case UIUserInterfaceIdiomPhone:
-      return @"Phone";
-    default:
-      return @"Unknown";
-  }
-}
-
-NSString *bit_osVersionBuild(void) {
-  void *result = NULL;
-  size_t result_len = 0;
-  int ret;
-  
-  /* If our buffer is too small after allocation, loop until it succeeds -- the requested destination size
-   * may change after each iteration. */
-  do {
-    /* Fetch the expected length */
-    if ((ret = sysctlbyname("kern.osversion", NULL, &result_len, NULL, 0)) == -1) {
-      break;
-    }
-    
-    /* Allocate the destination buffer */
-    if (result != NULL) {
-      free(result);
-    }
-    result = malloc(result_len);
-    
-    /* Fetch the value */
-    ret = sysctlbyname("kern.osversion", result, &result_len, NULL, 0);
-  } while (ret == -1 && errno == ENOMEM);
-  
-  /* Handle failure */
-  if (ret == -1) {
-    int saved_errno = errno;
-    
-    if (result != NULL) {
-      free(result);
-    }
-    
-    errno = saved_errno;
-    return NULL;
-  }
-  
-  NSString *osBuild = [NSString stringWithCString:result encoding:NSUTF8StringEncoding];
-  free(result);
-  
-  NSString *osVersion = [[UIDevice currentDevice] systemVersion];
-  
-  return [NSString stringWithFormat:@"%@ (%@)", osVersion, osBuild];
-}
-
-NSString *bit_osName(void){
-  return [[UIDevice currentDevice] systemName];
-}
-
-NSString *bit_deviceLocale(void) {
-  NSLocale *locale = [NSLocale currentLocale];
-  return [locale objectForKey:NSLocaleIdentifier];
-}
-
-NSString *bit_deviceLanguage(void) {
-  return [[NSBundle mainBundle] preferredLocalizations][0];
-}
-
-NSString *bit_screenSize(void){
-  CGFloat scale = [UIScreen mainScreen].scale;
-  CGSize screenSize = [UIScreen mainScreen].bounds.size;
-  return [NSString stringWithFormat:@"%dx%d",(int)(screenSize.height * scale), (int)(screenSize.width * scale)];
-}
-
-NSString *bit_sdkVersion(void){
-  return [NSString stringWithFormat:@"ios:%@", [NSString stringWithUTF8String:hockeyapp_library_info.bit_version]];
-}
-
-NSString *bit_appVersion(void){
-  NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-  NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
-  
-  if(version){
-    return [NSString stringWithFormat:@"%@ (%@)", version, build];
-  }else{
-    return build;
-  }
 }
 
 #endif /* HOCKEYSDK_CONFIGURATION_ReleaseCrashOnly && HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions */

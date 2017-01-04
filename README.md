@@ -1,9 +1,21 @@
 [![Build Status](https://travis-ci.org/bitstadium/HockeySDK-iOS.svg?branch=master)](https://travis-ci.org/bitstadium/HockeySDK-iOS)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](http://cocoapod-badges.herokuapp.com/v/HockeySDK/badge.png)](http://cocoadocs.org/docsets/HockeySDK)
 
-## Version 4.0.0-beta.1
+## Version 4.1.3
 
-- [Changelog](http://www.hockeyapp.net/help/sdk/ios/4.0.0-beta.1/docs/docs/Changelog.html)
+- [Changelog](http://www.hockeyapp.net/help/sdk/ios/4.1.3/docs/docs/Changelog.html)
+
+**NOTE** If your are using the binary integration of our SDK, make sure that the `HockeySDKResources.bundle` inside the `HockeySDK.embeddedframework`-folder has been added to your application.
+
+### Feedback and iOS 10
+**4.1.1 and later of the HockeySDK remove the Feedback feature from the default version of the SDK.**
+The reason for this is that iOS 10 requires developers to add a usage string to their Info.plist in case they include the photos framework in their app. If this string is missing, the app will be rejected when submitting the app to the app store. As HockeyApp's Feedback feature includes a dependency to the photos framework. This means that if you include HockeyApp into your app, adding the usage string would be a requirement even for developers who don't use the Feedback feature. If you don't use Feedback in your app, simply upgrade HockeySDK to version 4.1.1 or newer. If you are using Feedback, please have a look at the [Feedback section](#feedback).
+
+
+We **strongly** suggest upgrading to version 4.1.1 or a later version of the SDK. Not specifying the usage description string and using previous versions of the HockeySDK-iOS will cause the app to crash at runtime as soon as the user taps the "attach image"-button or in case you have enabled `BITFeedbackObservationModeOnScreenshot`.
+
+If you are using an older version of the SDK, you must add a `NSPhotoLibraryUsageDescription` to your `Info.plist` to avoid a AppStore rejection during upload of your app (please have a look at the [Feedback section](#feedback)).
 
 ## Introduction
 
@@ -11,9 +23,9 @@ HockeySDK-iOS implements support for using HockeyApp in your iOS applications.
 
 The following features are currently supported:
 
-1. **Collect crash reports:** If your app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and letive apps, i.e. those submitted to the App Store.
+1. **Collect crash reports:** If your app crashes, a crash log with the same format as from the Apple Crash Reporter is written to the device's storage. If the user starts the app again, he is asked to submit the crash report to HockeyApp. This works for both beta and live apps, i.e. those submitted to the App Store.
 
-2. **User Metrics** Understand user behavior to improve your app. Track usage through daily and monthly active users. Monitor crash impacted users. Measure customer engagement through session count.
+2. **User Metrics:** Understand user behavior to improve your app. Track usage through daily and monthly active users, monitor crash impacted users, as well as customer engagement through session count.You can now track **Custom Events** in your app, understand user actions and see the aggregates on the HockeyApp portal.
 
 3. **Update Ad-Hoc / Enterprise apps:** The app will check with HockeyApp if a new version for your Ad-Hoc or Enterprise build is available. If yes, it will show an alert view to the user and let him see the release notes, the version history and start the installation process right away. 
 
@@ -29,26 +41,29 @@ This document contains the following sections:
 2. [Setup](#setup)
 3. [Advanced Setup](#advancedsetup) 
   1. [Linking System Frameworks manually](#linkmanually)   
-  2. [Setup with CocoaPods](#cocoapods)
-  3. [iOS Extensions](#extensions)
-  4. [WatchKit 1 Extensions](#watchkit)
-  5. [Crash Reporting](#crashreporting)
-  6. [User Metrics](#user-metrics)
-  7. [Feedback](#feedback)
-  8. [Store Updates](#storeupdates)
-  9. [In-App-Updates (Beta & Enterprise only)](#betaupdates)
-  10. [Debug information](#debug)
+  2. [CocoaPods](#cocoapods)
+  3. [Carthage](#carthage)
+  4. [iOS Extensions](#extensions)
+  5. [WatchKit 1 Extensions](#watchkit)
+  6. [Crash Reporting](#crashreporting)
+  7. [User Metrics](#user-metrics)
+  8. [Feedback](#feedback)
+  9. [Store Updates](#storeupdates)
+  10. [In-App-Updates (Beta & Enterprise only)](#betaupdates)
+  11. [Debug information](#debug)
 4. [Documentation](#documentation)
 5. [Troubleshooting](#troubleshooting)
 6. [Contributing](#contributing)
-7. [Contributor License](#contributorlicense)
-8. [Contact](#contact)
+  1. [Code of Conduct](#codeofconduct)
+  2. [Contributor License](#contributorlicense)
+7. [Contact](#contact)
 
 <a id="requirements"></a> 
 ## 1. Requirements
 
 1. We assume that you already have a project in Xcode and that this project is opened in Xcode 7 or later.
 2. The SDK supports iOS 6.0 and later.
+3. Xcode 8 
 
 <a id="setup"></a>
 ## 2. Setup
@@ -68,13 +83,14 @@ Please see the "[How to create a new app](http://support.hockeyapp.net/kb/about-
 
 From our experience, 3rd-party libraries usually reside inside a subdirectory (let's call our subdirectory `Vendor`), so if you don't have your project organized with a subdirectory for libraries, now would be a great start for it. To continue our example,  create a folder called `Vendor` inside your project directory and move the unzipped `HockeySDK-iOS`-folder into it. 
 
-The SDK comes in three flavours:
+The SDK comes in four flavours:
 
-  * Full featured `HockeySDK.embeddedframework`
-  * Crash reporting only: `HockeySDK.framework` in the subfolder `HockeySDKCrashOnly`
+  * Default SDK without Feedback: `HockeySDK.embeddedframework`
+  * Full featured SDK with Feedback: `HockeySDK.embeddedframework` in the subfolder `HockeySDKAllFeatures`. 
+  * Crash reporting only: `HockeySDK.framework` in the subfolder `HockeySDKCrashOnly`.
   * Crash reporting only for extensions: `HockeySDK.framework` in the subfolder `HockeySDKCrashOnlyExtension` (which is required to be used for extensions).
   
-Our examples will use the full featured SDK (`HockeySDK.embeddedframework`).
+Our examples will use the **default** SDK (`HockeySDK.embeddedframework`).
 
 <a id="setupxcode"></a>
 
@@ -99,7 +115,7 @@ Our examples will use the full featured SDK (`HockeySDK.embeddedframework`).
   ```
 
 3. Search for the method `application:didFinishLaunchingWithOptions:`
-4. Add the following lines to setup and start the Application Insights SDK:
+4. Add the following lines to setup and start the HockeyApp SDK:
 
   ```objectivec
   [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
@@ -108,7 +124,7 @@ Our examples will use the full featured SDK (`HockeySDK.embeddedframework`).
   [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation]; // This line is obsolete in the crash only builds
   ```
 
-**Swift**
+**Swift 2.3**
 
 1. Open your `AppDelegate.swift` file.
 2. Add the following line at the top of the file below your own import statements:
@@ -123,15 +139,41 @@ Our examples will use the full featured SDK (`HockeySDK.embeddedframework`).
   application(application: UIApplication, didFinishLaunchingWithOptions launchOptions:[NSObject: AnyObject]?) -> Bool
   ```
 
-4. Add the following lines to setup and start the Application Insights SDK:
+4. Add the following lines to setup and start the HockeyApp SDK:
 
   ```swift
-  BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER");
-  BITHockeyManager.sharedHockeyManager().startManager();
-  BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation(); // This line is obsolete in the crash only builds
+  BITHockeyManager.sharedHockeyManager().configureWithIdentifier("APP_IDENTIFIER")
+  BITHockeyManager.sharedHockeyManager().startManager()
+  BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation() // This line is obsolete in the crash only builds
   ```
 
+**Swift 3**
+
+1. Open your `AppDelegate.swift` file.
+2. Add the following line at the top of the file below your own import statements:
+
+  ```swift
+  import HockeySDK
+  ```
+
+3. Search for the method 
+
+  ```swift
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+  ```
+
+4. Add the following lines to setup and start the HockeyApp SDK:
+
+  ```swift
+  BITHockeyManager.shared().configure(withIdentifier: "cdef2c2b4ddf420b9cdf470a9667eb27")
+  BITHockeyManager.shared().start()
+  BITHockeyManager.shared().authenticator.authenticateInstallation() // This line is obsolete in the crash only builds
+
+  ```
+
+
 *Note:* The SDK is optimized to defer everything possible to a later time while making sure e.g. crashes on startup can also be caught and each module executes other code with a delay some seconds. This ensures that `applicationDidFinishLaunching` will process as fast as possible and the SDK will not block the startup sequence resulting in a possible kill by the watchdog process.
+
 
 **Congratulation, now you're all set to use HockeySDK!**
 
@@ -148,7 +190,20 @@ If you are working with an older project which doesn't support clang modules yet
 3. Select the tab `Build Phases`.
 4. Expand `Link Binary With Libraries`.
 5. Add the following system frameworks, if they are missing:
-  1. Full Featured: 
+  1. Default SDK: 
+    + `AssetsLibrary`
+    + `CoreText`
+    + `CoreGraphics`
+    + `Foundation`
+    + `MobileCoreServices`
+    + `QuartzCore`
+    + `QuickLook`
+    + `Security`
+    + `SystemConfiguration`
+    + `UIKit`
+    + `libc++`
+    + `libz`
+  2. SDK with all features:
     + `AssetsLibrary`
     + `CoreText`
     + `CoreGraphics`
@@ -162,13 +217,13 @@ If you are working with an older project which doesn't support clang modules yet
     + `UIKit`
     + `libc++`
     + `libz`
-  2. Crash reporting only:
+  3. Crash reporting only:
     + `Foundation`
     + `Security`
     + `SystemConfiguration`
     + `UIKit`
     + `libc++`
-  3. Crash reporting only for extensions:
+  4. Crash reporting only for extensions:
     + `Foundation`
     + `Security`
     + `SystemConfiguration`
@@ -177,7 +232,7 @@ If you are working with an older project which doesn't support clang modules yet
 Note that this also means that you can't use the `@import` syntax mentioned in the [Modify Code](#modify) section but have to stick to the old `#import <HockeySDK/HockeySDK.h>`.
 
 <a id="cocoapods"></a>
-### 3.2 Setup with CocoaPods
+### 3.2 CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like HockeySDK in your projects. To learn how to setup CocoaPods for your project, visit the [official CocoaPods website](http://cocoapods.org/).
 
@@ -193,6 +248,14 @@ pod "HockeySDK"
 The default and recommended distribution is a binary (static library) and a resource bundle with translations and images for all SDK Features: Crash Reporting, User Feedback, Store Updates, Authentication, AdHoc Updates.
 
 You can alternative use a Crash Reporting build only by using the following line in your `Podfile`:
+
+For the SDK with all features, add
+
+```ruby
+pod "HockeySDK", :subspecs => ['AllFeaturesLib']
+```
+to your podfile.
+To add the variant that only includes crash reporting, use
 
 ```ruby
 pod "HockeySDK", :subspecs => ['CrashOnlyLib']
@@ -212,8 +275,21 @@ Alternatively you can integrate the SDK by source if you want to do any modifica
 pod "HockeySDK-Source"
 ```
 
+<a id="carthage"></a>
+### 3.3 Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is an alternative way to add frameworks to your app. For general information about how to use Carthage, please follow their [documentation](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+
+To add HockeySDK to your project, simply put this line into your `Cartfile`:
+
+`github "bitstadium/HockeySDK-iOS"`
+
+and then follow the steps described in the [Carthage documentation](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos).
+
+For now, this will integrate the **full-featured SDK** so you must include the `NSPhotoLibraryUsageDescription` and read the [feedback section](#feedback).
+
 <a id="extensions"></a>
-### 3.3 iOS Extensions
+### 3.4 iOS Extensions
 
 The following points need to be considered to use the HockeySDK SDK with iOS Extensions:
 
@@ -242,7 +318,7 @@ The following points need to be considered to use the HockeySDK SDK with iOS Ext
 3. The binary distribution provides a special framework build in the `HockeySDKCrashOnly` or `HockeySDKCrashOnlyExtension` folder of the distribution zip file, which only contains crash reporting functionality (also automatic sending crash reports only).
 
 <a id="watchkit"></a>
-### 3.4 WatchKit 1 Extensions
+### 3.5 WatchKit 1 Extensions
 
 The following points need to be considered to use HockeySDK with WatchKit 1 Extensions:
 
@@ -307,14 +383,14 @@ The following points need to be considered to use HockeySDK with WatchKit 1 Exte
 2. The binary distribution provides a special framework build in the `HockeySDKCrashOnly` or `HockeySDKCrashOnlyExtension` folder of the distribution zip file, which only contains crash reporting functionality (also automatic sending crash reports only).
 
 <a name="crashreporting"></a>
-### 3.5 Crash Reporting
+### 3.6 Crash Reporting
 
 The following options only show some of possibilities to interact and fine-tune the crash reporting feature. For more please check the full documentation of the `BITCrashManager` class in our [documentation](#documentation).
 
-#### 3.5.1 Disable Crash Reporting
+#### 3.6.1 Disable Crash Reporting
 The HockeySDK enables crash reporting **per default**. Crashes will be immediately sent to the server the next time the app is launched.
 
-To provide you with the best crash reporting, we are using [PLCrashReporter]("https://github.com/plausiblelabs/plcrashreporter") in [Version 1.2 / Commit 356901d7f3ca3d46fbc8640f469304e2b755e461]("https://github.com/plausiblelabs/plcrashreporter/commit/356901d7f3ca3d46fbc8640f469304e2b755e461").
+To provide you with the best crash reporting, we are using [PLCrashReporter]("https://github.com/plausiblelabs/plcrashreporter") in [Version 1.3 / Commit 05d34741d3a90bbed51214983110943831ae5943]("https://github.com/plausiblelabs/plcrashreporter/commit/05d34741d3a90bbed51214983110943831ae5943").
 
 This feature can be disabled as follows:
 
@@ -326,7 +402,7 @@ This feature can be disabled as follows:
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-#### 3.5.2 Autosend crash reports
+#### 3.6.2 Autosend crash reports
 
 Crashes are send the next time the app starts. If `crashManagerStatus` is set to `BITCrashManagerStatusAutoSend`, crashes will be send without any user interaction, otherwise an alert will appear allowing the users to decide whether they want to send the report or not.
 
@@ -342,7 +418,7 @@ The SDK is not sending the reports right when the crash happens deliberately, be
 
 Sending the reports on startup is done asynchronously (non-blocking). This is the only safe way to ensure that the app won't be possibly killed by the iOS watchdog process, because startup could take too long and the app could not react to any user input when network conditions are bad or connectivity might be very slow.
 
-#### 3.5.3 Mach Exception Handling
+#### 3.6.3 Mach Exception Handling
 
 By default the SDK is using the safe and proven in-process BSD Signals for catching crashes. This option provides an option to enable catching fatal signals via a Mach exception server instead.
 
@@ -358,7 +434,7 @@ We strongly advice _NOT_ to enable Mach exception handler in release versions of
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
 
-#### 3.5.4 Attach additional data
+#### 3.6.4 Attach additional data
 
 The `BITHockeyManagerDelegate` protocol provides methods to add additional data to a crash report:
 
@@ -393,25 +469,96 @@ and set the delegate:
 
 
 <a name="user-metrics"></a>
-### 3.6 User Metrics
+### 3.7 User Metrics
 
 HockeyApp automatically provides you with nice, intelligible, and informative metrics about how your app is used and by whom. 
+
 - **Sessions**: A new session is tracked by the SDK whenever the containing app is restarted (this refers to a 'cold start', i.e. when the app has not already been in memory prior to being launched) or whenever it becomes active again after having been in the background for 20 seconds or more.
 - **Users**: The SDK anonymously tracks the users of your app by creating a random UUID that is then securely stored in the iOS keychain. Because this anonymous ID is stored in the keychain it persists across reinstallations.
+- **Custom Events**: With HockeySDK 4.1.0 you can now track Custom Events in your app, understand user actions and see the aggregates on the HockeyApp portal.
+- **Batching & offline behavior**: The SDK batches up to 50 events or waits for 15s and then persist and send the events, whichever comes first. So for sessions, this might actually mean we send 1 single event per batch. If you are sending Custom Events, it can be 1 session event plus X of your Custom Events (up to 50 events per batch total). In case the device is offline, up to 300 events are stored until the SDK starts to drop new events.
 
-Just in case you want to opt-out of this feature, there is a way to turn this functionality off:
+Just in case you want to opt-out of the automatic collection of anonymous users and sessions statistics, there is a way to turn this functionality off at any time:
 
 ```objectivec
-[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
-
 [BITHockeyManager sharedHockeyManager].disableMetricsManager = YES;
+```
 
-[[BITHockeyManager sharedHockeyManager] startManager];
+#### 3.7.1 Custom Events
 
+By tracking custom events, you can now get insight into how your customers use your app, understand their behavior and answer important business or user experience questions while improving your app.
+
+- Before starting to track events, ask yourself the questions that you want to get answers to. For instance, you might be interested in business, performance/quality or user experience aspects.
+- Name your events in a meaningful way and keep in mind that you will use these names when searching for events in the HockeyApp web portal. It is your reponsibility to not collect personal information as part of the events tracking.
+
+**Objective-C**
+
+```objectivec
+BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
+
+[metricsManager trackEventWithName:eventName]
+```
+
+**Swift**
+
+```swift
+let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+
+metricsManager.trackEventWithName(eventName)
+```
+
+**Limitations**
+
+- Accepted characters for tracking events are: [a-zA-Z0-9_. -]. If you use other than the accepted characters, your events will not show up in the HockeyApp web portal.
+- There is currently a limit of 300 unique event names per app per week.
+- There is _no_ limit on the number of times an event can happen.
+
+#### 3.7.2 Attaching custom properties and measurements to a custom event
+
+It's possible to attach properties and/or measurements to a custom event. There is one limitation to attaching properties and measurements. They currently don't show up in the HockeyApp dashboard but you have to link your app to Application Insights to be able to query them. Please have a look at [our blogpost](https://www.hockeyapp.net/blog/2016/08/30/custom-events-public-preview.html) to find out how to do that. 
+
+- Properties have to be a string.
+- Measurements have to be of a numeric type.
+
+**Objective-C**
+
+```objectivec
+BITMetricsManager *metricsManager = [BITHockeyManager sharedHockeyManager].metricsManager;
+
+NSDictionary *myProperties = @{@"Property 1" : @"Something",
+                               @"Property 2" : @"Other thing",
+                               @"Property 3" : @"Totally different thing"};
+NSDictionary *myMeasurements = @{@"Measurement 1" : @1,
+                                 @"Measurement 2" : @2.34,
+                                 @"Measurement 3" : @2000000};
+
+[metricsManager trackEventWithName:eventName properties:myProperties measurements:myMeasurements]
+```
+
+**Swift**
+
+```swift
+let myProperties = ["Property 1": "Something", "Property 2": "Other thing", "Property 3" : "Totally different thing."]
+let myMeasurements = ["Measurement 1": 1, "Measurement 2": 2.3, "Measurement 3" : 30000]
+      
+let metricsManager = BITHockeyManager.sharedHockeyManager().metricsManager
+metricsManager.trackEventWithName(eventName, properties: myProperties, myMeasurements: measurements)
 ```
 
 <a name="feedback"></a>
-### 3.7 Feedback
+### 3.8 Feedback
+
+As of HockeySDK 4.1.1, Feedback is no longer part of the default SDK. To use feedback in your app, integrate the SDK with all features as follows:
+
+#### 3.8.1 Integrate the full-featured SDK.
+
+If you're integrating the binary yourself, use the `HockeySDK.embeddedframework` in the subfolder `HockeySDKAllFeatures`. If you're using cocoapods, use
+
+```ruby
+pod "HockeySDK", :subspecs => ['AllFeaturesLib']
+```
+
+in your podfile.
 
 `BITFeedbackManager` lets your users communicate directly with you via the app and an integrated user interface. It provides a single threaded discussion with a user running your app. This feature is only enabled, if you integrate the actual view controllers into your app.
  
@@ -421,10 +568,17 @@ You should never create your own instance of `BITFeedbackManager` but use the on
 [BITHockeyManager sharedHockeyManager].feedbackManager
 ```
 
-Please check the [documentation](#documentation) of the `BITFeedbachManager` class on more information on how to leverage this feature.
+Please check the [documentation](#documentation) of the `BITFeedbackManager` and `BITFeedbackManagerDelegate` classes on more information on how to leverage this feature.
+
+#### 3.8.2 Add the NSPhotoLibraryUsageDescription to your Info.plist.
+
+As of iOS 10, developers have to add UsageDescription-strings before using system frameworks with privacy features (read more on this in [Apple's own documentation](https://developer.apple.com/library/prerelease/content/releasenotes/General/WhatsNewIniOS/Articles/iOS10.html#//apple_ref/doc/uid/TP40017084-SW3)). To make allow users to attach photos to feedback, add the `NSPhotoLibraryUsageDescription` to your `Info.plist` and provide a description. Make sure to localize your description as described in [Apple's documentation about localizing Info.plist strings](https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html).
+
+If the value is missing from your `Info.plist`, the SDK will disable attaching potos to feedback and disable the creation of a new feedback item in case of a screenshot. 
+
 
 <a name="storeupdates"></a>
-### 3.8 Store Updates
+### 3.9 Store Updates
 
 This is the HockeySDK module for handling app updates when having your app released in the App Store.
 
@@ -445,7 +599,7 @@ When this module is enabled and **NOT** running in an App Store build/environmen
 Please check the [documentation](#documentation) of the `BITStoreUpdateManager` class on more information on how to leverage this feature and know about its limits.
 
 <a name="betaupdates"></a>
-### 3.9 In-App-Updates (Beta & Enterprise only)
+### 3.10 In-App-Updates (Beta & Enterprise only)
 
 The following options only show some of possibilities to interact and fine-tune the update feature when using Ad-Hoc or Enterprise provisioning profiles. For more please check the full documentation of the `BITUpdateManager` class in our [documentation](#documentation).
 
@@ -466,14 +620,14 @@ This feature can be disabled manually as follows:
 If you want to see beta analytics, use the beta distribution feature with in-app updates, restrict versions to specific users, or want to know who is actually testing your app, you need to follow the instructions on our guide [Authenticating Users on iOS](http://support.hockeyapp.net/kb/client-integration-ios-mac-os-x/authenticating-users-on-ios)
 
 <a id="debug"></a>
-### 3.10 Debug information
+### 3.11 Debug information
 
 To check if data is send properly to HockeyApp and also see some additional SDK debug log data in the console, add the following line before `startManager`:
 
 ```objectivec
 [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"APP_IDENTIFIER"];
 
-[[BITHockeyManager sharedHockeyManager] setDebugLogEnabled:YES];
+[BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;
 
 [[BITHockeyManager sharedHockeyManager] startManager];
 ```
@@ -481,7 +635,7 @@ To check if data is send properly to HockeyApp and also see some additional SDK 
 <a id="documentation"></a>
 ## 4. Documentation
 
-Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/ios/4.0.0-beta.1/index.html).
+Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/ios/4.1.3/index.html).
 
 <a id="troubleshooting"></a>
 ## 5.Troubleshooting
@@ -495,13 +649,13 @@ Our documentation can be found on [HockeyApp](http://hockeyapp.net/help/sdk/ios/
   Make sure none of the following files are copied into your app bundle, check under app target, `Build Phases`, `Copy Bundle Resources` or in the `.app` bundle after building:
 
   - `HockeySDK.framework` (except if you build a dynamic framework version of the SDK yourself!)
-  - `de.bitstadium.HockeySDK-iOS-4.0.0-beta.1.docset`
+  - `de.bitstadium.HockeySDK-iOS-4.1.3.docset`
 
 ### Feature are not working as expected
 
   Enable debug output to the console to see additional information from the SDK initializing the modules,  sending and receiving network requests and more by adding the following code before calling `startManager`:
 
-  `[[BITHockeyManager sharedHockeyManager] setDebugLogEnabled: YES];`
+  `[BITHockeyManager sharedHockeyManager].logLevel = BITLogLevelDebug;`
 
 <a id="contributing"></a>
 ## 6. Contributing
@@ -514,13 +668,19 @@ We're looking forward to your contributions via pull requests.
 * Get the latest Xcode from the Mac App Store
 * [AppleDoc](https://github.com/tomaz/appledoc) 
 * [CocoaPods](https://cocoapods.org/)
+* [Carthage](https://github.com/Carthage/Carthage)
+
+<a id="codeofconduct"></a>
+### 6.1 Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 <a id="contributorlicense"></a>
-## 7. Contributor License
+### 6.2 Contributor License
 
 You must sign a [Contributor License Agreement](https://cla.microsoft.com/) before submitting your pull request. To complete the Contributor License Agreement (CLA), you will need to submit a request via the [form](https://cla.microsoft.com/) and then electronically sign the CLA when you receive the email containing the link to the document. You need to sign the CLA only once to cover submission to any Microsoft OSS project. 
 
 <a id="contact"></a>
-## 8. Contact
+## 7. Contact
 
-If you have further questions or are running into trouble that cannot be resolved by any of the steps here, feel free to open a Github issue here or contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net)
+If you have further questions or are running into trouble that cannot be resolved by any of the steps here, feel free to open a Github issue here, contact us at [support@hockeyapp.net](mailto:support@hockeyapp.net) or join our [Slack](https://slack.hockeyapp.net) [![Slack Status](https://slack.hockeyapp.net/badge.svg)](https://slack.hockeyapp.net)

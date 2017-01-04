@@ -1,15 +1,12 @@
 #import <XCTest/XCTest.h>
 
-#define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
-
-#define MOCKITO_SHORTHAND
 #import <OCMockitoIOS/OCMockitoIOS.h>
 
 #import <OCMock/OCMock.h>
 
 #import "BITPersistencePrivate.h"
-#import "BITChannel.h"
+#import "BITChannelPrivate.h"
 #import "BITTelemetryContext.h"
 #import "BITPersistence.h"
 #import "BITEnvelope.h"
@@ -27,11 +24,11 @@
 
 - (void)setUp {
   [super setUp];
-  _mockPersistence = mock(BITPersistence.class);
+  _mockPersistence = OCMPartialMock([[BITPersistence alloc] init]);
   BITTelemetryContext *mockContext = mock(BITTelemetryContext.class);
   
   _sut = [[BITChannel alloc]initWithTelemetryContext:mockContext persistence:_mockPersistence];
-  BITSafeJsonEventsString = NULL;
+  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
 }
 
 #pragma mark - Setup Tests
@@ -45,7 +42,7 @@
 
 - (void)testEnqueueEnvelopeWithOneEnvelopeAndJSONStream {
   _sut = OCMPartialMock(_sut);
-  _sut.maxBatchCount = 3;
+  _sut.maxBatchSize = 3;
   BITTelemetryData *testData = [BITTelemetryData new];
   
   [_sut enqueueTelemetryItem:testData];
@@ -58,7 +55,7 @@
 
 - (void)testEnqueueEnvelopeWithMultipleEnvelopesAndJSONStream {
   _sut = OCMPartialMock(_sut);
-  _sut.maxBatchCount = 3;
+  _sut.maxBatchSize = 3;
   
   BITTelemetryData *testData = [BITTelemetryData new];
   
@@ -90,14 +87,16 @@
 #pragma clang diagnostic ignored "-Wnonnull"
   bit_appendStringToSafeJsonStream(nil, 0);
 #pragma clang diagnostic pop
-  XCTAssertTrue(BITSafeJsonEventsString == NULL);
+  XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
   
-  BITSafeJsonEventsString = NULL;
+//  BITSafeJsonEventsString = NULL;
+  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
   bit_appendStringToSafeJsonStream(nil, &BITSafeJsonEventsString);
 #pragma clang diagnostic pop
-  XCTAssertTrue(BITSafeJsonEventsString == NULL);
+  XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
   
   bit_appendStringToSafeJsonStream(@"", &BITSafeJsonEventsString);
   XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
@@ -110,12 +109,14 @@
   bit_resetSafeJsonStream(&BITSafeJsonEventsString);
   XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
   
-  BITSafeJsonEventsString = NULL;
+//  BITSafeJsonEventsString = NULL;
+  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
   bit_resetSafeJsonStream(nil);
 #pragma clang diagnostic pop
-  XCTAssertEqual(BITSafeJsonEventsString, NULL);
+  XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
   
   BITSafeJsonEventsString = strdup("test string");
   bit_resetSafeJsonStream(&BITSafeJsonEventsString);
