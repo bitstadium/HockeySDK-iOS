@@ -43,10 +43,6 @@
 #import <mach-o/dyld.h>
 #import <mach-o/loader.h>
 
-#ifndef __IPHONE_6_1
-#define __IPHONE_6_1     60100
-#endif
-
 @implementation BITHockeyBaseManager {
   UINavigationController *_navController;
   
@@ -58,12 +54,6 @@
   if ((self = [super init])) {
     _serverURL = BITHOCKEYSDK_URL;
 
-    if ([self isPreiOS7Environment]) {
-      _barStyle = UIBarStyleBlackOpaque;
-      self.navigationBarTintColor = BIT_RGBCOLOR(25, 25, 25);
-    } else {
-      _barStyle = UIBarStyleDefault;
-    }
     _modalPresentationStyle = UIModalPresentationFormSheet;
     
     NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
@@ -179,17 +169,6 @@
  */
 - (UINavigationController *)customNavigationControllerWithRootViewController:(UIViewController *)viewController presentationStyle:(UIModalPresentationStyle)modalPresentationStyle {
   UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-  navController.navigationBar.barStyle = self.barStyle;
-  if (self.navigationBarTintColor) {
-    navController.navigationBar.tintColor = self.navigationBarTintColor;
-  } else {
-    // in case of iOS 7 we overwrite the tint color on the navigation bar
-    if (![self isPreiOS7Environment]) {
-      if ([UIWindow instancesRespondToSelector:NSSelectorFromString(@"tintColor")]) {
-        [navController.navigationBar setTintColor:BIT_RGBCOLOR(0, 122, 255)];
-      }
-    }
-  }
   navController.modalPresentationStyle = self.modalPresentationStyle;
   
   return navController;

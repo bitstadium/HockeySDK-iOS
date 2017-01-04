@@ -536,9 +536,6 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     return;
   }
   
-  if ([self isPreiOS7Environment])
-    self.barStyle = UIBarStyleBlack;
-  
   BITUpdateViewController *updateViewController = [self hockeyViewController:YES];
   if ([self hasNewerMandatoryVersion] || [self expiryDateReached]) {
     [updateViewController setMandatoryUpdate: YES];
