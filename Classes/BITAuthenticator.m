@@ -542,7 +542,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
   if (completion) { completion(identified, authParseError); }
   if (self.identificationCompletion) {
     self.identificationCompletion(identified, authParseError);
-    self.identificationCompletion = nil;
+    if (identified) {
+      self.identificationCompletion = nil;
+    }
   }
 }
 
@@ -749,7 +751,6 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
                                            code:BITAuthenticatorErrorUnknown
                                        userInfo:@{NSLocalizedDescriptionKey:localizedErrorDescription}];
       self.identificationCompletion(NO, error);
-      self.identificationCompletion = nil;
     }
   }
   return YES;
@@ -1035,7 +1036,9 @@ static unsigned char kBITPNGEndChunk[4] = {0x49, 0x45, 0x4e, 0x44};
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   if (alertView.tag == 0) {
-    [self validate];
+    [self cleanupInternalStorage];
+    self.identified = NO;
+    [self authenticate];
   }
 }
 #pragma clang diagnostic pop
