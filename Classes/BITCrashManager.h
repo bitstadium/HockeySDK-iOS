@@ -257,8 +257,8 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
  * @see lastSessionCrashDetails
  * @see didReceiveMemoryWarningInLastSession
  * @see `BITCrashManagerDelegate considerAppNotTerminatedCleanlyReportForCrashManager:`
- * @see [Apple Technical Note TN2151](https://developer.apple.com/library/ios/technotes/tn2151/_index.html)
- * @see [Apple Technical Q&A QA1693](https://developer.apple.com/library/ios/qa/qa1693/_index.html)
+ * @see [Apple Technical Note TN2151](https://developer.apple.com/library/ios/technotes/tn2151/_index.html )
+ * @see [Apple Technical Q&A QA1693](https://developer.apple.com/library/ios/qa/qa1693/_index.html )
  */
 @property (nonatomic, assign, getter = isAppNotTerminatingCleanlyDetectionEnabled) BOOL enableAppNotTerminatingCleanlyDetection;
 

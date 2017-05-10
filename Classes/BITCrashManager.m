@@ -198,6 +198,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   
   BOOL _didLogLowMemoryWarning;
   
+  id _appDidFinishLaunchingObserver;
   id _appDidBecomeActiveObserver;
   id _appWillTerminateObserver;
   id _appDidEnterBackgroundObserver;
@@ -463,6 +464,18 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 - (void) registerObservers {
   __weak typeof(self) weakSelf = self;
   
+  if (nil == _appDidFinishLaunchingObserver) {
+    _appDidFinishLaunchingObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
+                                                                                       object:nil
+                                                                                        queue:NSOperationQueue.mainQueue
+                                                                                   usingBlock:^(NSNotification * _Nonnull note) {
+                                                                                     typeof(self) strongSelf = weakSelf;
+                                                                                     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+                                                                                       [strongSelf appEnteredForeground];
+                                                                                     }
+                                                                                   }];
+  }
+  
   if(nil == _appDidBecomeActiveObserver) {
     _appDidBecomeActiveObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
                                                                                     object:nil
@@ -532,6 +545,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 }
 
 - (void) unregisterObservers {
+  [self unregisterObserver:_appDidFinishLaunchingObserver];
   [self unregisterObserver:_appDidBecomeActiveObserver];
   [self unregisterObserver:_appWillTerminateObserver];
   [self unregisterObserver:_appDidEnterBackgroundObserver];
@@ -1296,12 +1310,9 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
       }
     }
   }
-  
-#if !defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
-  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-    [self appEnteredForeground];
-  }
-#else
+
+#if defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
+  // In extensions, UIApplicationDidFinishLaunchingNotification will never be fired, therfore we need this fallback
   [self appEnteredForeground];
 #endif
   
