@@ -1640,7 +1640,11 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 
 - (NSMutableURLRequest *)requestWithBoundary:(NSString *)boundary {
   NSString *postCrashPath = [NSString stringWithFormat:@"api/2/apps/%@/crashes", self.encodedAppIdentifier];
-  
+  if ([self.delegate respondsToSelector:@selector(crashManagerCustomCrashPath)] &&
+    [[self.delegate crashManagerCustomCrashPath] isKindOfClass:[NSString class]]) {
+    postCrashPath = [self.delegate crashManagerCustomCrashPath];
+  }
+
   NSMutableURLRequest *request = [self.hockeyAppClient requestWithMethod:@"POST"
                                                                     path:postCrashPath
                                                               parameters:nil];
@@ -1648,6 +1652,14 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   [request setCachePolicy: NSURLRequestReloadIgnoringLocalCacheData];
   [request setValue:@"HockeySDK/iOS" forHTTPHeaderField:@"User-Agent"];
   [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+
+  NSDictionary *headerDictionary = nil;
+  if ([self.delegate respondsToSelector:@selector(crashManagerRequestCustomHeaderDictionary)] &&
+      [(headerDictionary = [self.delegate crashManagerRequestCustomHeaderDictionary]) isKindOfClass:[NSDictionary class]]) {
+    [headerDictionary enumerateKeysAndObjectsUsingBlock:^(NSString* headerField, NSString* value, BOOL * _Nonnull stop) {
+      [request setValue:value forHTTPHeaderField:headerField];
+    }];
+  }
   
   NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
   [request setValue:contentType forHTTPHeaderField:@"Content-type"];

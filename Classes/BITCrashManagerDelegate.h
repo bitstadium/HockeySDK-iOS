@@ -152,4 +152,22 @@
  */
 -(BOOL)considerAppNotTerminatedCleanlyReportForCrashManager:(BITCrashManager *)crashManager;
 
+
+/** Define a dictionary of custom NSURLRequest header fields and values
+
+ Define a dictionary of custom NSURLRequest header fields and values that are amended
+ to the request sent to the server.
+
+ @return A dictionary containing header fields and values
+ @see `[BITHockeyManager serverURL]`
+ */
+-(NSDictionary*)crashManagerRequestCustomHeaderDictionary;
+
+/** Define the path of the crash report endpoint
+
+ @return A string that will be appended after the server URL when posting the crash report
+ @see `[BITHockeyManager serverURL]`
+ */
+-(NSString*)crashManagerCustomCrashPath;
+
 @end
