@@ -758,6 +758,15 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 }
 
 /**
+ * Process a live crash report without crashing
+ */
+- (void)logException:(NSException *)exception {
+  [self handleCrashReportWithLoadCrashDataBlock:^NSData *(NSError *__autoreleasing *error) {
+    return [[NSData alloc] initWithData:[self.plCrashReporter generateLiveReportWithException:exception error:error]];
+  }];
+}
+
+/**
  *  Write a meta file for a new crash report
  *
  *  @param filename the crash reports temp filename
@@ -852,11 +861,12 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
 #pragma mark - PLCrashReporter
 
 /**
- *	 Process new crash reports provided by PLCrashReporter
+ *	 Process PLCrashReporter crash reports provided by the `loadCrashData` block
  *
- * Parse the new crash report and gather additional meta data from the app which will be stored along the crash report
+ * Parse the crash report and gather additional meta data from the app which will be stored along the crash report
  */
-- (void) handleCrashReport {
+- (void)handleCrashReportWithLoadCrashDataBlock:(NSData *(^)(NSError *__autoreleasing *error))loadCrashData
+{
   BITHockeyLogVerbose(@"VERBOSE: Handling crash report");
   NSError *error = NULL;
 	
@@ -871,7 +881,7 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
     [self saveSettings];
     
     // Try loading the crash report
-    NSData *crashData = [[NSData alloc] initWithData:[self.plCrashReporter loadPendingCrashReportDataAndReturnError: &error]];
+    NSData *crashData = loadCrashData(&error);
     
     NSString *cacheFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
     _lastCrashFilename = cacheFilename;
@@ -935,6 +945,15 @@ static void uncaught_cxx_exception_handler(const BITCrashUncaughtCXXExceptionInf
   [self saveSettings];
   
   [self.plCrashReporter purgePendingCrashReport];
+}
+
+/**
+ *	 Process new crash reports provided by PLCrashReporter
+ */
+- (void)handleCrashReport {
+  [self handleCrashReportWithLoadCrashDataBlock:^NSData *(NSError *__autoreleasing *error) {
+    return [[NSData alloc] initWithData:[self.plCrashReporter loadPendingCrashReportDataAndReturnError:error]];
+  }];
 }
 
 /**
