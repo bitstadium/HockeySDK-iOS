@@ -1276,6 +1276,26 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
  *  Creates a fake crash report because the app was killed while being in foreground
  */
 - (void)createCrashReportForAppKill {
+  NSMutableString *info = [NSMutableString string];
+
+  [info appendString:@"The application did not terminate cleanly but no crash occured."];
+  if (self.didReceiveMemoryWarningInLastSession) {
+    [info appendString:@" The app received at least one Low Memory Warning."];
+  }
+
+  self.lastSessionCrashDetails = [self createFakeCrashReportWithApplicationSpecificInformation:info];
+}
+
+- (void)sendNonFatalReportWithMessage:(NSString *)message
+{
+  [self createFakeCrashReportWithApplicationSpecificInformation:message];
+  [self triggerDelayedProcessing];
+}
+
+/**
+ *  Creates a fake crash report
+ */
+- (BITCrashDetails *)createFakeCrashReportWithApplicationSpecificInformation:(NSString *)applicationSpecificInformation {
   NSString *fakeReportUUID = bit_UUID();
   NSString *fakeReporterKey = bit_appAnonID(NO) ?: @"???";
   
@@ -1283,7 +1303,7 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
 
   NSString *fakeReportAppVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBITAppVersion];
   if (!fakeReportAppVersion)
-    return;
+    return nil;
   
   NSString *fakeReportOSVersion = [[NSUserDefaults standardUserDefaults] objectForKey:kBITAppOSVersion] ?: [[UIDevice currentDevice] systemVersion];
   
@@ -1328,10 +1348,7 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
   [fakeReportString appendString:@"Exception Codes: 00000020 at 0x8badf00d\n"];
   [fakeReportString appendString:@"\n"];
   [fakeReportString appendString:@"Application Specific Information:\n"];
-  [fakeReportString appendString:@"The application did not terminate cleanly but no crash occured."];
-  if (self.didReceiveMemoryWarningInLastSession) {
-    [fakeReportString appendString:@" The app received at least one Low Memory Warning."];
-  }
+  [fakeReportString appendString:applicationSpecificInformation];
   [fakeReportString appendString:@"\n\n"];
   
   NSString *fakeReportFilename = [NSString stringWithFormat: @"%.0f", [NSDate timeIntervalSinceReferenceDate]];
@@ -1348,20 +1365,6 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
   [rootObj setObject:fakeReportDeviceModel forKey:kBITFakeCrashDeviceModel];
   [rootObj setObject:fakeReportAppUUIDs forKey:kBITFakeCrashAppBinaryUUID];
   [rootObj setObject:fakeReportString forKey:kBITFakeCrashReport];
-  
-  self.lastSessionCrashDetails = [[BITCrashDetails alloc] initWithIncidentIdentifier:fakeReportUUID
-                                                                     reporterKey:fakeReporterKey
-                                                                          signal:fakeSignalName
-                                                                   exceptionName:nil
-                                                                 exceptionReason:nil
-                                                                    appStartTime:nil
-                                                                       crashTime:nil
-                                                                       osVersion:fakeReportOSVersion
-                                                                         osBuild:fakeReportOSBuild
-                                                                      appVersion:fakeReportAppMarketingVersion
-                                                                        appBuild:fakeReportAppVersion
-                                                            appProcessIdentifier:[[NSProcessInfo processInfo] processIdentifier]
-                              ];
 
   NSData *plist = [NSPropertyListSerialization dataWithPropertyList:(id)rootObj
                                                              format:NSPropertyListBinaryFormat_v1_0
@@ -1374,6 +1377,20 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
   } else {
     BITHockeyLogError(@"ERROR: Writing fake crash report. %@", [error description]);
   }
+
+  return [[BITCrashDetails alloc] initWithIncidentIdentifier:fakeReportUUID
+                                                 reporterKey:fakeReporterKey
+                                                      signal:fakeSignalName
+                                               exceptionName:nil
+                                             exceptionReason:nil
+                                                appStartTime:nil
+                                                   crashTime:nil
+                                                   osVersion:fakeReportOSVersion
+                                                     osBuild:fakeReportOSBuild
+                                                  appVersion:fakeReportAppMarketingVersion
+                                                    appBuild:fakeReportAppVersion
+                                        appProcessIdentifier:[[NSProcessInfo processInfo] processIdentifier]
+          ];
 }
 
 /**

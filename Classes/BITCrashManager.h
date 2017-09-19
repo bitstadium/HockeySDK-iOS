@@ -407,6 +407,16 @@ typedef NS_ENUM(NSUInteger, BITCrashManagerUserInput) {
  */
 @property (nonatomic, readonly) NSTimeInterval timeIntervalCrashInLastSessionOccurred;
 
+/**
+ * Sends a crash report without a strack trace.
+ *
+ * Allows to report non-fatal conditions that require special attention but do not lead to an immediate crash.
+ * Besides the lack of a stack trace, all the usual information is attached to the report. It will therefore
+ * appear in the Hockey dashboard like a usual crash.
+ *
+ * @param message The text that is shown as the reason of the "crash".
+ */
+- (void)sendNonFatalReportWithMessage:(NSString *)message;
 
 ///-----------------------------------------------------------------------------
 /// @name Helper
