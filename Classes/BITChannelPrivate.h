@@ -85,14 +85,14 @@ FOUNDATION_EXPORT NSString *const BITChannelBlockedNotification;
  *  @param string The C string which the dictionary's JSON representation will be appended to.
  */
 void bit_appendStringToSafeJsonStream(NSString *string, char *__nonnull*__nonnull jsonStream);
-
+void bit_appendStringToBuffer(NSString *string);
 /**
  *  Reset BITSafeJsonEventsString so we can start appending JSON dictionaries.
  *
  *  @param jsonStream The string that will be reset.
  */
 void bit_resetSafeJsonStream(char *__nonnull*__nonnull jsonStream);
-
+void bit_resetBuffer();
 /**
  *  A method which indicates whether the telemetry pipeline is busy and no new data should be enqueued.
  *  Currently, we drop telemetry data if this returns YES.

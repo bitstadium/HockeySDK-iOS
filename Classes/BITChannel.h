@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXPORT char *BITSafeJsonEventsString;
-
+FOUNDATION_EXPORT pthread_mutex_t BITEventsStringMutex;
 /**
  *  Items get queued before they are persisted and sent out as a batch. This class managed the queue, and forwards the batch
  *  to the persistence layer once the max batch count has been reached.
