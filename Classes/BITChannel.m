@@ -13,8 +13,11 @@
 #import "BITDevice.h"
 #import "BITPersistencePrivate.h"
 
+#import <pthread.h>
+
 static char *const BITDataItemsOperationsQueue = "net.hockeyapp.senderQueue";
 char *BITSafeJsonEventsString;
+pthread_mutex_t BITEventsStringMutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER;
 
 NSString *const BITChannelBlockedNotification = @"BITChannelBlockedNotification";
 
@@ -42,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init {
   if ((self = [super init])) {
-    bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+    bit_resetBuffer();
     _dataItemCount = 0;
     if (bit_isDebuggerAttached()) {
       _maxBatchSize = BITDebugMaxBatchSize;
@@ -125,11 +128,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)persistDataItemQueue {
   [self invalidateTimer];
+  pthread_mutex_lock(&BITEventsStringMutex);
   if (!BITSafeJsonEventsString || strlen(BITSafeJsonEventsString) == 0) {
+    pthread_mutex_unlock(&BITEventsStringMutex);
     return;
   }
-  
   NSData *bundle = [NSData dataWithBytes:BITSafeJsonEventsString length:strlen(BITSafeJsonEventsString)];
+  pthread_mutex_unlock(&BITEventsStringMutex);
   [self.persistence persistBundle:bundle];
   
   // Reset both, the async-signal-safe and item counter.
@@ -137,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)resetQueue {
-  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+  bit_resetBuffer();
   self.dataItemCount = 0;
 }
 
@@ -229,9 +234,21 @@ NS_ASSUME_NONNULL_BEGIN
     
     // Since we can't persist every event right away, we write it to a simple C string.
     // This can then be written to disk by a signal handler in case of a crash.
-    bit_appendStringToSafeJsonStream(string, &(BITSafeJsonEventsString));
+    bit_appendStringToBuffer(string);
     self.dataItemCount += 1;
   }
+}
+
+void bit_appendStringToBuffer(NSString *string) {
+  pthread_mutex_lock(&BITEventsStringMutex);
+  bit_appendStringToSafeJsonStream(string, &BITSafeJsonEventsString);
+  pthread_mutex_unlock(&BITEventsStringMutex);
+}
+
+void bit_resetBuffer(void) {
+  pthread_mutex_lock(&BITEventsStringMutex);
+  bit_resetSafeJsonStream(&BITSafeJsonEventsString);
+  pthread_mutex_unlock(&BITEventsStringMutex);
 }
 
 void bit_appendStringToSafeJsonStream(NSString *string, char **jsonString) {

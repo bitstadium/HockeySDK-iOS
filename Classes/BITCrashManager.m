@@ -51,6 +51,8 @@
 #import "BITMetricsManagerPrivate.h"
 #import "BITChannel.h"
 #import "BITPersistencePrivate.h"
+
+#import <pthread.h>
 #endif
 
 #include <sys/sysctl.h>
@@ -105,7 +107,6 @@ static BITCrashManagerCallbacks bitCrashCallbacks = {
 
 #if HOCKEYSDK_FEATURE_METRICS
 static void bit_save_events_callback(siginfo_t __unused *info, ucontext_t __unused *uap, void __unused *context) {
-  
   // Do not flush metrics queue if queue is empty (metrics module disabled) to not freeze the app
   if (!BITSafeJsonEventsString) {
     return;
@@ -116,12 +117,14 @@ static void bit_save_events_callback(siginfo_t __unused *info, ucontext_t __unus
   if (fd < 0) {
     return;
   }
-  
+
+  pthread_mutex_lock(&BITEventsStringMutex);
   size_t len = strlen(BITSafeJsonEventsString);
   if (len > 0) {
     // Simply write the whole string to disk
     write(fd, BITSafeJsonEventsString, len);
   }
+  pthread_mutex_unlock(&BITEventsStringMutex);
   close(fd);
 }
 #endif
