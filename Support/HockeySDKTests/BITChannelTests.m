@@ -122,4 +122,23 @@
   XCTAssertEqual(strcmp(BITSafeJsonEventsString,""), 0);
 }
 
+- (void) testBITSafeJsonEventsStringThreadSafety {
+  int count = 1000;
+  XCTestExpectation *expectation1 = [[XCTestExpectation alloc] initWithDescription:@"append"];
+  XCTestExpectation *expectation2 = [[XCTestExpectation alloc] initWithDescription:@"reset"];
+  dispatch_async(dispatch_queue_create("queue1", DISPATCH_QUEUE_SERIAL), ^{
+    for(int i = 0; i < count; i++) {
+      bit_appendStringToBuffer([NSString stringWithFormat:@"%d", i]);
+    }
+    [expectation1 fulfill];
+  });
+  dispatch_async(dispatch_queue_create("queue2", DISPATCH_QUEUE_SERIAL), ^{
+    for(int i = 0; i < count; i++) {
+      bit_resetBuffer();
+    }
+    [expectation2 fulfill];
+  });
+  [self waitForExpectations:@[expectation1, expectation2] timeout: 10];
+  XCTAssertTrue(true);
+}
 @end
