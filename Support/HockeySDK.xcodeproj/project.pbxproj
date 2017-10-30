@@ -628,6 +628,7 @@
 		1EF95CA9162CB313000AE3AD /* BITFeedbackComposeViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackComposeViewControllerDelegate.h; sourceTree = "<group>"; };
 		1EFF03D717F20F8300A5F13C /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
 		1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashManagerTests.m; sourceTree = "<group>"; };
+		4AE4CAE71FA710F3004C571D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/HockeySDK.strings; sourceTree = "<group>"; };
 		628B7B9B7E7741C3D85B1159 /* BITHockeyLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyLoggerTests.m; sourceTree = "<group>"; };
 		6EA5DEA41CC05E7600D44206 /* live_report_xamarin.plcrash */ = {isa = PBXFileReference; lastKnownFileType = file; path = live_report_xamarin.plcrash; sourceTree = "<group>"; };
 		6EA5DEAD1CC0670000D44206 /* log_report_xamarin */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = log_report_xamarin; sourceTree = "<group>"; };
@@ -2044,6 +2045,7 @@
 				1E20A57F181E9D4600D5B770 /* nl */,
 				B280F42D1DDF999F006179A7 /* fa */,
 				E328A2FB1C88B344008BB527 /* nb */,
+				4AE4CAE71FA710F3004C571D /* tr */,
 			);
 			name = HockeySDK.strings;
 			sourceTree = "<group>";
