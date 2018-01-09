@@ -14,7 +14,7 @@
 #import "BITDevice.h"
 #import "BITPersistencePrivate.h"
 #import "BITSender.h"
-#import <libkern/OSAtomic.h>
+#import <stdatomic.h>
 
 
 static char *const BITDataItemsOperationsQueue = "net.hockeyapp.senderQueue";
@@ -28,6 +28,8 @@ static NSInteger const BITSchemaVersion = 2;
 
 static NSInteger const BITDebugMaxBatchSize = 5;
 static NSInteger const BITDebugBatchInterval = 3;
+
+typedef _Atomic(char*) atomic_charptr;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -131,13 +133,12 @@ NS_ASSUME_NONNULL_BEGIN
   
   // Make sure string (which points to BITTelemetryEventBuffer) is not changed.
   char *previousBuffer = NULL;
-  char *newEmptyString = NULL;
+  char *newEmptyString = strdup("");
   do {
-    newEmptyString = strdup("");
     previousBuffer = *eventBuffer;
     
     // This swaps pointers and makes sure eventBuffer now has the balue of newEmptyString.
-    if (OSAtomicCompareAndSwapPtr(previousBuffer, newEmptyString, (void*)eventBuffer)) {
+    if (atomic_compare_exchange_strong((atomic_charptr *)eventBuffer, &previousBuffer, newEmptyString)) {
       @synchronized(self) {
         self.dataItemCount = 0;
       }
@@ -403,7 +404,7 @@ void bit_appendStringToEventBuffer(NSString *string, char **eventBuffer) {
     asprintf(&newBuffer, "%s%.*s\n", previousBuffer, (int)MIN(string.length, (NSUInteger)INT_MAX), string.UTF8String);
     
     // Compare newBuffer and previousBuffer. If they point to the same address, we are safe to use them.
-    if (OSAtomicCompareAndSwapPtr(previousBuffer, newBuffer, (void*)eventBuffer)) {
+    if (atomic_compare_exchange_strong((atomic_charptr *)eventBuffer, &previousBuffer, newBuffer)) {
  
       // Free the intermediate pointer.
       free(previousBuffer);
@@ -417,16 +418,17 @@ void bit_appendStringToEventBuffer(NSString *string, char **eventBuffer) {
 }
 
 void bit_resetEventBuffer(char **eventBuffer) {
-  if (!eventBuffer) { return; }
+  if (!eventBuffer) {
+    return;
+  }
   
-  char *newEmptyString = NULL;
   char *prevString = NULL;
+  char *newEmptyString = strdup("");
   do {
     prevString = *eventBuffer;
-    newEmptyString = strdup("");
     
     // Compare pointers to strings to make sure we are still threadsafe!
-    if (OSAtomicCompareAndSwapPtr(prevString, newEmptyString, (void*)eventBuffer)) {
+    if (atomic_compare_exchange_strong((atomic_charptr *)eventBuffer, &prevString, newEmptyString)) {
       free(prevString);
       return;
     }
