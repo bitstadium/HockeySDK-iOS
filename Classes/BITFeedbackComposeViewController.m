@@ -564,9 +564,7 @@
   [self presentViewController:alertController animated:YES completion:nil];
   
   self.actionSheetVisible = YES;
-  if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) || ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9,0,0}])) {
-    [self.textView resignFirstResponder];
-  }
+  [self.textView resignFirstResponder];
 }
 
 
@@ -619,10 +617,7 @@
   self.selectedAttachmentIndex = NSNotFound;
   
   [self refreshAttachmentScrollview];
-  
-  if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) || ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9,0,0}])) {
-    [self.textView becomeFirstResponder];
-  }
+  [self.textView becomeFirstResponder];
 }
 
 - (void)editAction {
@@ -637,9 +632,7 @@
 }
 
 - (void)cancelAction {
-  if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) || ([[NSProcessInfo processInfo] respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)] && [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9,0,0}])) {
-    [self.textView becomeFirstResponder];
-  }
+  [self.textView becomeFirstResponder];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
