@@ -64,7 +64,7 @@ This document contains the following sections:
 ## 1. Requirements
 
 1. We assume that you already have a project in Xcode and that this project is opened in Xcode 8 or later.
-2. The SDK supports iOS 8.0 and later.
+2. The SDK supports iOS 9.0 and later.
 
 <a id="setup"></a>
 ## 2. Setup
@@ -215,7 +215,7 @@ Note that not using clang modules also means that you can't use the `@import` sy
 **Podfile**
 
 ```ruby
-platform :ios, '8.0'
+platform :ios, '9.0'
 pod "HockeySDK"
 ```
 
@@ -224,7 +224,7 @@ pod "HockeySDK"
 The default and recommended distribution is a binary (static library) and a resource bundle with translations and images for all SDK features.
 
 ```ruby
-platform :ios, '8.0'
+platform :ios, '9.0'
 pod "HockeySDK"
 ```
 
