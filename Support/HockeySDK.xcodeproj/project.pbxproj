@@ -2170,6 +2170,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = ReleaseCrashOnlyExtensions;
@@ -2386,6 +2387,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -2399,6 +2401,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = ReleaseDefault;
@@ -2609,6 +2612,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = ReleaseCrashOnly;
@@ -3199,6 +3203,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = ReleaseFeedbackOnly;
@@ -3480,6 +3485,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.resources.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRIP_PNG_TEXT = NO;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
