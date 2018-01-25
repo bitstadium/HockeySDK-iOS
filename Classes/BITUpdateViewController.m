@@ -474,14 +474,6 @@
   }
 }
 
-
-#pragma mark - Rotation
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation) __unused interfaceOrientation duration:(NSTimeInterval) __unused duration {
-  // update all cells
-  [self.cells makeObjectsPerformSelector:@selector(addWebView)];
-}
-
 #pragma mark - PSAppStoreHeaderDelegate
 
 - (void)setAppStoreButtonState:(AppStoreButtonState)anAppStoreButtonState {

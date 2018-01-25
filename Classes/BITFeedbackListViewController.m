@@ -370,27 +370,6 @@
   }
 }
 
-
-#pragma mark - UIViewController Rotation
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-  self.numberOfSectionsBeforeRotation = [self numberOfSectionsInTableView:self.tableView];
-  self.numberOfMessagesBeforeRotation = [self.manager numberOfMessages];
-  [self.tableView reloadData];
-  [self.tableView beginUpdates];
-  [self.tableView endUpdates];
-  
-  self.numberOfSectionsBeforeRotation = -1;
-  self.numberOfMessagesBeforeRotation = -1;
-  [self.tableView reloadData];
-  
-  [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-  return UIInterfaceOrientationMaskAll;
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView {
