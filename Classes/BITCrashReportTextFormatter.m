@@ -277,8 +277,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
       if (codeType != nil)
         break;
     }
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    
     /* If we were unable to determine the code type, fall back on the legacy architecture value. */
     if (codeType == nil) {
       switch (report.systemInfo.architecture) {
@@ -305,7 +304,6 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
           break;
       }
     }
-#pragma GCC diagnostic pop
   }
   
   {

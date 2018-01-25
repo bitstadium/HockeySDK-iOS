@@ -2067,7 +2067,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
@@ -2125,7 +2125,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2212,7 +2212,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -2254,7 +2254,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2431,7 +2431,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2489,7 +2489,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2564,8 +2564,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -2653,7 +2653,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2743,7 +2743,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -2793,7 +2793,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -2844,7 +2844,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -2891,7 +2891,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2955,7 +2955,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3020,7 +3020,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3096,7 +3096,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
@@ -3154,7 +3154,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3241,7 +3241,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -3283,7 +3283,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3376,8 +3376,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
@@ -3435,7 +3435,7 @@
 					"$(SRCROOT)/HockeySDKTests/Vendor/**",
 				);
 				INFOPLIST_FILE = "HockeySDKTests/HockeySDKTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3521,7 +3521,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "HockeySDK Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.hockeyapp.sdk.ios;
@@ -3563,7 +3563,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/HockeySDKTests/Vendor";
 				INFOPLIST_FILE = "HockeySDK FrameworkTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/HockeySDKTests/Vendor";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3663,8 +3663,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -3711,8 +3711,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "../Resources/HockeySDK-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[arch=arm64]" = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;

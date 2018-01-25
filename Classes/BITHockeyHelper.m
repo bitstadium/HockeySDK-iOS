@@ -736,8 +736,7 @@ UIImage *bit_addGlossToImage(UIImage *inputImage) {
 #pragma mark UIImage helpers
 
 UIImage *bit_imageToFitSize(UIImage *inputImage, CGSize fitSize, BOOL honorScaleFactor) {
-  
-  if (!inputImage){
+  if (!inputImage) {
     return nil;
   }
   

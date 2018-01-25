@@ -33,7 +33,6 @@
 #define kBITLineBreakWordWrapTextWidthScalingFactor (M_PI / M_E)
 
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wcast-qual"

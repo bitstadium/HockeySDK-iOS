@@ -478,7 +478,8 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
     NSNotificationName name = UIApplicationDidBecomeActiveNotification;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpartial-availability"
-    if (bit_isRunningInAppExtension() && &NSExtensionHostDidBecomeActiveNotification != NULL) {
+#pragma clang diagnostic ignored "-Wtautological-pointer-compare"
+    if (bit_isRunningInAppExtension() && &NSExtensionHostDidBecomeActiveNotification != nil) {
       name = NSExtensionHostDidBecomeActiveNotification;
     }
 #pragma clang diagnostic pop
@@ -515,7 +516,8 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
     NSNotificationName name = UIApplicationDidEnterBackgroundNotification;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpartial-availability"
-    if (bit_isRunningInAppExtension() && &NSExtensionHostDidEnterBackgroundNotification != NULL) {
+#pragma clang diagnostic ignored "-Wtautological-pointer-compare"
+    if (bit_isRunningInAppExtension() && &NSExtensionHostDidEnterBackgroundNotification != nil) {
       name = NSExtensionHostDidEnterBackgroundNotification;
     }
 #pragma clang diagnostic pop
@@ -532,7 +534,8 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
     NSNotificationName name = UIApplicationWillEnterForegroundNotification;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpartial-availability"
-    if (bit_isRunningInAppExtension() && &NSExtensionHostWillEnterForegroundNotification != NULL) {
+#pragma clang diagnostic ignored "-Wtautological-pointer-compare"
+    if (bit_isRunningInAppExtension() && &NSExtensionHostWillEnterForegroundNotification != nil) {
       name = NSExtensionHostWillEnterForegroundNotification;
     }
 #pragma clang diagnostic pop
