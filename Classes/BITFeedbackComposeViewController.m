@@ -58,6 +58,8 @@ static const CGFloat kSscrollViewWidth = 100;
 @property (nonatomic, strong) UIScrollView *attachmentScrollView;
 @property (nonatomic, strong) NSMutableArray *attachmentScrollViewImageViews;
 
+@property (nonatomic, strong) NSLayoutConstraint *keyboardConstraint;
+
 @property (nonatomic, strong) UIButton *addPhotoButton;
 
 @property (nonatomic, copy) NSString *text;
@@ -151,43 +153,17 @@ static const CGFloat kSscrollViewWidth = 100;
 
 #pragma mark - Keyboard
 
-- (void)keyboardWasShown:(NSNotification*)aNotification {
-  NSDictionary* info = [aNotification userInfo];
-  CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-  
-  BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
-  
-  CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-  if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-    frame.size.height -= kbSize.height;
-  } else {
-    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
-    CGFloat windowHeight = windowSize.height - 20;
-    CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
-    
-    if (isPortraitOrientation) {
-      frame.size.height = windowHeight - navBarHeight - kbSize.height;
-    } else {
-      windowHeight = windowSize.height - 20;
-      CGFloat modalGap = 0.0;
-      if (windowHeight - kbSize.height < self.view.bounds.size.height) {
-        modalGap = 30;
-      } else {
-        modalGap = (windowHeight - self.view.bounds.size.height) / 2;
-      }
-      frame.size.height = windowSize.height - navBarHeight - modalGap - kbSize.height;
-    }
-  }
-  [self.contentViewContainer setFrame:frame];
-  
-  [self performSelector:@selector(refreshAttachmentScrollview) withObject:nil afterDelay:0.0];
-}
+- (void)keyboardWillChange:(NSNotification *)notification {
+  NSDictionary *info = [notification userInfo];
+  NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+  CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  CGRect screen = [UIScreen mainScreen].bounds;
+  self.keyboardConstraint.constant = keyboardFrame.origin.y - screen.size.height;
 
-- (void)keyboardWillBeHidden:(NSNotification*) __unused aNotification {
-  CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-  [self.contentViewContainer setFrame:frame];
+  [UIView animateWithDuration:animationDuration animations:^{
+    [self.view layoutIfNeeded];
+  }];
 }
-
 
 #pragma mark - View lifecycle
 
@@ -207,38 +183,59 @@ static const CGFloat kSscrollViewWidth = 100;
                                                                            action:@selector(sendAction:)];
 
   // Container that contains both the textfield and eventually the photo scroll view on the right side
-  self.contentViewContainer = [[UIView alloc] initWithFrame:self.view.bounds];
-  self.contentViewContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-  
+  self.contentViewContainer = [UIView new];
   [self.view addSubview:self.contentViewContainer];
   
-  // message input textfield
-  self.textView = [[UITextView alloc] initWithFrame:self.view.bounds];
+  // Use keyboard constraint
+  self.keyboardConstraint = [NSLayoutConstraint constraintWithItem:self.contentViewContainer
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                        relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                           toItem:self.view
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                       multiplier:1.0
+                                                                         constant:0];
+  self.keyboardConstraint.priority = UILayoutPriorityDefaultLow;
+  [self.view addConstraints:@[self.keyboardConstraint]];
+
+  // Use safe area constraints
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0
+  if (@available(iOS 11, *)) {
+    UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
+    self.contentViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+      [self.contentViewContainer.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor],
+      [self.contentViewContainer.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor],
+      [self.contentViewContainer.topAnchor constraintEqualToAnchor:safeArea.topAnchor],
+      [self.contentViewContainer.bottomAnchor constraintLessThanOrEqualToAnchor:safeArea.bottomAnchor]
+    ]];
+  }
+#endif
+  
+  // Message input textfield
+  self.textView = [[UITextView alloc] initWithFrame:CGRectZero];
   self.textView.font = [UIFont systemFontOfSize:17];
   self.textView.delegate = self;
   self.textView.backgroundColor = [UIColor whiteColor];
   self.textView.returnKeyType = UIReturnKeyDefault;
-  self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+  self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   self.textView.accessibilityHint = BITHockeyLocalizedString(@"HockeyAccessibilityHintRequired");
   
   [self.contentViewContainer addSubview:self.textView];
   
   // Add Photo Button + Container that's displayed above the keyboard.
-  if([BITHockeyHelper isPhotoAccessPossible]) {
+  if ([BITHockeyHelper isPhotoAccessPossible]) {
     self.textAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 44)];
     self.textAccessoryView.backgroundColor = [UIColor colorWithRed:(CGFloat)0.9 green:(CGFloat)0.9 blue:(CGFloat)0.9 alpha:(CGFloat)1.0];
-    
+   
     self.addPhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.addPhotoButton setTitle:BITHockeyLocalizedString(@"HockeyFeedbackComposeAttachmentAddImage") forState:UIControlStateNormal];
     [self.addPhotoButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.addPhotoButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
     self.addPhotoButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 44);
     [self.addPhotoButton addTarget:self action:@selector(addPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.addPhotoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+    self.addPhotoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.textAccessoryView addSubview:self.addPhotoButton];
   }
-  
-  
   
   if (!self.hideImageAttachmentButton) {
     self.textView.inputAccessoryView = self.textAccessoryView;
@@ -249,7 +246,7 @@ static const CGFloat kSscrollViewWidth = 100;
   self.attachmentScrollView.scrollEnabled = YES;
   self.attachmentScrollView.bounces = YES;
   self.attachmentScrollView.autoresizesSubviews = NO;
-  self.attachmentScrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleRightMargin;
+  self.attachmentScrollView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0
   if (@available(iOS 11.0, *)) {
     self.attachmentScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAlways;
@@ -260,12 +257,9 @@ static const CGFloat kSscrollViewWidth = 100;
 
 - (void)viewWillAppear:(BOOL)animated {
   [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardWasShown:)
-                                               name:UIKeyboardDidShowNotification object:nil];
-  
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(keyboardWillBeHidden:)
-                                               name:UIKeyboardWillHideNotification object:nil];
+                                           selector:@selector(keyboardWillChange:)
+                                               name:UIKeyboardWillChangeFrameNotification
+                                             object:nil];
   
   self.manager.currentFeedbackComposeViewController = self;
   
@@ -309,8 +303,7 @@ static const CGFloat kSscrollViewWidth = 100;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
   
   self.manager.currentFeedbackComposeViewController = nil;
   
@@ -326,28 +319,9 @@ static const CGFloat kSscrollViewWidth = 100;
   if (self.imageAttachments.count) {
     scrollViewWidth = kSscrollViewWidth;
   }
-  
-  CGRect textViewFrame = self.textView.frame;
-  CGRect scrollViewFrame = self.attachmentScrollView.frame;
-  BOOL alreadySetup = CGRectGetWidth(scrollViewFrame) > 0;
-  if (alreadySetup && self.imageAttachments.count == 0) {
-    textViewFrame.size.width += kSscrollViewWidth;
-    self.textView.frame = textViewFrame;
-    scrollViewFrame.size.width = 0;
-    self.attachmentScrollView.frame = scrollViewFrame;
-    return;
-  }
-  
-  if (!alreadySetup) {
-    CGSize tempTextViewSize = CGSizeMake(self.contentViewContainer.frame.size.width, self.contentViewContainer.frame.size.height);
-    textViewFrame.size = tempTextViewSize;
-    textViewFrame.size.width -= scrollViewWidth;
-    // height has to be identical to the textview!
-    scrollViewFrame = CGRectMake(CGRectGetMaxX(textViewFrame), self.view.frame.origin.y, scrollViewWidth, CGRectGetHeight(self.textView.bounds));
-    self.textView.frame = textViewFrame;
-    self.attachmentScrollView.frame = scrollViewFrame;
-    self.attachmentScrollView.contentInset = self.textView.contentInset;
-  }
+  CGSize contentSize = self.contentViewContainer.frame.size;
+  self.textView.frame = CGRectMake(0, 0, contentSize.width - scrollViewWidth, contentSize.height);
+  self.attachmentScrollView.frame = CGRectMake(CGRectGetMaxX(self.textView.frame), 0, scrollViewWidth, contentSize.height);
   
   if (self.imageAttachments.count > self.attachmentScrollViewImageViews.count) {
     NSInteger numberOfViewsToCreate = self.imageAttachments.count - self.attachmentScrollViewImageViews.count;
@@ -373,7 +347,7 @@ static const CGFloat kSscrollViewWidth = 100;
     CGFloat scaleFactor = width / image.size.width;
     CGFloat height = round(image.size.height * scaleFactor);
     imageButton.frame = CGRectMake(offsetX, currentYOffset + offsetY, width, height);
-    currentYOffset += height;
+    currentYOffset += height + offsetY;
     [imageButton setImage:image forState:UIControlStateNormal];
     index++;
   }
@@ -398,22 +372,6 @@ static const CGFloat kSscrollViewWidth = 100;
   frame.size.width += 100;
   self.textView.frame = frame;
 }
-
-
-#pragma mark - UIViewController Rotation
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-  return UIInterfaceOrientationMaskAll;
-}
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation) __unused fromInterfaceOrientation {
-  [self removeAttachmentScrollView];
-  
-  [self refreshAttachmentScrollview];
-}
-#pragma clang diagnostic pop
 
 #pragma mark - Private methods
 
