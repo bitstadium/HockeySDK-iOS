@@ -46,7 +46,7 @@
 #import <tgmath.h>
 
 
-static const CGFloat kPhotoCompressionQuality = 0.7;
+static const CGFloat kPhotoCompressionQuality = (CGFloat)0.7;
 static const CGFloat kSscrollViewWidth = 100;
 
 @interface BITFeedbackComposeViewController () <BITFeedbackUserDataDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BITImageAnnotationDelegate> {
@@ -157,8 +157,7 @@ static const CGFloat kSscrollViewWidth = 100;
   NSDictionary *info = [notification userInfo];
   NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
   CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-  CGRect screen = [UIScreen mainScreen].bounds;
-  self.keyboardConstraint.constant = keyboardFrame.origin.y - screen.size.height;
+  self.keyboardConstraint.constant = keyboardFrame.origin.y - CGRectGetHeight(self.view.frame);
 
   [UIView animateWithDuration:animationDuration animations:^{
     [self.view layoutIfNeeded];
@@ -171,6 +170,7 @@ static const CGFloat kSscrollViewWidth = 100;
   [super viewDidLoad];
   
   self.title = BITHockeyLocalizedString(@"HockeyFeedbackComposeTitle");
+  self.edgesForExtendedLayout = UIRectEdgeNone;
   self.view.backgroundColor = [UIColor whiteColor];
   
   // Do any additional setup after loading the view.
@@ -183,7 +183,8 @@ static const CGFloat kSscrollViewWidth = 100;
                                                                            action:@selector(sendAction:)];
 
   // Container that contains both the textfield and eventually the photo scroll view on the right side
-  self.contentViewContainer = [UIView new];
+  self.contentViewContainer = [[UIView alloc] initWithFrame:self.view.bounds];
+  self.contentViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
   [self.view addSubview:self.contentViewContainer];
   
   // Use keyboard constraint
@@ -201,15 +202,22 @@ static const CGFloat kSscrollViewWidth = 100;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0
   if (@available(iOS 11, *)) {
     UILayoutGuide *safeArea = self.view.safeAreaLayoutGuide;
-    self.contentViewContainer.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-      [self.contentViewContainer.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor],
-      [self.contentViewContainer.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor],
-      [self.contentViewContainer.topAnchor constraintEqualToAnchor:safeArea.topAnchor],
-      [self.contentViewContainer.bottomAnchor constraintLessThanOrEqualToAnchor:safeArea.bottomAnchor]
-    ]];
-  }
+        [self.contentViewContainer.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor],
+        [self.contentViewContainer.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor],
+        [self.contentViewContainer.topAnchor constraintEqualToAnchor:safeArea.topAnchor],
+        [self.contentViewContainer.bottomAnchor constraintLessThanOrEqualToAnchor:safeArea.bottomAnchor]
+      ]];
+  } else
 #endif
+  {
+    [NSLayoutConstraint activateConstraints:@[
+        [self.contentViewContainer.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.contentViewContainer.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.contentViewContainer.topAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor],
+        [self.contentViewContainer.bottomAnchor constraintLessThanOrEqualToAnchor:self.bottomLayoutGuide.topAnchor]
+      ]];
+  }
   
   // Message input textfield
   self.textView = [[UITextView alloc] initWithFrame:CGRectZero];
@@ -334,6 +342,8 @@ static const CGFloat kSscrollViewWidth = 100;
   }
   
   int index = 0;
+  const CGFloat offsetX = 10.0;
+  const CGFloat offsetY = 10.0;
   CGFloat currentYOffset = 0.0;
   NSEnumerator *reverseAttachments = self.imageAttachments.reverseObjectEnumerator;
   for (BITFeedbackMessageAttachment *attachment in reverseAttachments.allObjects) {
@@ -341,9 +351,7 @@ static const CGFloat kSscrollViewWidth = 100;
     UIImage *image = [attachment thumbnailWithSize:CGSizeMake(kSscrollViewWidth, kSscrollViewWidth)];
     
     // Scale to scrollview size with offsets
-    const CGFloat offsetX = 10.0;
-    const CGFloat offsetY = 10.0;
-    CGFloat width = kSscrollViewWidth - 2.0 * offsetX;
+    CGFloat width = kSscrollViewWidth - (CGFloat)2.0 * offsetX;
     CGFloat scaleFactor = width / image.size.width;
     CGFloat height = round(image.size.height * scaleFactor);
     imageButton.frame = CGRectMake(offsetX, currentYOffset + offsetY, width, height);
@@ -352,7 +360,7 @@ static const CGFloat kSscrollViewWidth = 100;
     index++;
   }
   
-  [self.attachmentScrollView setContentSize:CGSizeMake(CGRectGetWidth(self.attachmentScrollView.frame), currentYOffset)];
+  [self.attachmentScrollView setContentSize:CGSizeMake(CGRectGetWidth(self.attachmentScrollView.frame), currentYOffset + offsetY)];
   [self updateBarButtonState];
 }
 
