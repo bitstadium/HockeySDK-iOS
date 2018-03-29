@@ -49,6 +49,27 @@
 static const CGFloat kPhotoCompressionQuality = (CGFloat)0.7;
 static const CGFloat kSscrollViewWidth = 100;
 
+
+@interface InputAccessoryView : UIView
+@end
+
+@implementation InputAccessoryView
+
+- (id)init {
+  self = [super initWithFrame:CGRectZero];
+  if (self) {
+    self.backgroundColor = [UIColor colorWithRed:(CGFloat)0.9 green:(CGFloat)0.9 blue:(CGFloat)0.9 alpha:(CGFloat)1.0];
+    self.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+  }
+  return self;
+}
+
+- (CGSize)intrinsicContentSize {
+  return CGSizeZero;
+}
+
+@end
+
 @interface BITFeedbackComposeViewController () <BITFeedbackUserDataDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, BITImageAnnotationDelegate> {
 }
 
@@ -232,17 +253,39 @@ static const CGFloat kSscrollViewWidth = 100;
   
   // Add Photo Button + Container that's displayed above the keyboard.
   if ([BITHockeyHelper isPhotoAccessPossible]) {
-    self.textAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 44)];
-    self.textAccessoryView.backgroundColor = [UIColor colorWithRed:(CGFloat)0.9 green:(CGFloat)0.9 blue:(CGFloat)0.9 alpha:(CGFloat)1.0];
    
     self.addPhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.addPhotoButton setTitle:BITHockeyLocalizedString(@"HockeyFeedbackComposeAttachmentAddImage") forState:UIControlStateNormal];
     [self.addPhotoButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [self.addPhotoButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-    self.addPhotoButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 44);
     [self.addPhotoButton addTarget:self action:@selector(addPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.addPhotoButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    [self.addPhotoButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.addPhotoButton.heightAnchor constraintGreaterThanOrEqualToConstant:44]
+      ]];
+    
+    self.textAccessoryView = [[InputAccessoryView alloc] init];
     [self.textAccessoryView addSubview:self.addPhotoButton];
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0
+    if (@available(iOS 11, *)) {
+      UILayoutGuide *safeArea = self.textAccessoryView.safeAreaLayoutGuide;
+      [NSLayoutConstraint activateConstraints:@[
+          [self.addPhotoButton.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor],
+          [self.addPhotoButton.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor],
+          [self.addPhotoButton.topAnchor constraintEqualToAnchor:safeArea.topAnchor],
+          [self.addPhotoButton.bottomAnchor constraintEqualToAnchor:safeArea.bottomAnchor]
+        ]];
+    } else
+#endif
+    {
+      [NSLayoutConstraint activateConstraints:@[
+          [self.addPhotoButton.leadingAnchor constraintEqualToAnchor:self.textAccessoryView.leadingAnchor],
+          [self.addPhotoButton.trailingAnchor constraintEqualToAnchor:self.textAccessoryView.trailingAnchor],
+          [self.addPhotoButton.topAnchor constraintEqualToAnchor:self.textAccessoryView.topAnchor],
+          [self.addPhotoButton.bottomAnchor constraintEqualToAnchor:self.textAccessoryView.bottomAnchor]
+        ]];
+    }
   }
   
   if (!self.hideImageAttachmentButton) {
