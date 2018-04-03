@@ -114,7 +114,7 @@
 
 /* Update Simulator Warning */
 
-"UpdateSimulatorMessage" = "HockeyのアップデートはSimulatorでは作動しません。\nitms-services:// のURL方式は実装されていますが、機能しません。";
+"UpdateSimulatorMessage" = "HockeyのアップデートはSimulatorでは作動しません。";
 
 
 /* Feedback */
