@@ -176,8 +176,8 @@ static const CGFloat kSscrollViewWidth = 100;
 
 - (void)keyboardWillChange:(NSNotification *)notification {
   NSDictionary *info = [notification userInfo];
-  NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-  CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  NSTimeInterval animationDuration = [(NSNumber *)[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+  CGRect keyboardFrame = [(NSValue *)[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   self.keyboardConstraint.constant = keyboardFrame.origin.y - CGRectGetHeight(self.view.frame);
 
   [UIView animateWithDuration:animationDuration animations:^{

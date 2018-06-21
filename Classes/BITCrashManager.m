@@ -610,11 +610,11 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
     static dispatch_once_t predAppData;
     
     dispatch_once(&predAppData, ^{
-      id marketingVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+      id<NSObject> marketingVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
       if (marketingVersion && [marketingVersion isKindOfClass:[NSString class]])
         [[NSUserDefaults standardUserDefaults] setObject:marketingVersion forKey:kBITAppMarketingVersion];
       
-      id bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+      id<NSObject> bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
       if (bundleVersion && [bundleVersion isKindOfClass:[NSString class]])
         [[NSUserDefaults standardUserDefaults] setObject:bundleVersion forKey:kBITAppVersion];
       
@@ -1003,8 +1003,8 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
       NSString *filePath = [self.crashesDir stringByAppendingPathComponent:file];
       
       NSDictionary<NSFileAttributeKey, id> *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:&error];
-      if ([[fileAttributes objectForKey:NSFileType] isEqualToString:NSFileTypeRegular] &&
-          [[fileAttributes objectForKey:NSFileSize] intValue] > 0 &&
+      if ([(NSString *)[fileAttributes objectForKey:NSFileType] isEqualToString:NSFileTypeRegular] &&
+          [(NSNumber *)[fileAttributes objectForKey:NSFileSize] intValue] > 0 &&
           ![file hasSuffix:@".DS_Store"] &&
           ![file hasSuffix:@".analyzer"] &&
           ![file hasSuffix:@".plist"] &&

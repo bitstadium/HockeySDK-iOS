@@ -353,7 +353,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
         [self saveAppCache];
       } else {
         [self.appVersions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-          if (idx > 0 && [obj isKindOfClass:[BITAppVersionMetaInfo class]]) {
+          if (idx > 0 && [(NSObject *)obj isKindOfClass:[BITAppVersionMetaInfo class]]) {
             NSComparisonResult compareVersions = bit_versionCompare([(BITAppVersionMetaInfo *)obj version], self.currentAppVersion);
             BOOL uuidFound = [(BITAppVersionMetaInfo *)obj hasUUID:self.uuid];
 
@@ -449,7 +449,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck]) {
       // we did write something else in the past, so for compatibility reasons do this
       id tempLastCheck = [[NSUserDefaults standardUserDefaults] objectForKey:kBITUpdateDateOfLastCheck];
-      if ([tempLastCheck isKindOfClass:[NSDate class]]) {
+      if ([(NSObject *)tempLastCheck isKindOfClass:[NSDate class]]) {
         _lastCheck = tempLastCheck;
       }
     }
@@ -907,7 +907,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
       NSError *error = nil;
       NSDictionary *json = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:(NSData *)[responseString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
       
-      self.companyName = (([[json valueForKey:@"company"] isKindOfClass:[NSString class]]) ? [json valueForKey:@"company"] : nil);
+      self.companyName = (([(NSObject *)[json valueForKey:@"company"] isKindOfClass:[NSString class]]) ? [json valueForKey:@"company"] : nil);
       
       if (self.appEnvironment == BITEnvironmentOther) {
         NSArray *feedArray = (NSArray *)[json valueForKey:@"versions"];

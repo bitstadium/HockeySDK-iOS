@@ -148,7 +148,7 @@
   if (!self.message.attachments) return;
   if (self.message.attachments.count == 0) return;
   if (!note.object) return;
-  if (![note.object isKindOfClass:[BITFeedbackMessageAttachment class]]) return;
+  if (![(NSObject *)note.object isKindOfClass:[BITFeedbackMessageAttachment class]]) return;
   
   BITFeedbackMessageAttachment *attachment = (BITFeedbackMessageAttachment *)note.object;
   if (![self.message.attachments containsObject:attachment]) return;

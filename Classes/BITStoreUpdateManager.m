@@ -179,7 +179,7 @@
   
   NSString *lastStoreVersion = [self lastStoreVersion];
   
-  if ([[dictionary objectForKey:@"results"] isKindOfClass:[NSArray class]] &&
+  if ([(NSObject *)[dictionary objectForKey:@"results"] isKindOfClass:[NSArray class]] &&
       [(NSArray *)[dictionary objectForKey:@"results"] count] > 0 ) {
     self.lastCheckFailed = NO;
 

@@ -762,7 +762,7 @@ typedef void (^BITLatestImageFetchCompletionBlock)(UIImage *_Nonnull latestImage
             // TODO: match messages in state conflict
 
             [messagesSendInProgress enumerateObjectsUsingBlock:^(id objSendInProgressMessage, NSUInteger __unused messagesSendInProgressIdx, BOOL *stop2) {
-                if ([[(NSDictionary *) objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *) objSendInProgressMessage token]]) {
+                if ([(NSString *)[(NSDictionary *) objMessage objectForKey:@"token"] isEqualToString:[(BITFeedbackMessage *) objSendInProgressMessage token]]) {
                   matchingSendInProgressOrInConflictMessage = objSendInProgressMessage;
                   *stop2 = YES;
                 }
