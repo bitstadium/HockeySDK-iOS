@@ -198,7 +198,7 @@ typedef unsigned int bit_uint32;
       viewController.tableViewTitle = BITHockeyLocalizedString(@"HockeyAuthenticationViewControllerDataEmailDescription");
       break;
   }
-  id strongDelegate = self.delegate;
+  id<BITAuthenticatorDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(authenticator:willShowAuthenticationController:)]) {
     [strongDelegate authenticator:self willShowAuthenticationController:viewController];
   }
@@ -366,7 +366,7 @@ typedef unsigned int bit_uint32;
     }
     return NO;
   }
-  if (![jsonObject isKindOfClass:[NSDictionary class]]) {
+  if (![(NSObject *)jsonObject isKindOfClass:[NSDictionary class]]) {
     if (error) {
       *error = [NSError errorWithDomain:kBITAuthenticatorErrorDomain
                                    code:BITAuthenticatorAPIServerReturnedInvalidResponse
@@ -583,7 +583,7 @@ typedef unsigned int bit_uint32;
                                                   options:0
                                                     error:&jsonParseError];
   //no json or unexpected json
-  if (nil == jsonObject || ![jsonObject isKindOfClass:[NSDictionary class]]) {
+  if (nil == jsonObject || ![(NSObject *)jsonObject isKindOfClass:[NSDictionary class]]) {
     if (error) {
       NSDictionary *userInfo = @{NSLocalizedDescriptionKey:BITHockeyLocalizedString(@"HockeyAuthenticationFailedAuthenticate")};
       if (jsonParseError) {
@@ -714,7 +714,7 @@ typedef unsigned int bit_uint32;
   //there should actually only one
   static NSString *const UDIDQuerySpecifier = @"udid";
   for (NSString *queryComponents in [query componentsSeparatedByString:@"&"]) {
-    NSArray *parameterComponents = [queryComponents componentsSeparatedByString:@"="];
+    NSArray<NSString *> *parameterComponents = [queryComponents componentsSeparatedByString:@"="];
     if (2 == parameterComponents.count && [parameterComponents[0] isEqualToString:UDIDQuerySpecifier]) {
       udid = parameterComponents[1];
       break;
@@ -729,7 +729,7 @@ typedef unsigned int bit_uint32;
   static NSString *const EmailQuerySpecifier = @"email";
   static NSString *const IUIDQuerySpecifier = @"iuid";
   for (NSString *queryComponents in [query componentsSeparatedByString:@"&"]) {
-    NSArray *parameterComponents = [queryComponents componentsSeparatedByString:@"="];
+    NSArray<NSString *> *parameterComponents = [queryComponents componentsSeparatedByString:@"="];
     if (email && 2 == parameterComponents.count && [parameterComponents[0] isEqualToString:EmailQuerySpecifier]) {
       *email = parameterComponents[1];
     } else if (iuid && 2 == parameterComponents.count && [parameterComponents[0] isEqualToString:IUIDQuerySpecifier]) {

@@ -300,7 +300,7 @@
   }
   
   if ([self isUpdateAvailable]) {
-    id strongDelegate = self.delegate;
+    id<BITStoreUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(detectedUpdateFromStoreUpdateManager:newVersion:storeURL:)]) {
       [strongDelegate detectedUpdateFromStoreUpdateManager:self newVersion:self.latestStoreVersion storeURL:[NSURL URLWithString:self.appStoreURLString]];
     }

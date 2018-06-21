@@ -324,7 +324,7 @@
 }
 
 - (void)imageButtonPressed:(id)sender {
-  id strongDelegate = self.delegate;
+  id<BITFeedbackListViewCellDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(listCell:didSelectAttachment:)]) {
     NSUInteger index = [self.attachmentViews indexOfObject:sender];
     if (index != NSNotFound && [self.message previewableAttachments].count > index) {

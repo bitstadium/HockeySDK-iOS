@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   // was tapped, so we assume the user agreed
   if (self.didStartUpdateProcess) {
     self.didStartUpdateProcess = NO;    
-    id strongDelegate = self.delegate;
+    id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(updateManagerWillExitApp:)]) {
       [strongDelegate updateManagerWillExitApp:self];
     }
@@ -217,7 +217,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   if (![self expiryDateReached]) return;
   
   BOOL shouldShowDefaultAlert = YES;
-  id strongDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(shouldDisplayExpiryAlertForUpdateManager:)]) {
     shouldShowDefaultAlert = [strongDelegate shouldDisplayExpiryAlertForUpdateManager:self];
   }
@@ -523,7 +523,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
 - (void)showCheckForUpdateAlert {
   if (self.appEnvironment != BITEnvironmentOther) return;
   if ([self isUpdateManagerDisabled]) return;
-  id strongDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
   if ([strongDelegate respondsToSelector:@selector(shouldDisplayUpdateAlertForUpdateManager:forShortVersion:forVersion:)] &&
       ![strongDelegate shouldDisplayUpdateAlertForUpdateManager:self forShortVersion:[self.newestAppVersion shortVersion] forVersion:[self.newestAppVersion version]]) {
     return;
@@ -837,7 +837,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
   NSString *iOSUpdateURL = [NSString stringWithFormat:@"itms-services://?action=download-manifest&url=%@", bit_URLEncodedString(hockeyAPIURL)];
 
   // Notify delegate of update intent before placing the call
-  id stronDelegate = self.delegate;
+  id<BITUpdateManagerDelegate> stronDelegate = self.delegate;
   if ([stronDelegate respondsToSelector:@selector(willStartDownloadAndUpdate:)]) {
     [stronDelegate willStartDownloadAndUpdate:self];
   }
@@ -860,7 +860,7 @@ typedef NS_ENUM(NSInteger, BITUpdateAlertViewTag) {
     if ([self isUpdateManagerDisabled]) return;
     
     BITHockeyLogDebug(@"INFO: Starting UpdateManager");
-    id strongDelegate = self.delegate;
+    id<BITUpdateManagerDelegate> strongDelegate = self.delegate;
     if ([strongDelegate respondsToSelector:@selector(updateManagerShouldSendUsageData:)]) {
       self.sendUsageData = [strongDelegate updateManagerShouldSendUsageData:self];
     }

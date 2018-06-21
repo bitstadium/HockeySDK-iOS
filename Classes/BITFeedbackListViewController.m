@@ -364,7 +364,7 @@
   } else {
     [self dismissViewControllerAnimated:YES completion:^(void){}];
   }
-  id strongDelegate = strongManager.delegate;
+  id<BITFeedbackManagerDelegate> strongDelegate = strongManager.delegate;
   if ([strongDelegate respondsToSelector:@selector(feedbackComposeViewController:didFinishWithResult:)]) {
     [strongDelegate feedbackComposeViewController:composeViewController didFinishWithResult:composeResult];
   }
