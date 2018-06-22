@@ -134,19 +134,19 @@ static const CGFloat kSscrollViewWidth = 100;
 #pragma mark - Public
 
 - (void)prepareWithItems:(NSArray *)items {
-  for (id item in items) {
+  for (id<NSObject> item in items) {
     if ([item isKindOfClass:[NSString class]]) {
       self.text = [(self.text ? self.text : @"") stringByAppendingFormat:@"%@%@", (self.text ? @" " : @""), item];
     } else if ([item isKindOfClass:[NSURL class]]) {
       self.text = [(self.text ? self.text : @"") stringByAppendingFormat:@"%@%@", (self.text ? @" " : @""), [(NSURL *)item absoluteString]];
     } else if ([item isKindOfClass:[UIImage class]]) {
-      UIImage *image = item;
+      UIImage *image = (UIImage *)item;
       BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:UIImageJPEGRepresentation(image, (CGFloat)0.7) contentType:@"image/jpeg"];
       attachment.originalFilename = [NSString stringWithFormat:@"Image_%li.jpg", (unsigned long)[self.attachments count]];
       [self.attachments addObject:attachment];
       [self.imageAttachments addObject:attachment];
     } else if ([item isKindOfClass:[NSData class]]) {
-      BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:item contentType:@"application/octet-stream"];
+      BITFeedbackMessageAttachment *attachment = [BITFeedbackMessageAttachment attachmentWithData:(NSData *)item contentType:@"application/octet-stream"];
       attachment.originalFilename = [NSString stringWithFormat:@"Attachment_%li.data", (unsigned long)[self.attachments count]];
       [self.attachments addObject:attachment];
     } else if ([item isKindOfClass:[BITHockeyAttachment class]]) {
@@ -176,8 +176,8 @@ static const CGFloat kSscrollViewWidth = 100;
 
 - (void)keyboardWillChange:(NSNotification *)notification {
   NSDictionary *info = [notification userInfo];
-  NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-  CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+  NSTimeInterval animationDuration = [(NSNumber *)[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+  CGRect keyboardFrame = [(NSValue *)[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
   self.keyboardConstraint.constant = keyboardFrame.origin.y - CGRectGetHeight(self.view.frame);
 
   [UIView animateWithDuration:animationDuration animations:^{
@@ -458,7 +458,7 @@ static const CGFloat kSscrollViewWidth = 100;
 }
 
 - (void)dismissWithResult:(BITFeedbackComposeResult) result {
-  id strongDelegate = self.delegate;
+  id<BITFeedbackComposeViewControllerDelegate> strongDelegate = self.delegate;
   if([strongDelegate respondsToSelector:@selector(feedbackComposeViewController:didFinishWithResult:)]) {
     [strongDelegate feedbackComposeViewController:self didFinishWithResult:result];
   } else {

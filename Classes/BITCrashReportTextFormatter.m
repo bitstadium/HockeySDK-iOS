@@ -72,8 +72,8 @@
  * Sort PLCrashReportBinaryImageInfo instances by their starting address.
  */
 static NSInteger bit_binaryImageSort(id binary1, id binary2, void *__unused context) {
-  uint64_t addr1 = [binary1 imageBaseAddress];
-  uint64_t addr2 = [binary2 imageBaseAddress];
+  uint64_t addr1 = [(BITPLCrashReportBinaryImageInfo *)binary1 imageBaseAddress];
+  uint64_t addr2 = [(BITPLCrashReportBinaryImageInfo *)binary2 imageBaseAddress];
   
   if (addr1 < addr2)
     return NSOrderedAscending;

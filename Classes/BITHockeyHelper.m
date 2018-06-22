@@ -95,7 +95,7 @@ NSString *bit_settingsDir(void) {
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     
     // temporary directory for crashes grabbed from PLCrashReporter
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSArray<NSString *> *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     settingsDir = [[paths objectAtIndex:0] stringByAppendingPathComponent:BITHOCKEY_IDENTIFIER];
     
     if (![fileManager fileExistsAtPath:settingsDir]) {
