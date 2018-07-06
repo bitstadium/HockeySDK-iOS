@@ -1281,7 +1281,7 @@ __attribute__((noreturn)) static void uncaught_cxx_exception_handler(const BITCr
   }
   
 #if !defined (HOCKEYSDK_CONFIGURATION_ReleaseCrashOnlyExtensions)
-  if ([BITHockeyHelper applicationState] != BITApplicationStateActive) {
+  if ([BITHockeyHelper applicationState] == BITApplicationStateActive) {
     [self appEnteredForeground];
   }
 #else
