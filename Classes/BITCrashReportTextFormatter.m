@@ -52,6 +52,12 @@
 
 #import "BITCrashReportTextFormatter.h"
 
+/**
+ * With Xcode 10, the new ARM64 V8_3A architecture, used by iPhone XS and XR, is not yet in the headers.
+ */
+#ifndef CPU_SUBTYPE_ARM64_V8_3
+# define CPU_SUBTYPE_ARM64_V8_3 ((cpu_subtype_t) 2)
+#endif
 
 /**
  * Sort PLCrashReportBinaryImageInfo instances by their starting address.
