@@ -449,8 +449,9 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
 #if TARGET_OS_SIMULATOR
     if (lp64) {
       foundSelector = [[self class] selectorForRegisterWithName:@"rsi" ofThread:crashed_thread report:report];
-      if (foundSelector == NULL)
+      if (foundSelector == NULL) {
         foundSelector = [[self class] selectorForRegisterWithName:@"rdx" ofThread:crashed_thread report:report];
+      }
     } else {
       foundSelector = [[self class] selectorForRegisterWithName:@"ecx" ofThread:crashed_thread report:report];
     }
@@ -482,7 +483,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
      * post-processed report, Apple writes this out as full frame entries. We use the latter format. */
     for (NSUInteger frame_idx = 0; frame_idx < [exception.stackFrames count]; frame_idx++) {
       BITPLCrashReportStackFrameInfo *frameInfo = exception.stackFrames[frame_idx];
-      [text appendString: [[self class] bit_formatStackFrame: frameInfo frameIndex: frame_idx report: report lp64: lp64]];
+      [text appendString: [[self class] bit_formatStackFrame:frameInfo frameIndex:frame_idx report:report lp64:lp64]];
     }
     [text appendString: @"\n"];
   }
@@ -628,8 +629,9 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
     }
   }
   
-  if (regAddress == 0)
+  if (regAddress == 0) {
     return nil;
+  }
   
   BITPLCrashReportBinaryImageInfo *imageForRegAddress = [report imageForAddress:regAddress];
   if (imageForRegAddress) {
