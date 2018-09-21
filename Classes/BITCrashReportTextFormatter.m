@@ -52,21 +52,6 @@
 
 #import "BITCrashReportTextFormatter.h"
 
-/*
- * XXX: The ARM64 CPU type, and ARM_V7S and ARM_V8 Mach-O CPU subtypes are not
- * defined in the Mac OS X 10.8 headers.
- */
-#ifndef CPU_SUBTYPE_ARM_V7S
-# define CPU_SUBTYPE_ARM_V7S 11
-#endif
-
-#ifndef CPU_TYPE_ARM64
-#define CPU_TYPE_ARM64 (CPU_TYPE_ARM | CPU_ARCH_ABI64)
-#endif
-
-#ifndef CPU_SUBTYPE_ARM_V8
-# define CPU_SUBTYPE_ARM_V8 13
-#endif
 
 /**
  * Sort PLCrashReportBinaryImageInfo instances by their starting address.
