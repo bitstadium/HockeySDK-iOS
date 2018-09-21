@@ -774,6 +774,10 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
           archName = @"arm64";
           break;
           
+        case CPU_SUBTYPE_ARM64_V8_3:
+          archName = @"arm64e";
+          break;
+          
         default:
           archName = @"arm64-unknown";
           break;
