@@ -454,20 +454,21 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
     // search the registers value for the current arch
 #if TARGET_OS_SIMULATOR
     if (lp64) {
-      foundSelector = [[self class] selectorForRegisterWithName:@"rsi" ofThread:crashed_thread report:report];
+      foundSelector = [[self class] selectorForRegisterWithName:@"rsi" ofThread:crashed_thread report:report lp64:lp64];
       if (foundSelector == NULL) {
-        foundSelector = [[self class] selectorForRegisterWithName:@"rdx" ofThread:crashed_thread report:report];
+        foundSelector = [[self class] selectorForRegisterWithName:@"rdx" ofThread:crashed_thread report:report lp64:lp64];
       }
     } else {
-      foundSelector = [[self class] selectorForRegisterWithName:@"ecx" ofThread:crashed_thread report:report];
+      foundSelector = [[self class] selectorForRegisterWithName:@"ecx" ofThread:crashed_thread report:report lp64:lp64];
     }
 #else
     if (lp64) {
-      foundSelector = [[self class] selectorForRegisterWithName:@"x1" ofThread:crashed_thread report:report];
+      foundSelector = [[self class] selectorForRegisterWithName:@"x1" ofThread:crashed_thread report:report lp64:lp64];
     } else {
-      foundSelector = [[self class] selectorForRegisterWithName:@"r1" ofThread:crashed_thread report:report];
-      if (foundSelector == NULL)
-        foundSelector = [[self class] selectorForRegisterWithName:@"r2" ofThread:crashed_thread report:report];
+      foundSelector = [[self class] selectorForRegisterWithName:@"r1" ofThread:crashed_thread report:report lp64:lp64];
+      if (foundSelector == NULL) {
+        foundSelector = [[self class] selectorForRegisterWithName:@"r2" ofThread:crashed_thread report:report lp64:lp64];
+      }
     }
 #endif
     
@@ -624,7 +625,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
  *
  *  @return The selector as a C string or NULL if no selector was found
  */
-+ (NSString *)selectorForRegisterWithName:(NSString *)regName ofThread:(BITPLCrashReportThreadInfo *)thread report:(BITPLCrashReport *)report {
++ (NSString *)selectorForRegisterWithName:(NSString *)regName ofThread:(BITPLCrashReportThreadInfo *)thread report:(BITPLCrashReport *)report lp64:(boolean_t)lp64 {
   // get the address for the register
   uint64_t regAddress = 0;
   
@@ -637,6 +638,11 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
   
   if (regAddress == 0) {
     return nil;
+  }
+  
+  // When on an ARM64 architecture, normalize the address to remove possible pointer signatures
+  if (lp64) {
+    regAddress = regAddress & 0x0000000fffffffff;
   }
   
   BITPLCrashReportBinaryImageInfo *imageForRegAddress = [report imageForAddress:regAddress];
@@ -827,11 +833,16 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
   NSString *imageName = @"\?\?\?";
   NSString *symbolString = nil;
   
-  BITPLCrashReportBinaryImageInfo *imageInfo = [report imageForAddress: frameInfo.instructionPointer];
+  // When on an ARM64 architecture, normalize the address to remove possible pointer signatures
+  uint64_t instructionPointer = lp64 ? (frameInfo.instructionPointer & 0x0000000fffffffff) : frameInfo.instructionPointer;
+  uint64_t untouchedInstructionPointer = frameInfo.instructionPointer;
+  
+  BITPLCrashReportBinaryImageInfo *imageInfo = [report imageForAddress: instructionPointer];
+  
   if (imageInfo != nil) {
     imageName = [imageInfo.imageName lastPathComponent];
     baseAddress = imageInfo.imageBaseAddress;
-    pcOffset = frameInfo.instructionPointer - imageInfo.imageBaseAddress;
+    pcOffset = instructionPointer - imageInfo.imageBaseAddress;
   }
   
   /* Make sure UTF8/16 characters are handled correctly */
@@ -877,7 +888,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
     }
     
     
-    uint64_t symOffset = frameInfo.instructionPointer - frameInfo.symbolInfo.startAddress;
+    uint64_t symOffset = instructionPointer - frameInfo.symbolInfo.startAddress;
     symbolString = [NSString stringWithFormat: @"%@ + %" PRId64, symbolName, symOffset];
   } else {
     symbolString = [NSString stringWithFormat: @"0x%" PRIx64 " + %" PRId64, baseAddress, pcOffset];
@@ -889,7 +900,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
   return [NSString stringWithFormat: @"%-4ld%-35S 0x%0*" PRIx64 " %@\n",
           (long) frameIndex,
           (const uint16_t *)[imageName cStringUsingEncoding: NSUTF16StringEncoding],
-          lp64 ? 16 : 8, frameInfo.instructionPointer,
+          lp64 ? 16 : 8, untouchedInstructionPointer,
           symbolString];
 }
 
