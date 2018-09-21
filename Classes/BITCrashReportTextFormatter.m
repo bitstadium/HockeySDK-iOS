@@ -773,11 +773,11 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
     case CPU_TYPE_ARM64:
       /* Apple includes subtype for ARM64 binaries. */
       switch (subType) {
-        case CPU_SUBTYPE_ARM_ALL:
+        case CPU_SUBTYPE_ARM64_ALL:
           archName = @"arm64";
           break;
           
-        case CPU_SUBTYPE_ARM_V8:
+        case CPU_SUBTYPE_ARM64_V8:
           archName = @"arm64";
           break;
           
