@@ -641,14 +641,15 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
   }
   
   // When on an ARM64 architecture, normalize the address to remove possible pointer signatures
+  uint64_t normalizedRegAddress = regAddress;
   if (lp64) {
-    regAddress = regAddress & 0x0000000fffffffff;
+    normalizedRegAddress = regAddress & 0x0000000fffffffff;
   }
   
-  BITPLCrashReportBinaryImageInfo *imageForRegAddress = [report imageForAddress:regAddress];
+  BITPLCrashReportBinaryImageInfo *imageForRegAddress = [report imageForAddress:normalizedRegAddress];
   if (imageForRegAddress) {
     // get the SEL
-    const char *foundSelector = findSEL([imageForRegAddress.imageName UTF8String], imageForRegAddress.imageUUID, regAddress - (uint64_t)imageForRegAddress.imageBaseAddress);
+    const char *foundSelector = findSEL([imageForRegAddress.imageName UTF8String], imageForRegAddress.imageUUID, normalizedRegAddress - (uint64_t)imageForRegAddress.imageBaseAddress);
     
     if (foundSelector != NULL) {
       return [NSString stringWithUTF8String:foundSelector];
@@ -834,15 +835,15 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
   NSString *symbolString = nil;
   
   // When on an ARM64 architecture, normalize the address to remove possible pointer signatures
-  uint64_t instructionPointer = lp64 ? (frameInfo.instructionPointer & 0x0000000fffffffff) : frameInfo.instructionPointer;
+  uint64_t normalizedInstructionPointer = lp64 ? (frameInfo.instructionPointer & 0x0000000fffffffff) : frameInfo.instructionPointer;
   uint64_t untouchedInstructionPointer = frameInfo.instructionPointer;
   
-  BITPLCrashReportBinaryImageInfo *imageInfo = [report imageForAddress: instructionPointer];
+  BITPLCrashReportBinaryImageInfo *imageInfo = [report imageForAddress: normalizedInstructionPointer];
   
   if (imageInfo != nil) {
     imageName = [imageInfo.imageName lastPathComponent];
     baseAddress = imageInfo.imageBaseAddress;
-    pcOffset = instructionPointer - imageInfo.imageBaseAddress;
+    pcOffset = normalizedInstructionPointer - imageInfo.imageBaseAddress;
   }
   
   /* Make sure UTF8/16 characters are handled correctly */
@@ -888,7 +889,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
     }
     
     
-    uint64_t symOffset = instructionPointer - frameInfo.symbolInfo.startAddress;
+    uint64_t symOffset = normalizedInstructionPointer - frameInfo.symbolInfo.startAddress;
     symbolString = [NSString stringWithFormat: @"%@ + %" PRId64, symbolName, symOffset];
   } else {
     symbolString = [NSString stringWithFormat: @"0x%" PRIx64 " + %" PRId64, baseAddress, pcOffset];
