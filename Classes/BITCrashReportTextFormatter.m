@@ -53,10 +53,10 @@
 #import "BITCrashReportTextFormatter.h"
 
 /**
- * With Xcode 10, the new ARM64 V8_3A architecture, used by iPhone XS and XR, is not yet in the headers.
+ * Before macOS Mojave, the new ARM64E architecture, used by iPhone XS and XR, is not yet in the headers.
  */
-#ifndef CPU_SUBTYPE_ARM64_V8_3
-# define CPU_SUBTYPE_ARM64_V8_3 ((cpu_subtype_t) 2)
+#ifndef CPU_SUBTYPE_ARM64E
+# define CPU_SUBTYPE_ARM64E ((cpu_subtype_t) 2)
 #endif
 
 /**
@@ -781,7 +781,7 @@ static NSString *const BITXamarinStackTraceDelimiter = @"Xamarin Exception Stack
           archName = @"arm64";
           break;
           
-        case CPU_SUBTYPE_ARM64_V8_3:
+        case CPU_SUBTYPE_ARM64E:
           archName = @"arm64e";
           break;
           
