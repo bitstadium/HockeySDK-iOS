@@ -114,7 +114,7 @@
 
 /* Update Simulator Warning */
 
-"UpdateSimulatorMessage" = "A Hockey Update nem használható a szimulátorban.\nAz itms-services:// URL séma elérhető, de nem működőképes.";
+"UpdateSimulatorMessage" = "A Hockey Update nem használható a szimulátorban.";
 
 
 /* Feedback */

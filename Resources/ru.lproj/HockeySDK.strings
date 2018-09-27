@@ -114,7 +114,7 @@
 
 /* Update Simulator Warning */
 
-"UpdateSimulatorMessage" = "Hockey Update не работает в Simulator.\nСхема itms-services:// url применена, но не работает.";
+"UpdateSimulatorMessage" = "Hockey Update не работает в Simulator.";
 
 
 /* Feedback */

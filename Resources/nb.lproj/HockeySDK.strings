@@ -114,7 +114,7 @@
 
 /* Update Simulator Warning */
 
-"UpdateSimulatorMessage" = "Hockey Update vil ikke fungere i simulator.\nItms-services:// url-oppsettet er implementert, men ikke fungerende.";
+"UpdateSimulatorMessage" = "Hockey Update vil ikke fungere i simulator.";
 
 
 /* Feedback */

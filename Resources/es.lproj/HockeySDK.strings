@@ -114,7 +114,7 @@
 
 /* Update Simulator Warning */
 
-"UpdateSimulatorMessage" = "Las actualizaciones de Hockey no funcionan en el Simulador.\nEl esquema URL itms-services:// está implementado pero no funciona.";
+"UpdateSimulatorMessage" = "Las actualizaciones de Hockey no funcionan en el Simulador.";
 
 
 /* Feedback */
