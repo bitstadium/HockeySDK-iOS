@@ -245,7 +245,7 @@ cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}"/include/HockeySDK/BITFeedback*.h 
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyAttachment.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyBaseManager.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyBaseViewController.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
-cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyLogger.h" "${INSTALL_DIR}/Headers/"
+cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyLogger.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyManager.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/BITHockeyManagerDelegate.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
 cp -R "${SRCROOT}/${DEVICE_DIR_ONLY_FEEDBACK}/include/HockeySDK/HockeySDK.h" "${FEEDBACK_ONLY_INSTALL_DIR}/Headers/"
