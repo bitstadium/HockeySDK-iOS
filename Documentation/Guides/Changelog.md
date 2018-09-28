@@ -1,3 +1,7 @@
+## 5.1.4
+
+- [FIX] Fix a regression that was introduced in 5.1.3 that prevented integration because of a missing header file. [#532](https://github.com/bitstadium/HockeySDK-iOS/pull/532)
+
 ## 5.1.3
 
 - [FIX] Support new arm64e architecture in crash reports. [#527](https://github.com/bitstadium/HockeySDK-iOS/pull/526)
