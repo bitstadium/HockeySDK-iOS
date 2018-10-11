@@ -34,7 +34,7 @@
 // defines a button action set (data container)
 @interface BITStoreButtonData : NSObject
 
-+ (id)dataWithLabel:(NSString*)aLabel enabled:(BOOL)flag;
++ (instancetype)dataWithLabel:(NSString*)aLabel enabled:(BOOL)flag;
 
 @property (nonatomic, copy) NSString *label;
 @property (nonatomic, assign, getter=isEnabled) BOOL enabled;

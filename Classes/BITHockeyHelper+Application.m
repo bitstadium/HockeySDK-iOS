@@ -37,7 +37,7 @@ NSString *BITHockeyHelperApplicationCategory;
 }
 
 + (UIApplicationState)sharedAppState {
-  return [[[[self class] sharedApplication] valueForKey:@"applicationState"] longValue];
+  return [(NSNumber *)[[[self class] sharedApplication] valueForKey:@"applicationState"] longValue];
 }
 
 @end

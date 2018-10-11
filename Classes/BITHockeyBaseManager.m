@@ -214,6 +214,7 @@
   if (NSClassFromString(@"TTNavigator")) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+#pragma clang diagnostic ignored "-Wobjc-messaging-id"
     UIViewController *ttParentViewController = nil;
     ttParentViewController = [[NSClassFromString(@"TTNavigator") performSelector:(NSSelectorFromString(@"navigator"))] visibleViewController];
     if (ttParentViewController)
