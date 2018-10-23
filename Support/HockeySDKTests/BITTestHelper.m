@@ -32,14 +32,7 @@
 + (BOOL)copyFixtureCrashReportWithFileName:(NSString *)filename {
   NSFileManager *fm = [[NSFileManager alloc] init];
 
-  // the bundle identifier when running with unit tets is "otest"
-  const char *progname = getprogname();
-  if (progname == NULL) {
-    return NO;
-  }
-  
-  NSString *bundleIdentifierPathString = [NSString stringWithUTF8String: progname];
-
+  NSString *bundleIdentifierPathString = [[NSBundle mainBundle] bundleIdentifier];
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
   
   // create the PLCR cache dir
@@ -55,7 +48,11 @@
   NSError *theError = NULL;
   
   if (!filePath) return NO;
-  [fm copyItemAtPath:filePath toPath:[plcrCrashesDir stringByAppendingPathComponent:@"live_report.plcrash"] error:&theError];
+  NSString *destFile = [plcrCrashesDir stringByAppendingPathComponent:@"live_report.plcrash"];
+  if ([[NSFileManager defaultManager] isDeletableFileAtPath:destFile]) {
+    [[NSFileManager defaultManager] removeItemAtPath:destFile error:nil];
+  }
+  [fm copyItemAtPath:filePath toPath:destFile error:&theError];
   
   if (theError)
     return NO;
