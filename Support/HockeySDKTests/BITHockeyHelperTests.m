@@ -69,8 +69,11 @@
 }
 
 - (void)testAppName {
-  NSString *resultString = bit_appName(@"Placeholder");
-  assertThatBool([resultString isEqualToString:@"Placeholder"], isTrue());
+  NSString *placeholder = @"Placeholder";
+  NSString *testTargetName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+  NSString *resultString = bit_appName(placeholder);
+  assertThatBool([resultString isEqualToString:testTargetName], isTrue());
+  assertThatBool([resultString isEqualToString:placeholder], isFalse());
 }
 
 - (void)testUUID {
