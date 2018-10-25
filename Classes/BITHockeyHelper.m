@@ -174,10 +174,10 @@ void bit_fixBackupAttributeForURL(NSURL *directoryURL) {
       if ([directoryURL getResourceValue:&appSupportDirExcludedValue forKey:NSURLIsExcludedFromBackupKey error:&getResourceError] && appSupportDirExcludedValue) {
         NSError *setResourceError = nil;
         if(![directoryURL setResourceValue:@NO forKey:NSURLIsExcludedFromBackupKey error:&setResourceError]) {
-          BITHockeyLogError(@"ERROR: Error while setting resource value: %@", setResourceError.localizedDescription);
+          BITHockeyLogDebug(@"ERROR: Could not set resource value: %@", setResourceError.localizedDescription);
         }
       } else {
-        BITHockeyLogError(@"ERROR: Error while retrieving resource value: %@", getResourceError.localizedDescription);
+        BITHockeyLogDebug(@"ERROR: Could not retrieve resource value: %@", getResourceError.localizedDescription);
       }
     });
   }
