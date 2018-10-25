@@ -366,6 +366,12 @@
 		8034E6E31BA3567B00D83A30 /* BITTestsDependencyInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8034E6C21BA3567B00D83A30 /* BITTestsDependencyInjection.m */; };
 		8034E6E41BA3567B00D83A30 /* BITUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8034E6C31BA3567B00D83A30 /* BITUserTests.m */; };
 		8034E6E51BA3567B00D83A30 /* BITUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8034E6C31BA3567B00D83A30 /* BITUserTests.m */; };
+		803BB52E217EE85000BE92C9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 803BB52D217EE85000BE92C9 /* AppDelegate.m */; };
+		803BB531217EE85000BE92C9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 803BB530217EE85000BE92C9 /* ViewController.m */; };
+		803BB534217EE85000BE92C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 803BB532217EE85000BE92C9 /* Main.storyboard */; };
+		803BB536217EE85300BE92C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 803BB535217EE85300BE92C9 /* Assets.xcassets */; };
+		803BB539217EE85300BE92C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 803BB537217EE85300BE92C9 /* LaunchScreen.storyboard */; };
+		803BB53C217EE85300BE92C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 803BB53B217EE85300BE92C9 /* main.m */; };
 		8042A7F51CC507F500B603FE /* BITHockeyLoggerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 8042A7F41CC507B700B603FE /* BITHockeyLoggerPrivate.h */; };
 		8042A7F61CC507F600B603FE /* BITHockeyLoggerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 8042A7F41CC507B700B603FE /* BITHockeyLoggerPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		80668C741C8CD93B00A133D3 /* BITEventData.h in Headers */ = {isa = PBXBuildFile; fileRef = 80668C721C8CD93B00A133D3 /* BITEventData.h */; };
@@ -472,6 +478,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1E59550915B6F45800A03429;
 			remoteInfo = HockeySDKResources;
+		};
+		803BB544217EE87000BE92C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4005611148D79B500EB22B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 803BB529217EE85000BE92C9;
+			remoteInfo = "HockeySDK TestTarget";
 		};
 		846A906A1B20D4BB0076BB80 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -692,6 +705,16 @@
 		8034E6C11BA3567B00D83A30 /* BITTestsDependencyInjection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITTestsDependencyInjection.h; sourceTree = "<group>"; };
 		8034E6C21BA3567B00D83A30 /* BITTestsDependencyInjection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITTestsDependencyInjection.m; sourceTree = "<group>"; };
 		8034E6C31BA3567B00D83A30 /* BITUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITUserTests.m; sourceTree = "<group>"; };
+		803BB52A217EE85000BE92C9 /* HockeySDK TestTarget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HockeySDK TestTarget.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		803BB52C217EE85000BE92C9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		803BB52D217EE85000BE92C9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		803BB52F217EE85000BE92C9 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		803BB530217EE85000BE92C9 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		803BB533217EE85000BE92C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		803BB535217EE85300BE92C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		803BB538217EE85300BE92C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		803BB53A217EE85300BE92C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		803BB53B217EE85300BE92C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8042A7F41CC507B700B603FE /* BITHockeyLoggerPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITHockeyLoggerPrivate.h; sourceTree = "<group>"; };
 		80668C721C8CD93B00A133D3 /* BITEventData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITEventData.h; sourceTree = "<group>"; };
 		80668C731C8CD93B00A133D3 /* BITEventData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITEventData.m; sourceTree = "<group>"; };
@@ -810,6 +833,13 @@
 				80B1C4EF1C8A72620057A5CB /* HockeySDK.framework in Frameworks */,
 				80807B8D1C46BF2F00F4C44F /* OCHamcrestIOS.framework in Frameworks */,
 				80807B8F1C46BF2F00F4C44F /* OCMockitoIOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		803BB527217EE85000BE92C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,6 +1203,22 @@
 			name = "Contract Files";
 			sourceTree = "<group>";
 		};
+		803BB52B217EE85000BE92C9 /* HockeySDK TestTarget */ = {
+			isa = PBXGroup;
+			children = (
+				803BB52C217EE85000BE92C9 /* AppDelegate.h */,
+				803BB52D217EE85000BE92C9 /* AppDelegate.m */,
+				803BB52F217EE85000BE92C9 /* ViewController.h */,
+				803BB530217EE85000BE92C9 /* ViewController.m */,
+				803BB532217EE85000BE92C9 /* Main.storyboard */,
+				803BB535217EE85300BE92C9 /* Assets.xcassets */,
+				803BB537217EE85300BE92C9 /* LaunchScreen.storyboard */,
+				803BB53A217EE85300BE92C9 /* Info.plist */,
+				803BB53B217EE85300BE92C9 /* main.m */,
+			);
+			path = "HockeySDK TestTarget";
+			sourceTree = "<group>";
+		};
 		80807B891C46BF0600F4C44F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1207,6 +1253,7 @@
 				1E5A459616F0DFC200B55C04 /* HockeySDKTests */,
 				1EB617401B0A30480035A986 /* HockeySDK Framework */,
 				1EB6174D1B0A30480035A986 /* HockeySDK FrameworkTests */,
+				803BB52B217EE85000BE92C9 /* HockeySDK TestTarget */,
 				E400561C148D79B500EB22B9 /* Frameworks */,
 				E4005648148D7A3000EB22B9 /* Resources */,
 				1E66CA8F15D40FF600F35BED /* Support */,
@@ -1225,6 +1272,7 @@
 				1E5A459016F0DFC200B55C04 /* HockeySDKTests.xctest */,
 				1EB6173F1B0A30480035A986 /* HockeySDK.framework */,
 				1EB617491B0A30480035A986 /* HockeySDK FrameworkTests.xctest */,
+				803BB52A217EE85000BE92C9 /* HockeySDK TestTarget.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1520,6 +1568,7 @@
 			);
 			dependencies = (
 				1EA116FF16F4D302001C015C /* PBXTargetDependency */,
+				803BB545217EE87000BE92C9 /* PBXTargetDependency */,
 			);
 			name = HockeySDKTests;
 			productName = HockeySDKTests;
@@ -1563,6 +1612,23 @@
 			productReference = 1EB617491B0A30480035A986 /* HockeySDK FrameworkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		803BB529217EE85000BE92C9 /* HockeySDK TestTarget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 803BB543217EE85300BE92C9 /* Build configuration list for PBXNativeTarget "HockeySDK TestTarget" */;
+			buildPhases = (
+				803BB526217EE85000BE92C9 /* Sources */,
+				803BB527217EE85000BE92C9 /* Frameworks */,
+				803BB528217EE85000BE92C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HockeySDK TestTarget";
+			productName = "HockeySDK TestTarget";
+			productReference = 803BB52A217EE85000BE92C9 /* HockeySDK TestTarget.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1572,11 +1638,18 @@
 				LastTestingUpgradeCheck = 0600;
 				LastUpgradeCheck = 0920;
 				TargetAttributes = {
+					1E5A458F16F0DFC200B55C04 = {
+						TestTargetID = 803BB529217EE85000BE92C9;
+					};
 					1EB6173E1B0A30480035A986 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
 					1EB617481B0A30480035A986 = {
 						CreatedOnToolsVersion = 6.3.1;
+					};
+					803BB529217EE85000BE92C9 = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1604,6 +1677,7 @@
 				hu,
 				fa,
 				nb,
+				Base,
 			);
 			mainGroup = E400560F148D79B500EB22B9;
 			productRefGroup = E400561B148D79B500EB22B9 /* Products */;
@@ -1617,6 +1691,7 @@
 				1EB617481B0A30480035A986 /* HockeySDK FrameworkTests */,
 				1E8E66AD15BC3D7700632A2E /* HockeySDK Documentation */,
 				1E4F61E91621AD970033EFC5 /* HockeySDK Distribution */,
+				803BB529217EE85000BE92C9 /* HockeySDK TestTarget */,
 			);
 		};
 /* End PBXProject section */
@@ -1719,6 +1794,16 @@
 				1E15088E1B0C946D00D7B9D9 /* InfoPlist.strings in Resources */,
 				8085BB8B1CBF216E0023FD9B /* Icon.png in Resources */,
 				1E15088C1B0C946700D7B9D9 /* live_report_exception.plcrash in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		803BB528217EE85000BE92C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				803BB539217EE85300BE92C9 /* LaunchScreen.storyboard in Resources */,
+				803BB536217EE85300BE92C9 /* Assets.xcassets in Resources */,
+				803BB534217EE85000BE92C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1958,6 +2043,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		803BB526217EE85000BE92C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				803BB531217EE85000BE92C9 /* ViewController.m in Sources */,
+				803BB53C217EE85300BE92C9 /* main.m in Sources */,
+				803BB52E217EE85000BE92C9 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1980,6 +2075,11 @@
 			isa = PBXTargetDependency;
 			target = 1E59550915B6F45800A03429 /* HockeySDKResources */;
 			targetProxy = 1EB618191B0A3C380035A986 /* PBXContainerItemProxy */;
+		};
+		803BB545217EE87000BE92C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 803BB529217EE85000BE92C9 /* HockeySDK TestTarget */;
+			targetProxy = 803BB544217EE87000BE92C9 /* PBXContainerItemProxy */;
 		};
 		846A906B1B20D4BB0076BB80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2023,6 +2123,22 @@
 				1E5A459A16F0DFC200B55C04 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		803BB532217EE85000BE92C9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				803BB533217EE85000BE92C9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		803BB537217EE85300BE92C9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				803BB538217EE85300BE92C9 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2157,6 +2273,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = ReleaseCrashOnlyExtensions;
@@ -2287,6 +2404,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -2466,6 +2584,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 			};
 			name = Debug;
 		};
@@ -2524,6 +2643,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = ReleaseDefault;
@@ -2689,6 +2809,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = ReleaseCrashOnly;
@@ -2927,6 +3048,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Debug;
@@ -2991,6 +3113,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -3056,10 +3179,237 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
 			name = ReleaseCrashOnly;
+		};
+		803BB53D217EE85300BE92C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		803BB53E217EE85300BE92C9 /* ReleaseDefault */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseDefault;
+		};
+		803BB53F217EE85300BE92C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		803BB540217EE85300BE92C9 /* ReleaseCrashOnly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseCrashOnly;
+		};
+		803BB541217EE85300BE92C9 /* ReleaseCrashOnlyExtensions */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseCrashOnlyExtensions;
+		};
+		803BB542217EE85300BE92C9 /* ReleaseFeedbackOnly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../Vendor\"";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "HockeySDK TestTarget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.sdk.ios.HockeySDK-TestTarget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseFeedbackOnly;
 		};
 		B22DFC011FC750FF0052AF19 /* ReleaseFeedbackOnly */ = {
 			isa = XCBuildConfiguration;
@@ -3190,6 +3540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = ReleaseFeedbackOnly;
@@ -3320,6 +3671,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -3472,6 +3824,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -3601,6 +3954,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 arm64";
 			};
@@ -3816,6 +4170,19 @@
 				1EB6175B1B0A30480035A986 /* ReleaseCrashOnly */,
 				1E27E6111B74F03000192AE2 /* ReleaseCrashOnlyExtensions */,
 				B22DFC061FC750FF0052AF19 /* ReleaseFeedbackOnly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		803BB543217EE85300BE92C9 /* Build configuration list for PBXNativeTarget "HockeySDK TestTarget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				803BB53D217EE85300BE92C9 /* Debug */,
+				803BB53E217EE85300BE92C9 /* ReleaseDefault */,
+				803BB53F217EE85300BE92C9 /* Release */,
+				803BB540217EE85300BE92C9 /* ReleaseCrashOnly */,
+				803BB541217EE85300BE92C9 /* ReleaseCrashOnlyExtensions */,
+				803BB542217EE85300BE92C9 /* ReleaseFeedbackOnly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
