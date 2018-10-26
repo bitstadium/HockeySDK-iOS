@@ -54,8 +54,8 @@
   return self;
 }
 
-+ (id)dataWithLabel:(NSString*)aLabel enabled:(BOOL)flag {
-  return [[[self class] alloc] initWithLabel:aLabel enabled:flag];
++ (instancetype)dataWithLabel:(NSString*)aLabel enabled:(BOOL)flag {
+  return [(BITStoreButtonData *)[[self class] alloc] initWithLabel:aLabel enabled:flag];
 }
 
 @end

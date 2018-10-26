@@ -38,7 +38,7 @@
 #pragma mark - Static
 
 + (BITAppVersionMetaInfo *)appVersionMetaInfoFromDict:(NSDictionary *)dict {
-  BITAppVersionMetaInfo *appVersionMetaInfo = [[[self class] alloc] init];
+  BITAppVersionMetaInfo *appVersionMetaInfo = [(BITAppVersionMetaInfo *)[[self class] alloc] init];
   
   if ([dict isKindOfClass:[NSDictionary class]]) {
     appVersionMetaInfo.name = [dict objectForKey:@"title"];
