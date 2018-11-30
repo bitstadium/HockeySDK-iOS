@@ -191,6 +191,9 @@
 
     if ([indexPath row] == 0 && [strongManager requireUserName] != BITFeedbackUserDataElementDontShow) {
       textField.placeholder = BITHockeyLocalizedString(@"HockeyFeedbackUserDataNamePlaceHolder");
+      if (@available(iOS 10.0, *)) {
+        textField.textContentType = UITextContentTypeName;
+      }
       textField.text = self.name;
       if (strongManager.requireUserName == BITFeedbackUserDataElementRequired) {
         textField.accessibilityHint = BITHockeyLocalizedString(@"HockeyAccessibilityHintRequired");
@@ -206,6 +209,9 @@
       [textField becomeFirstResponder];
     } else {
       textField.placeholder = BITHockeyLocalizedString(@"HockeyFeedbackUserDataEmailPlaceholder");
+      if (@available(iOS 10.0, *)) {
+        textField.textContentType = UITextContentTypeEmailAddress;
+      }
       textField.text = self.email;
       if (strongManager.requireUserEmail == BITFeedbackUserDataElementRequired) {
         textField.accessibilityHint = BITHockeyLocalizedString(@"HockeyAccessibilityHintRequired");
