@@ -68,15 +68,15 @@ This document contains the following sections:
 <a id="setup"></a>
 ## 2. Setup
 
-We recommend integration of our binary into your Xcode project to setup HockeySDK for your iOS app. You can also use our interactive SDK integration wizard in <a href="http://hockeyapp.net/mac/">HockeyApp for Mac</a> which covers all the steps from below. For other ways to setup the SDK, see [Advanced Setup](#advancedsetup).
+We recommend integration of our binary into your Xcode project to setup HockeySDK for your iOS app. You can also use our interactive SDK integration wizard in <a href="https://hockeyapp.net/mac/">HockeyApp for Mac</a> which covers all the steps from below. For other ways to setup the SDK, see [Advanced Setup](#advancedsetup).
 
 ### 2.1 Obtain an App Identifier
 
-Please see the "[How to create a new app](http://support.hockeyapp.net/kb/about-general-faq/how-to-create-a-new-app)" tutorial. This will provide you with an HockeyApp specific App Identifier to be used to initialize the SDK.
+Please see the "[How to create a new app](https://support.hockeyapp.net/kb/about-general-faq/how-to-create-a-new-app)" tutorial. This will provide you with an HockeyApp specific App Identifier to be used to initialize the SDK.
 
 ### 2.2 Download the SDK
 
-1. Download the latest [HockeySDK-iOS](http://www.hockeyapp.net/releases/) framework which is provided as a zip-File.
+1. Download the latest [HockeySDK-iOS](https://www.hockeyapp.net/releases/) framework which is provided as a zip-File.
 2. Unzip the file and you will see a folder called `HockeySDK-iOS`. (Make sure not to use 3rd party unzip tools!)
 
 ### 2.3 Copy the SDK into your projects directory in Finder
