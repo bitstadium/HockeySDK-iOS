@@ -1658,6 +1658,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				de,
 				es,
@@ -2213,7 +2214,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = ReleaseCrashOnlyExtensions;
@@ -2338,7 +2338,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2406,7 +2405,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = ReleaseCrashOnlyExtensions;
 		};
@@ -2464,7 +2462,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -2491,7 +2488,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = ReleaseDefault;
@@ -2718,7 +2714,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = ReleaseCrashOnly;
@@ -2875,7 +2870,6 @@
 				PRODUCT_NAME = HockeySDK;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2926,7 +2920,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2977,7 +2970,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3049,7 +3041,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.hockeyapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Debug;
 		};
@@ -3115,7 +3106,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = ReleaseDefault;
 		};
@@ -3181,7 +3171,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = ReleaseCrashOnly;
 		};
@@ -3480,7 +3469,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = ReleaseFeedbackOnly;
@@ -3605,7 +3593,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3673,7 +3660,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = ReleaseFeedbackOnly;
 		};
@@ -3764,7 +3750,6 @@
 				PRODUCT_NAME = HockeySDK;
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -3888,7 +3873,6 @@
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				"VALID_ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -3956,7 +3940,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HockeySDK TestTarget.app/HockeySDK TestTarget";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Release;
 		};
