@@ -1,0 +1,3 @@
+#include "HockeySDKBase.xcconfig"
+
+BIT_ARM_ARCHS = armv7 arm64

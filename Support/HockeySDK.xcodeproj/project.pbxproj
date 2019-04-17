@@ -644,6 +644,7 @@
 		1EF95CA9162CB313000AE3AD /* BITFeedbackComposeViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BITFeedbackComposeViewControllerDelegate.h; sourceTree = "<group>"; };
 		1EFF03D717F20F8300A5F13C /* BITCrashManagerPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BITCrashManagerPrivate.h; sourceTree = "<group>"; };
 		1EFF03E417F2485500A5F13C /* BITCrashManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITCrashManagerTests.m; sourceTree = "<group>"; };
+		6071267D22671D2A000DC95B /* dynamicframework_only.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = dynamicframework_only.xcconfig; sourceTree = "<group>"; };
 		628B7B9B7E7741C3D85B1159 /* BITHockeyLoggerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BITHockeyLoggerTests.m; sourceTree = "<group>"; };
 		6EA5DEA41CC05E7600D44206 /* live_report_xamarin.plcrash */ = {isa = PBXFileReference; lastKnownFileType = file; path = live_report_xamarin.plcrash; sourceTree = "<group>"; };
 		6EA5DEAD1CC0670000D44206 /* log_report_xamarin */ = {isa = PBXFileReference; fileEncoding = 1; lastKnownFileType = text; path = log_report_xamarin; sourceTree = "<group>"; };
@@ -954,6 +955,7 @@
 				1E45A90E1B78DB0C002CA772 /* default.xcconfig */,
 				B22DFBFF1FC74DF50052AF19 /* feedbackonly.xcconfig */,
 				B24AB7651FC8C1EC00AAAD1B /* HockeySDKDistribution.sh */,
+				6071267D22671D2A000DC95B /* dynamicframework_only.xcconfig */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1658,6 +1660,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				de,
 				es,
@@ -3845,6 +3848,7 @@
 		};
 		B29855481D85EBC9007FF452 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6071267D22671D2A000DC95B /* dynamicframework_only.xcconfig */;
 			buildSettings = {
 				"ARCHS[sdk=iphonesimulator*]" = "$(BIT_SIM_ARCHS)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
